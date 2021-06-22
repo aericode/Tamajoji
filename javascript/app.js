@@ -1,6 +1,18 @@
-is_going_at_left = true;
-limit_left = 0;
-limit_right = 520;
+let is_going_at_left = true;
+let limit_left = 0;
+let limit_right = 520;
+
+let current_selected_menu = 0;
+
+let menu = Array();
+menu[0] = "menu_food"
+menu[1] = "menu_stats"
+menu[2] = "menu_play"
+menu[3] = "menu_toilet"
+menu[4] = "menu_med"
+menu[5] = "menu_sleep"
+menu[6] = "menu_scold"
+menu[7] = "menu_attention"
 
 
 function wander(){
@@ -19,7 +31,6 @@ function movePet(){
     let pet = document.querySelector(".pet")
     let num_values = (pet.style.left).replace("px","");
     num_values = parseInt(num_values);
-    console.log(num_values);
 
     
     if(is_going_at_left){
@@ -67,6 +78,25 @@ function updateTime(k) {
     else {
         return k;
     }
+}
+
+function switchMainMenu(){
+    let unselect = document.querySelector( "."+menu[current_selected_menu] );
+    unselect.classList.remove("selected_icon");
+    unselect.classList.add("unselected_icon");
+
+    current_selected_menu++;
+    if(current_selected_menu==7) current_selected_menu = 0;
+
+    let select = document.querySelector( "."+menu[current_selected_menu] );
+    select.classList.remove("unselected_icon");
+    select.classList.add("selected_icon");
+
+}
+
+function pressA(){
+    console.log("xddddd");
+    switchMainMenu();
 }
 
 currentTime();

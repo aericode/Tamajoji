@@ -27,14 +27,12 @@
     position:absolute;
     font-family: 'Orbitron', sans-serif;
     color: #0f5326;
-    font-size: 56px;
+    font-size: 40px;
     text-align: center;
-    padding-top: 40px;
+    padding-top: 20px;
     padding-bottom: 40px;
     text-align: center;
-    left: 43%;
-    margin-left: auto;
-    margin-right: auto;
+    left: 600px;
 }
 
 .menu_bar{
@@ -50,4 +48,30 @@
 
 .selected_icon{
     opacity: 1;
+}
+
+.food_display{
+    position: absolute;
+    z-index: 1;
+    left: 280px;
+    top: 20px;
+}
+
+.food_menu_arrow{
+    z-index: 2;
+}
+
+.button_container{
+    position: absolute;
+    top: 530px;
+    left: 450px;
+    width: 400px;
+    justify-content: space-between;
+    display: flex;
+}
+
+.btn{
+    width: 100px;
+    height: 50px;
+    border: 4px solid black;
 }
