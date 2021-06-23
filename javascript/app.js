@@ -2,7 +2,15 @@ let is_going_at_left = true;
 let limit_left = 0;
 let limit_right = 520;
 
-let current_selected_menu = 0;
+let current_selected_icon = 0;
+
+let selected_food = 0;
+
+
+
+let age_display = 0;
+let weight = 0;
+
 
 let menu = Array();
 menu[0] = "menu_food"
@@ -13,6 +21,11 @@ menu[4] = "menu_med"
 menu[5] = "menu_sleep"
 menu[6] = "menu_scold"
 menu[7] = "menu_attention"
+
+
+//main menu
+let current_action = 8;
+
 
 
 function wander(){
@@ -81,22 +94,75 @@ function updateTime(k) {
 }
 
 function switchMainMenu(){
-    let unselect = document.querySelector( "."+menu[current_selected_menu] );
+    let unselect = document.querySelector( "."+menu[current_selected_icon] );
     unselect.classList.remove("selected_icon");
     unselect.classList.add("unselected_icon");
 
-    current_selected_menu++;
-    if(current_selected_menu==7) current_selected_menu = 0;
+    current_selected_icon++;
+    if(current_selected_icon==7) current_selected_icon = 0;
 
-    let select = document.querySelector( "."+menu[current_selected_menu] );
+    let select = document.querySelector( "."+menu[current_selected_icon] );
     select.classList.remove("unselected_icon");
     select.classList.add("selected_icon");
 
 }
 
+function openFoodMenu(){
+    let menu = document.querySelector(".food_display");
+    menu.style.display = "block";
+    selected_food = 0;
+}
+
+function changeSelectedFood(){
+    selected_food++;
+    if(selected_food ==2) selected_food=0;
+}
+
+function updateFoodArrow(){
+    let arrow = document.querySelector(".food_menu_arrow");
+    if(selected_food == 0){
+        arrow.style.left = "200px"
+    }
+
+    if(selected_food == 1){
+        arrow.style.left = "540px"
+    }
+}
+
+function closeFoodMenu(){
+    let menu = document.querySelector(".food_display");
+    menu.style.display = "none";
+    selected_food = 0;
+}
+
 function pressA(){
-    console.log("xddddd");
-    switchMainMenu();
+    if(current_action == 8){
+        switchMainMenu();
+    }
+
+    //food
+    if(current_action ==0){
+        changeSelectedFood();
+        updateFoodArrow();
+    }
+
+}
+
+function pressB(){
+    if(current_action == 8){
+        if(current_selected_icon == 0){
+            current_action = 0;
+            openFoodMenu();
+        }
+    }
+
+}
+
+function pressC(){
+    if(current_action == 0){
+        current_action = 8;
+        closeFoodMenu();
+    }
 }
 
 currentTime();

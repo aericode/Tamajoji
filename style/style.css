@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'PixelFont';
+    src: url('../font/ArcadeClassic.eot'); /* IE9 Compat Modes */
+    src: url('../font/ArcadeClassic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../font/ArcadeClassic.woff') format('woff'), /* Modern Browsers */
+    url('../font/ArcadeClassic.ttf')  format('truetype'), /* Safari, Android, iOS */
+    url('../font/ArcadeClassic.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
 .gameFrame{
     position: absolute;
     width: 800px;
@@ -25,14 +34,14 @@
 
 .clock{
     position:absolute;
-    font-family: 'Orbitron', sans-serif;
-    color: #0f5326;
-    font-size: 40px;
+    font-family: 'PixelFont', 'Orbitron', sans-serif;
+    color: black;
+    font-size: 60px;
     text-align: center;
     padding-top: 20px;
     padding-bottom: 40px;
     text-align: center;
-    left: 600px;
+    left: 580px;
 }
 
 .menu_bar{
@@ -50,15 +59,70 @@
     opacity: 1;
 }
 
-.food_display{
+.menu_display{
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     left: 280px;
     top: 20px;
+    display: none;
+}
+
+.stats_display{
+    display: block;
 }
 
 .food_menu_arrow{
-    z-index: 2;
+    position: absolute;
+    z-index: 3;
+    /*200 540*/
+    left: 200px;
+    top: 300px;
+}
+
+
+.game_text{
+    font-family: 'PixelFont', 'Orbitron', sans-serif;
+    font-size: 60px;
+}
+
+
+.stats_inner_front_age{
+    position: absolute;
+    left: 170px;
+    top: 90px;
+}
+
+.stats_inner_front_weight{
+    position: absolute;
+    left: 170px;
+    top: 150px;    
+}
+
+.selected_stats_menu{
+    display: block;
+}
+
+.unselected_stats_menu{
+    display: none;
+}
+
+.stat_bar_text{
+    position: absolute;
+    font-family: 'PixelFont', 'Orbitron', sans-serif;
+    font-size: 60px;
+    left: 280px;
+}
+
+.heart_full{
+    height: 128px;
+    width: 128px;
+    content:url("../images/full_heart.png");
+}
+
+.heart_empty{
+    height: 128px;
+    width: 128px;
+    content:url("../images/empty_heart.png");
 }
 
 .button_container{
