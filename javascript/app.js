@@ -4,6 +4,13 @@ let limit_right = 520;
 
 let current_selected_icon = 0;
 
+let selected_stats_menu = 0;
+let food_stat = 4;
+let fun_stat = 4;
+let discipline = 100;
+
+
+
 let selected_food = 0;
 
 
@@ -133,7 +140,69 @@ function closeFoodMenu(){
     let menu = document.querySelector(".food_display");
     menu.style.display = "none";
     selected_food = 0;
+
+    selectMenu(0)
+    unselectMenu(1);
+    unselectMenu(2);
+    unselectMenu(3);
 }
+
+function openStatsMenu(){
+    let menu = document.querySelector(".stats_display");
+    menu.style.display = "block";
+    selected_stats_menu = 0;
+
+    selectMenu(0)
+    unselectMenu(1);
+    unselectMenu(2);
+    unselectMenu(3);
+}
+
+function closeStatsMenu(){
+    let menu = document.querySelector(".stats_display");
+    menu.style.display = "none";
+    selected_stats_menu = 0;
+}
+
+function changeStatsMenu(){
+
+
+    let prev_selected = selected_stats_menu;
+    selected_stats_menu++;
+    if(selected_stats_menu == 4) selected_stats_menu = 0;
+
+
+    unselectMenu(prev_selected);
+    selectMenu(selected_stats_menu);
+
+}
+
+function selectMenu(to_select){
+    let menu_list = Array();
+    menu_list[0] = "stats_inner_front"
+    menu_list[1] = "stats_inner_hunger"
+    menu_list[2] = "stats_inner_happiness"
+    menu_list[3] = "stats_inner_discipline"
+
+    let select = document.querySelector( "."+menu_list[to_select] );
+    select.classList.remove("unselected_stats_menu");
+    select.classList.add("selected_stats_menu");
+}
+
+function unselectMenu(to_unselect){
+    let menu_list = Array();
+    menu_list[0] = "stats_inner_front"
+    menu_list[1] = "stats_inner_hunger"
+    menu_list[2] = "stats_inner_happiness"
+    menu_list[3] = "stats_inner_discipline"
+
+    let unselect = document.querySelector( "."+menu_list[to_unselect] );
+    unselect.classList.remove("selected_stats_menu");
+    unselect.classList.add("unselected_stats_menu");
+
+}
+
+
 
 function pressA(){
     if(current_action == 8){
@@ -146,6 +215,11 @@ function pressA(){
         updateFoodArrow();
     }
 
+    //check status
+    if(current_action ==1){
+        changeStatsMenu();
+    }
+
 }
 
 function pressB(){
@@ -153,6 +227,10 @@ function pressB(){
         if(current_selected_icon == 0){
             current_action = 0;
             openFoodMenu();
+        }
+        if(current_selected_icon == 1){
+            current_action = 1;
+            openStatsMenu();
         }
     }
 
@@ -162,6 +240,10 @@ function pressC(){
     if(current_action == 0){
         current_action = 8;
         closeFoodMenu();
+    }
+    if(current_action == 1){
+        current_action = 8;
+        closeStatsMenu();
     }
 }
 

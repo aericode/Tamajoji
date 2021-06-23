@@ -67,9 +67,6 @@
     display: none;
 }
 
-.stats_display{
-    display: block;
-}
 
 .food_menu_arrow{
     position: absolute;
@@ -110,19 +107,89 @@
     position: absolute;
     font-family: 'PixelFont', 'Orbitron', sans-serif;
     font-size: 60px;
-    left: 280px;
+    
+}
+
+.hunger_title{
+    left: 290px;
+}
+
+.happiness_title{
+    left: 240px;
+}
+
+.discipline_title{
+    left: 240px;
 }
 
 .heart_full{
     height: 128px;
     width: 128px;
-    content:url("../images/full_heart.png");
+    content:url("../images/objects/full_heart.png");
 }
 
 .heart_empty{
     height: 128px;
     width: 128px;
-    content:url("../images/empty_heart.png");
+    content:url("../images/objects/empty_heart.png");
+}
+
+.hunger_heart_1{
+    position: absolute;
+    left:130px;
+    top: 220px;
+}
+
+.hunger_heart_2{
+    position: absolute;
+    left:250px;
+    top: 160px;
+}
+
+.hunger_heart_3{
+    position: absolute;
+    left:370px;
+    top: 220px;
+}
+
+.hunger_heart_4{
+    position: absolute;
+    left:490px;
+    top: 160px;
+}
+
+.happy_heart_1{
+    position: absolute;
+    left:130px;
+    top: 220px;
+}
+
+.happy_heart_2{
+    position: absolute;
+    left:250px;
+    top: 160px;
+}
+
+.happy_heart_3{
+    position: absolute;
+    left:370px;
+    top: 220px;
+}
+
+.happy_heart_4{
+    position: absolute;
+    left:490px;
+    top: 160px;
+}
+
+
+.discipline_bar_fill{
+    position: absolute;
+    background-color: black;
+    width: 576px;
+    height: 62px;
+    top: 200px;
+    left: 102px;
 }
 
 .button_container{
