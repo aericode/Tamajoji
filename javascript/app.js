@@ -30,15 +30,20 @@ menu[6] = "menu_scold"
 menu[7] = "menu_attention"
 
 
-//main menu
+//main menu action is 8
+//animation action is 9
 let current_action = 8;
 
 
 
+
+let is_moving = true;
 function wander(){
-    setInterval(() => {
-        movePet();
-    }, 1000);
+    if(is_moving){
+        setInterval(() => {
+            movePet();
+        }, 1000);
+    }
 }
 
 function initPosition(){
@@ -56,7 +61,7 @@ function movePet(){
     if(is_going_at_left){
         
         
-        if(num_values > 0){
+        if(num_values > limit_left){
             num_values -= 10;
             pet.style.left = num_values + "px";
         }else{
@@ -67,7 +72,7 @@ function movePet(){
 
     }else{
         
-        if(num_values < 520){
+        if(num_values < limit_right){
             num_values += 10;
             pet.style.left = num_values + "px";
         }else{
@@ -116,8 +121,9 @@ function switchMainMenu(){
 
 function openFoodMenu(){
     let menu = document.querySelector(".food_display");
-    menu.style.display = "block";
     selected_food = 0;
+    updateFoodArrow();
+    menu.style.display = "block";
 }
 
 function changeSelectedFood(){
@@ -139,7 +145,6 @@ function updateFoodArrow(){
 function closeFoodMenu(){
     let menu = document.querySelector(".food_display");
     menu.style.display = "none";
-    selected_food = 0;
 
     selectMenu(0)
     unselectMenu(1);
@@ -202,6 +207,19 @@ function unselectMenu(to_unselect){
 
 }
 
+function confirmFoodMenu(){
+
+    if(selected_food == 0){
+        displayAnimation(1);
+
+    }
+    if(selected_food == 1){
+        displayAnimation(2);
+
+    }
+
+}
+
 
 
 function pressA(){
@@ -222,8 +240,37 @@ function pressA(){
 
 }
 
+
+function displayAnimation(anim_index){
+    let anim_array = Array();
+    anim_array[0] = "blank_screen";
+    anim_array[1] = "eat_meal";
+    anim_array[2] = "eat_snack";
+    anim_array[3] = "success";
+    anim_array[4] = "fail";
+    anim_array[5] = "refuse";
+    anim_array[6] = "thrash";
+    anim_array[7] = "vaccine";
+
+    current_action = 9;
+
+    let menu = document.querySelector(".animation_display");
+    let image = menu.querySelector("img");
+    menu.style.display = "block";
+    console.log("./images/animations/"+ anim_array[anim_index] + ".png")
+    image.src = "./images/animations/"+ anim_array[anim_index] + ".png";    
+
+}
+
+function closeAnimation(){
+    let menu = document.querySelector(".animation_display");
+    menu.style.display = "none";
+    current_action = 8;
+}
+
 function pressB(){
     if(current_action == 8){
+        just_selected = true;
         if(current_selected_icon == 0){
             current_action = 0;
             openFoodMenu();
@@ -232,7 +279,19 @@ function pressB(){
             current_action = 1;
             openStatsMenu();
         }
+
+        setInterval(() => {
+            just_selected = false;
+        }, 500);
     }
+
+    
+    if(current_action == 0 && !just_selected){
+        closeFoodMenu();
+        confirmFoodMenu();
+    }
+
+    
 
 }
 
@@ -245,8 +304,18 @@ function pressC(){
         current_action = 8;
         closeStatsMenu();
     }
+
+    if(current_action == 9){
+        current_action = 8;
+        closeAnimation();
+
+    }
 }
 
-currentTime();
-initPosition();
-wander();
+function start(){
+    currentTime();
+    initPosition();
+    wander();
+}
+
+start();
