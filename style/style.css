@@ -32,18 +32,6 @@
     /*up to 520px*/
 }
 
-.clock{
-    position:absolute;
-    font-family: 'PixelFont', 'Orbitron', sans-serif;
-    color: black;
-    font-size: 60px;
-    text-align: center;
-    padding-top: 20px;
-    padding-bottom: 40px;
-    text-align: center;
-    left: 580px;
-}
-
 .menu_bar{
     /*position: absolute;*/
     margin-top: 430px;
@@ -57,6 +45,27 @@
 
 .selected_icon{
     opacity: 1;
+}
+
+.sleep_display{
+    position: absolute;
+    z-index: 2;
+    left: 260px;
+    top: 10px;
+    display: none;
+}
+
+.clock{
+    position:absolute;
+    z-index: 3;
+    font-family: 'PixelFont', 'Orbitron', sans-serif;
+    color: black;
+    font-size: 60px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    text-align: center;
+    left: 580px;
 }
 
 .menu_display{
@@ -75,14 +84,6 @@
     /*200 540*/
     left: 200px;
     top: 300px;
-}
-
-.sleep_display{
-    position: absolute;
-    z-index: 2;
-    left: 260px;
-    top: 10px;
-    display: none;
 }
 
 
