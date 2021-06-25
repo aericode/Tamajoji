@@ -34,7 +34,7 @@ menu[7] = "menu_attention"
 //animation action is 9
 let current_action = 8;
 
-
+let is_light_on = true;
 
 
 let is_moving = true;

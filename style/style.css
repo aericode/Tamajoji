@@ -61,7 +61,7 @@
 
 .menu_display{
     position: absolute;
-    z-index: 2;
+    z-index: 4;
     left: 280px;
     top: 20px;
     display: none;
@@ -69,13 +69,20 @@
 
 
 
-
 .food_menu_arrow{
     position: absolute;
-    z-index: 3;
+    z-index: 5;
     /*200 540*/
     left: 200px;
     top: 300px;
+}
+
+.sleep_display{
+    position: absolute;
+    z-index: 2;
+    left: 260px;
+    top: 10px;
+    display: none;
 }
 
 
@@ -107,6 +114,7 @@
 
 .stat_bar_text{
     position: absolute;
+    z-index: 3;
     font-family: 'PixelFont', 'Orbitron', sans-serif;
     font-size: 60px;
     
