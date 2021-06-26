@@ -220,27 +220,6 @@ function confirmFoodMenu(){
 
 }
 
-
-
-function pressA(){
-    if(current_action == 8){
-        switchMainMenu();
-    }
-
-    //food
-    if(current_action ==0){
-        changeSelectedFood();
-        updateFoodArrow();
-    }
-
-    //check status
-    if(current_action ==1){
-        changeStatsMenu();
-    }
-
-}
-
-
 function displayAnimation(anim_index){
     let anim_array = Array();
     anim_array[0] = "blank_screen";
@@ -268,6 +247,94 @@ function closeAnimation(){
     current_action = 8;
 }
 
+
+let minigame_score;
+let minigame_try;
+let minigame_is_secret_greater;
+let revealed_value;
+let secret_value;
+let minigame_stage;
+/*
+minigame_stage guide:
+0 - reveals new revealed_value // hides secret_value
+  - let player change "is_greater" until they confirm
+1 - Player confirm generates and reveals secret_value
+2 - Shows result and wait player's click for reset
+
+3 - Ends the game, get the result and displays animation
+*/
+function openMinigameMenu(){
+    let menu = document.querySelector(".minigame_display");
+    menu.style.display = "block";
+
+    minigame_score = 0;
+    minigame_try = 0;
+
+    minigame_is_secret_greater = false;
+    let symbol_display = document.querySelector(".minigame_menu_symbol");
+    symbol_display.src = "./images/objects/lesser_equal.png"; 
+    
+    revealed_value = -1;
+    //randomize_revealed_number();
+    secret_value = -1;
+    minigame_stage = 0;
+}
+
+function closeMinigame(){
+    let menu = document.querySelector(".minigame_display");
+    menu.style.display = "none";
+}
+
+//switches minigame display and variable
+function switchMinigameGuess(){
+
+    minigame_is_secret_greater = !minigame_is_secret_greater;
+
+    let symbol_display = document.querySelector(".minigame_menu_symbol");
+
+    if(minigame_is_secret_greater){
+        symbol_display.src = "./images/objects/greater_equal.png";  
+    }else{
+        symbol_display.src = "./images/objects/lesser_equal.png"; 
+    }
+    
+
+}
+
+
+function randomize_revealed_number(){
+    let symbol_display = document.querySelector(".minigame_menu_symbol");
+    revealed_value = 1 + Math.floor(Math.random() * 9);
+    symbol_display.innerHTML = revealed_value
+}
+
+
+
+function pressA(){
+    if(current_action == 8){
+        switchMainMenu();
+    }
+
+    //food
+    if(current_action ==0){
+        changeSelectedFood();
+        updateFoodArrow();
+    }
+
+    //check status
+    if(current_action ==1){
+        changeStatsMenu();
+    }
+
+    if(current_action == 2){
+        if(minigame_stage == 0){
+            console.log("clicled switch")
+            switchMinigameGuess();
+        }
+    }
+
+}
+
 function pressB(){
     if(current_action == 8){
         just_selected = true;
@@ -278,6 +345,10 @@ function pressB(){
         if(current_selected_icon == 1){
             current_action = 1;
             openStatsMenu();
+        }
+        if(current_selected_icon == 2){
+            current_action = 2;
+            openMinigameMenu();
         }
 
         setInterval(() => {

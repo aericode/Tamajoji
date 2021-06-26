@@ -58,7 +58,7 @@
 .clock{
     position:absolute;
     z-index: 3;
-    font-family: 'PixelFont', 'Orbitron', sans-serif;
+    font-family: 'PixelFont' , sans-serif;
     color: black;
     font-size: 60px;
     text-align: center;
@@ -71,8 +71,13 @@
 .menu_display{
     position: absolute;
     z-index: 4;
+    /*
     left: 280px;
     top: 20px;
+    */
+    
+    left: 260px;
+    top: 10px;
     display: none;
 }
 
@@ -88,20 +93,20 @@
 
 
 .game_text{
-    font-family: 'PixelFont', 'Orbitron', sans-serif;
+    font-family: 'PixelFont' , sans-serif;
     font-size: 60px;
 }
 
 
 .stats_inner_front_age{
     position: absolute;
-    left: 170px;
+    left: 190px;
     top: 90px;
 }
 
 .stats_inner_front_weight{
     position: absolute;
-    left: 170px;
+    left: 190px;
     top: 150px;    
 }
 
@@ -116,21 +121,21 @@
 .stat_bar_text{
     position: absolute;
     z-index: 3;
-    font-family: 'PixelFont', 'Orbitron', sans-serif;
+    font-family: 'PixelFont', sans-serif;
     font-size: 60px;
     
 }
 
 .hunger_title{
-    left: 290px;
+    left: 310px;
 }
 
 .happiness_title{
-    left: 240px;
+    left: 260px;
 }
 
 .discipline_title{
-    left: 230px;
+    left: 250px;
 }
 
 .heart_full{
@@ -147,49 +152,49 @@
 
 .hunger_heart_1{
     position: absolute;
-    left:130px;
+    left:150px;
     top: 220px;
 }
 
 .hunger_heart_2{
     position: absolute;
-    left:250px;
+    left:270px;
     top: 160px;
 }
 
 .hunger_heart_3{
     position: absolute;
-    left:370px;
+    left:390px;
     top: 220px;
 }
 
 .hunger_heart_4{
     position: absolute;
-    left:490px;
+    left:510px;
     top: 160px;
 }
 
 .happy_heart_1{
     position: absolute;
-    left:130px;
+    left:150px;
     top: 220px;
 }
 
 .happy_heart_2{
     position: absolute;
-    left:250px;
+    left:270px;
     top: 160px;
 }
 
 .happy_heart_3{
     position: absolute;
-    left:370px;
+    left:390px;
     top: 220px;
 }
 
 .happy_heart_4{
     position: absolute;
-    left:490px;
+    left:510px;
     top: 160px;
 }
 
@@ -216,4 +221,28 @@
     width: 100px;
     height: 50px;
     border: 4px solid black;
+}
+
+.minigame_menu_symbol{
+    position: absolute;
+    left: 365px;
+    top: 140px;
+}
+
+.revealed_minigame_number{
+    position: absolute;
+    left: 130px;
+    top: 120px;
+
+    font-family: 'PixelFont' , sans-serif;
+    font-size: 90px;
+}
+
+
+.guessed_minigame_number{
+    position: absolute;
+    left: 625px;
+    top: 120px;
+    font-family: 'PixelFont' , sans-serif;
+    font-size: 90px;
 }
