@@ -250,7 +250,7 @@ function closeAnimation(){
 
 let minigame_score;
 let minigame_try;
-let minigame_is_secret_greater;
+let guess_is_secret_greater;
 let revealed_value;
 let secret_value;
 let minigame_stage;
@@ -258,8 +258,8 @@ let minigame_stage;
 minigame_stage guide:
 0 - reveals new revealed_value // hides secret_value
   - let player change "is_greater" until they confirm
-1 - Player confirm generates and reveals secret_value
-2 - Shows result and wait player's click for reset
+1 - Player confirm generates and reveals secret_value, game shows result
+2 - wait player's click for reset
 
 3 - Ends the game, get the result and displays animation
 */
@@ -270,13 +270,13 @@ function openMinigameMenu(){
     minigame_score = 0;
     minigame_try = 0;
 
-    minigame_is_secret_greater = false;
+    guess_is_secret_greater = false;
     let symbol_display = document.querySelector(".minigame_menu_symbol");
     symbol_display.src = "./images/objects/lesser_equal.png"; 
     
-    revealed_value = -1;
-    //randomize_revealed_number();
-    secret_value = -1;
+
+    randomize_revealed_number();
+    conceal_guessed_number();
     minigame_stage = 0;
 }
 
@@ -288,11 +288,11 @@ function closeMinigame(){
 //switches minigame display and variable
 function switchMinigameGuess(){
 
-    minigame_is_secret_greater = !minigame_is_secret_greater;
+    guess_is_secret_greater = !guess_is_secret_greater;
 
     let symbol_display = document.querySelector(".minigame_menu_symbol");
 
-    if(minigame_is_secret_greater){
+    if(guess_is_secret_greater){
         symbol_display.src = "./images/objects/greater_equal.png";  
     }else{
         symbol_display.src = "./images/objects/lesser_equal.png"; 
@@ -303,11 +303,39 @@ function switchMinigameGuess(){
 
 
 function randomize_revealed_number(){
-    let symbol_display = document.querySelector(".minigame_menu_symbol");
+    let symbol_display = document.querySelector(".revealed_minigame_number");
     revealed_value = 1 + Math.floor(Math.random() * 9);
     symbol_display.innerHTML = revealed_value
 }
 
+
+function conceal_guessed_number(){
+    let symbol_display = document.querySelector(".guessed_minigame_number");
+    symbol_display.innerHTML = "x";
+}
+
+function generate_guessed_number(){
+    let symbol_display = document.querySelector(".guessed_minigame_number");
+    secret_value = 1 + Math.floor(Math.random() * 9);
+    symbol_display.innerHTML = secret_value
+}
+
+function confirm_round_game(){
+    minigame_try++;
+    generate_guessed_number();
+
+    let is_final_secret_greater = (revealed_value < secret_value);
+
+    let is_round_won = ((is_final_secret_greater == guess_is_secret_greater)||(revealed_value==secret_value))
+
+    if(is_round_won){
+        minigame_score++;
+        console.log("acertou");
+        console.log("acertos: "+ minigame_score);
+    }else{
+        console.log("errou");
+    }
+}
 
 
 function pressA(){
@@ -328,7 +356,6 @@ function pressA(){
 
     if(current_action == 2){
         if(minigame_stage == 0){
-            console.log("clicled switch")
             switchMinigameGuess();
         }
     }
@@ -360,6 +387,12 @@ function pressB(){
     if(current_action == 0 && !just_selected){
         closeFoodMenu();
         confirmFoodMenu();
+    }
+
+    if(current_action == 2 && !just_selected){
+        if(minigame_stage == 0){
+            confirm_round_game();
+        }
     }
 
     
