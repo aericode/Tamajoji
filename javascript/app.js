@@ -236,7 +236,6 @@ function displayAnimation(anim_index){
     let menu = document.querySelector(".animation_display");
     let image = menu.querySelector("img");
     menu.style.display = "block";
-    console.log("./images/animations/"+ anim_array[anim_index] + ".png")
     image.src = "./images/animations/"+ anim_array[anim_index] + ".png";    
 
 }
@@ -258,10 +257,10 @@ let minigame_stage;
 minigame_stage guide:
 0 - reveals new revealed_value // hides secret_value
   - let player change "is_greater" until they confirm
-1 - Player confirm generates and reveals secret_value, game shows result
-2 - wait player's click for reset
+  - Player confirm generates and reveals secret_value, game shows result
+1 - wait player's click for reset
 
-3 - Ends the game, get the result and displays animation
+2 - Ends the game, get the result and displays animation
 */
 function openMinigameMenu(){
     let menu = document.querySelector(".minigame_display");
@@ -272,8 +271,14 @@ function openMinigameMenu(){
 
     guess_is_secret_greater = false;
     let symbol_display = document.querySelector(".minigame_menu_symbol");
-    symbol_display.src = "./images/objects/lesser_equal.png"; 
-    
+    symbol_display.src = "./images/objects/lesser_equal.png";
+
+
+    let target_icon;
+    for(let i = 1; i < 6; i++){
+        target_icon = document.querySelector(".minigame_score_icon_" + i);
+        target_icon.src = "./images/objects/mini_game_score_blank.png"
+    }
 
     randomize_revealed_number();
     conceal_guessed_number();
@@ -322,19 +327,70 @@ function generate_guessed_number(){
 
 function confirm_round_game(){
     minigame_try++;
+    minigame_stage = 1;
     generate_guessed_number();
 
     let is_final_secret_greater = (revealed_value < secret_value);
 
     let is_round_won = ((is_final_secret_greater == guess_is_secret_greater)||(revealed_value==secret_value))
 
+    if(is_round_won) minigame_score++;    
+    update_minigame_display(is_round_won);
+
+}
+
+function update_minigame_display(is_round_won){
+
+    let target_icon = document.querySelector(".minigame_score_icon_" + minigame_try);
+    let symbol_display = document.querySelector(".minigame_menu_symbol");
+
     if(is_round_won){
-        minigame_score++;
-        console.log("acertou");
-        console.log("acertos: "+ minigame_score);
+        target_icon.src    = "./images/objects/mini_game_score_correct.png";
+        symbol_display.src = "./images/objects/mini_game_correct.png"; 
     }else{
-        console.log("errou");
+        target_icon.src    = "./images/objects/mini_game_score_wrong.png";
+        symbol_display.src = "./images/objects/mini_game_wrong.png"; 
     }
+}
+
+function prepare_minigame_round(){
+
+    if(minigame_try == 5){
+        complete_minigame();
+        return;
+    }
+
+
+    randomize_revealed_number();
+    conceal_guessed_number();
+
+    guess_is_secret_greater = false;
+    let symbol_display = document.querySelector(".minigame_menu_symbol");
+    symbol_display.src = "./images/objects/lesser_equal.png";
+
+    minigame_stage = 0;
+}
+
+function complete_minigame(){
+    
+    if(minigame_score == 5){
+        console.log("Perfect victory")
+        closeMinigame();
+        displayAnimation(3);
+        
+    }else if(minigame_score ==4 || minigame_score ==3 ){
+        console.log("Victory");
+        closeMinigame();
+        displayAnimation(3);
+    }else{
+        console.log("Defeat")
+        closeMinigame();
+        displayAnimation(4);
+    }
+
+    current_stage = 9;
+
+    
 }
 
 
@@ -357,6 +413,9 @@ function pressA(){
     if(current_action == 2){
         if(minigame_stage == 0){
             switchMinigameGuess();
+        }
+        if(minigame_stage == 1){
+            prepare_minigame_round();
         }
     }
 

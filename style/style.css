@@ -246,3 +246,34 @@
     font-family: 'PixelFont' , sans-serif;
     font-size: 90px;
 }
+
+.minigame_score_icon_1{
+    position: absolute;
+    top: 350px;
+    left: 315px;
+}
+
+.minigame_score_icon_2{
+    position: absolute;
+    top: 350px;
+    left: 350px;
+}
+
+.minigame_score_icon_3{
+    position: absolute;
+    top: 350px;
+    left: 385px;
+}
+
+.minigame_score_icon_4{
+    position: absolute;
+    top: 350px;
+    left: 420px;
+}
+
+
+.minigame_score_icon_5{
+    position: absolute;
+    top: 350px;
+    left: 455px;
+}
