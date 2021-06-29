@@ -277,6 +277,8 @@
 .poop_display{
     z-index: 2;
     position: absolute;
+    width: 200px;
+    height: 80px;
     top:  120px;
     left: 600px;
 }
@@ -284,3 +286,4 @@
 .poop_display > img{
     display: none;
 }
+

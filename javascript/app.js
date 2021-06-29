@@ -5,6 +5,7 @@ let limit_right = 520;
 let current_selected_icon = 0;
 
 let selected_stats_menu = 0;
+
 let food_stat = 4;
 let fun_stat = 4;
 let discipline = 100;
@@ -20,7 +21,7 @@ let weight = 0;
 
 //5400 base value
 //randomize between 0 and 3600 to add to base
-let poop_timer = 5400;
+let poop_timer = 10;
 let poop_count = 0;
 
 
@@ -107,20 +108,44 @@ function currentTime() {
 }
 
 function game_clock_tick(){
-    poop_timer--;
+    poop_tick();
     console.log(poop_timer);
 }
 
 function poop_tick(){
     poop_timer--;
 
-    if(poop_timer <= 0){
-
-    }
+    if(poop_timer <= 0)poop_trigger();
 }
 
 function poop_trigger(){
+    poop_count++;
+    update_poop_display();
+    //reset_poop_timer();
+    poop_timer = 5;
+}
 
+function update_poop_display(){
+    let max_poop = 3;
+    let poop_icon;
+
+    for(let i = 1; i < max_poop+1 ; i++){
+        poop_icon = document.querySelector( ".poop_" + i);
+
+        if(i<=poop_count){
+            poop_icon.style.display = "inline";
+        }else{
+            poop_icon.style.display = "none";
+        }
+    
+    }
+}
+
+function reset_poop_timer(){
+    let base_time = 5400;
+    let variable_time_max = 3600;
+
+    poop_timer = base_time + Math.floor(Math.random()*variable_time_max);
 }
   
 function updateTime(k) {
@@ -329,8 +354,6 @@ function switchMinigameGuess(){
     }else{
         symbol_display.src = "./images/objects/lesser_equal.png"; 
     }
-    
-
 }
 
 
