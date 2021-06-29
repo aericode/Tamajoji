@@ -18,6 +18,11 @@ let selected_food = 0;
 let age_display = 0;
 let weight = 0;
 
+//5400 base value
+//randomize between 0 and 3600 to add to base
+let poop_timer = 5400;
+let poop_count = 0;
+
 
 let menu = Array();
 menu[0] = "menu_food"
@@ -29,9 +34,11 @@ menu[5] = "menu_sleep"
 menu[6] = "menu_scold"
 menu[7] = "menu_attention"
 
+//food - 0
+//status - 1
 
-//main menu action is 8
-//animation action is 9
+//main menu - 8
+//animation - 9
 let current_action = 8;
 
 let is_light_on = true;
@@ -93,7 +100,27 @@ function currentTime() {
     min = updateTime(min);
     sec = updateTime(sec);
     document.querySelector(".clock").innerText = hour + " : " + min ; /* adding time to the div */
+
+    game_clock_tick();
+
     let t = setTimeout(function(){ currentTime() }, 1000); /* setting timer */
+}
+
+function game_clock_tick(){
+    poop_timer--;
+    console.log(poop_timer);
+}
+
+function poop_tick(){
+    poop_timer--;
+
+    if(poop_timer <= 0){
+
+    }
+}
+
+function poop_trigger(){
+
 }
   
 function updateTime(k) {

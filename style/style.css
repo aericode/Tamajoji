@@ -49,7 +49,7 @@
 
 .sleep_display{
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     left: 260px;
     top: 10px;
     display: none;
@@ -57,7 +57,7 @@
 
 .clock{
     position:absolute;
-    z-index: 3;
+    z-index: 4;
     font-family: 'PixelFont' , sans-serif;
     color: black;
     font-size: 60px;
@@ -70,11 +70,7 @@
 
 .menu_display{
     position: absolute;
-    z-index: 4;
-    /*
-    left: 280px;
-    top: 20px;
-    */
+    z-index: 5;
     
     left: 260px;
     top: 10px;
@@ -85,7 +81,7 @@
 
 .food_menu_arrow{
     position: absolute;
-    z-index: 5;
+    z-index: 6;
     /*200 540*/
     left: 200px;
     top: 300px;
@@ -120,7 +116,7 @@
 
 .stat_bar_text{
     position: absolute;
-    z-index: 3;
+    z-index: 4;
     font-family: 'PixelFont', sans-serif;
     font-size: 60px;
     
@@ -276,4 +272,15 @@
     position: absolute;
     top: 350px;
     left: 455px;
+}
+
+.poop_display{
+    z-index: 2;
+    position: absolute;
+    top:  120px;
+    left: 600px;
+}
+
+.poop_display > img{
+    display: none;
 }
