@@ -183,10 +183,15 @@ function aging_tick(){
 }
 
 function food_tick(){
-    if(food_stat >= 0){
+    if(food_stat > 0){
         food_stat -= 0.0015;
-    }else if(!is_critical["food"]){
-        declare_critical("food")
+        if(food_stat < 0)food_stat=0;
+    }else if(!is_critical["food"] && !is_critical_cooldown["food"]){
+        declare_critical("food");
+    }else if(is_critical["food"] && is_critical_cooldown["food"]){
+        critical_cooldown_tick("food");
+    }else if(is_critical["food"] && !is_critical_cooldown["food"]){
+        critical_tick("food");
     }
 }
 
@@ -197,10 +202,24 @@ function declare_critical(key){
 
 function critical_cooldown_tick(key){
     critical_cooldown_timer[key]--;
-    if(critical_cool)
+    if(critical_cooldown_timer <= 0){
+        is_critical_cooldown[key] = false;
+    }
 }
 
 function critical_tick(key){
+    critical_timer[key]--;
+    if(critical_timer[key]<= 0) critical_miss(key);
+}
+
+//Todo:verify death on each critical miss
+function critical_miss(key){
+    stage_care_miss_count++;
+    care_miss_death_score++;
+
+    is_critical_cooldown[key]    = true;
+    //current cooldown 15 minutes
+    critical_cooldown_timer[key] = 900;
 
 }
 
