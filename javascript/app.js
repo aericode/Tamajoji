@@ -19,7 +19,11 @@ critical_timer["sick"]  = 900;
 
 critical_timer["faking"]  = 900;
 
+//REMOVE COOLDOWN MECHANIC JUST RESET TIMER AND ACCOUNT FOR MISS
+
+/*
 let is_critical_cooldown = Array();
+
 
 is_critical_cooldown["food"]  = false;
 is_critical_cooldown["fun"]   = false;
@@ -32,7 +36,7 @@ critical_cooldown_timer["food"]  = 900;
 critical_cooldown_timer["fun"]   = 900;
 critical_cooldown_timer["sleep"] = 900;
 critical_cooldown_timer["sick"]  = 900;
-
+*/
 
 let faking_critical_timer = 7200;
 
@@ -46,8 +50,8 @@ let current_selected_icon = 0;
 
 let selected_stats_menu = 0;
 
-let food_stat = 0.4;
-let fun_stat = 0;
+let food_stat = 0.001;
+let fun_stat = 0.001;
 let discipline_stat = 0.1;
 
 let clear_animation_counter = 0;
@@ -66,6 +70,8 @@ let poop_uncleaned_time = 0;
 let is_sick = false;
 let sickness_death_timer = 18000;
 let sick_check_timer = 10;
+
+let candy_sick_counter = 0;
 
 let menu = Array();
 menu[0] = "menu_food"
@@ -162,9 +168,14 @@ function currentTime() {
 }
 
 function game_clock_tick(){
-    poop_tick();
+    
     aging_tick();
+    poop_tick();
+    food_tick();
+    fun_tick();
     clear_animation_tick();
+    candy_digestion_tick();
+
     sick_tick();
 }
 
@@ -186,26 +197,39 @@ function food_tick(){
     if(food_stat > 0){
         food_stat -= 0.0015;
         if(food_stat < 0)food_stat=0;
-    }else if(!is_critical["food"] && !is_critical_cooldown["food"]){
+    }else if(!is_critical["food"]){
         declare_critical("food");
-    }else if(is_critical["food"] && is_critical_cooldown["food"]){
-        critical_cooldown_tick("food");
-    }else if(is_critical["food"] && !is_critical_cooldown["food"]){
+    }else if(is_critical["food"]){
         critical_tick("food");
     }
+}
+
+function fun_tick(){
+    if(fun_stat > 0){
+        fun_stat -= 0.0015;
+        if(fun_stat < 0)fun_stat=0;
+    }else if(!is_critical["fun"]){
+        declare_critical("fun");
+    }else if(is_critical["fun"]){
+        critical_tick("fun");
+    }
+}
+
+function candy_digestion_tick(){
+    if(candy_sick_counter > 0) candy_sick_counter -= 0.0003;
 }
 
 function declare_critical(key){
     is_critical[key] = true;
     critical_timer[key] = 900;
+    update_critical_icon();
 }
 
-function critical_cooldown_tick(key){
-    critical_cooldown_timer[key]--;
-    if(critical_cooldown_timer <= 0){
-        is_critical_cooldown[key] = false;
-    }
+function remove_critical(key){
+    is_critical[key] = false;
+    update_critical_icon();
 }
+
 
 function critical_tick(key){
     critical_timer[key]--;
@@ -217,10 +241,24 @@ function critical_miss(key){
     stage_care_miss_count++;
     care_miss_death_score++;
 
-    is_critical_cooldown[key]    = true;
-    //current cooldown 15 minutes
-    critical_cooldown_timer[key] = 900;
 
+    //reset critical timer
+    critical_timer[key] = 900;
+
+}
+
+function update_critical_icon(){
+    let is_icon_active = (is_critical["food"]||is_critical["fun"]||is_critical["sleep"]||is_critical["faking"]);
+    let critical_icon = document.querySelector(".menu_attention");
+
+    if(is_icon_active){
+        critical_icon.classList.remove("unselected_icon");
+        critical_icon.classList.add("selected_icon");
+    }else{
+        critical_icon.classList.remove("selected_icon");
+        critical_icon.classList.add("unselected_icon");
+    }
+    
 }
 
 function poop_tick(){
@@ -304,10 +342,19 @@ function sick_chance_roll(){
         const poop_sickness_rng   = Math.random();
 
         if(total_poop_sickness_limit > poop_sickness_rng){
+            //care miss
             get_sick();
             return;
         }
     }
+    //TOO MUCH CANDY
+
+    if(candy_sick_counter > 5){
+        //care miss
+        get_sick();
+        return;
+    }
+
     //RANDOM CHANCE;
     const random_sickness_limit = 0.15;
     const random_sickness_rng   = Math.random();
@@ -317,7 +364,8 @@ function sick_chance_roll(){
         return;
     }
 
-    //TODO: candy digestion check
+
+
 
 }
 
@@ -341,7 +389,7 @@ function get_healed(){
 }
 
 function sick_trigger(){
-    
+
     sick_chance_roll();
     //resets even if it gets sick, sickness makes the timer stop
     reset_sick_timer();
@@ -417,11 +465,27 @@ function updateFoodArrow(){
 function closeFoodMenu(){
     let menu = document.querySelector(".food_display");
     menu.style.display = "none";
+}
 
-    selectMenu(0)
-    unselectMenu(1);
-    unselectMenu(2);
-    unselectMenu(3);
+function eat_selected_food(){
+    if (selected_food == 0){
+        weight += 1;
+        food_stat += 1;
+        if(food_stat >= 4) food_stat = 4;
+        remove_critical("food");
+    }
+
+    if(selected_food == 1){
+        weight += 2;
+        food_stat += 1;
+        fun_stat += 1;
+        if(food_stat >= 4) food_stat = 4;
+        if(fun_stat >= 4) fun_stat = 4;
+        remove_critical("food");
+        remove_critical("fun");
+
+        candy_sick_counter++;
+    }
 }
 
 function openStatsMenu(){
@@ -533,10 +597,12 @@ function confirmFoodMenu(){
 
     if(selected_food == 0){
         displayAnimation(1);
+        eat_selected_food();
 
     }
     if(selected_food == 1){
         displayAnimation(2);
+        eat_selected_food();
 
     }
 
@@ -631,12 +697,15 @@ function switchMinigameGuess(){
 function win_minigame (is_perfect){
     if(is_perfect){
         fun_stat += 2;
+        remove_critical("fun");
     }else{
         fun_stat += 1;
+        remove_critical("fun");
     }
 
     if(fun_stat > 4) fun_stat = 4;
 }
+
 
 function randomize_revealed_number(){
     let symbol_display = document.querySelector(".revealed_minigame_number");
