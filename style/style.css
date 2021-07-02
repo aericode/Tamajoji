@@ -319,9 +319,9 @@
     display: none;
 }
 
-/*
-may not be necessary
-.not_hidden_display{
-    display: block;
+.death_display{
+    position: absolute;
+    z-index: 3;
+    left: 260px;
+    top: 10px;
 }
-*/

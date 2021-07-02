@@ -1,3 +1,41 @@
+let stage_care_miss_count = 0;
+let care_miss_death_score = 0;
+
+let is_critical = Array();
+
+is_critical["food"]  = false;
+is_critical["fun"]   = false;
+is_critical["sleep"] = false;
+is_critical["sick"]  = false;
+
+is_critical["faking"] = false;
+
+let critical_timer = Array();
+
+critical_timer["food"]  = 900;
+critical_timer["fun"]   = 900;
+critical_timer["sleep"] = 900;
+critical_timer["sick"]  = 900;
+
+critical_timer["faking"]  = 900;
+
+let is_critical_cooldown = Array();
+
+is_critical_cooldown["food"]  = false;
+is_critical_cooldown["fun"]   = false;
+is_critical_cooldown["sleep"] = false;
+is_critical_cooldown["sick"]  = false;
+
+let critical_cooldown_timer = Array();
+
+critical_cooldown_timer["food"]  = 900;
+critical_cooldown_timer["fun"]   = 900;
+critical_cooldown_timer["sleep"] = 900;
+critical_cooldown_timer["sick"]  = 900;
+
+
+let faking_critical_timer = 7200;
+
 let age_in_seconds = 0;
 
 let is_going_at_left = true;
@@ -27,7 +65,7 @@ let poop_uncleaned_time = 0;
 
 let is_sick = false;
 let sickness_death_timer = 18000;
-let sick_check_timer = 2;
+let sick_check_timer = 10;
 
 let menu = Array();
 menu[0] = "menu_food"
@@ -39,11 +77,16 @@ menu[5] = "menu_sleep"
 menu[6] = "menu_scold"
 menu[7] = "menu_attention"
 
-//food - 0
-//status - 1
+//in food menu - 0
+//in status menu - 1
+//in game menu - 2
+//in sleep menu - 3
+
+//toilet, medication and scold generate no status change because they have no menu
 
 //main menu - 8
 //animation - 9
+//death - 10
 let current_action = 8;
 
 let is_light_on = true;
@@ -139,6 +182,28 @@ function aging_tick(){
     age_in_seconds++;
 }
 
+function food_tick(){
+    if(food_stat >= 0){
+        food_stat -= 0.0015;
+    }else if(!is_critical["food"]){
+        declare_critical("food")
+    }
+}
+
+function declare_critical(key){
+    is_critical[key] = true;
+    critical_timer[key] = 900;
+}
+
+function critical_cooldown_tick(key){
+    critical_cooldown_timer[key]--;
+    if(critical_cool)
+}
+
+function critical_tick(key){
+
+}
+
 function poop_tick(){
     poop_timer--;
 
@@ -198,8 +263,7 @@ function sick_tick(){
     if(is_sick){
         sickness_death_timer--;
         if(sickness_death_timer <= 0){
-            //TODO: Death triggers
-            console.log("Na moral cê morreu")
+            die();
         }
     }
 }
@@ -212,12 +276,11 @@ function reset_sick_timer(){
 }
 
 function sick_chance_roll(){
-    console.log("sick_check")
     //POOP RELATED
     if(poop_count > 0){
 
         const poop_count_debuff      = 0.15 * poop_count;
-        const uncleaned_time_debuff  = 0.1 * (poop_uncleaned_time/3600);
+        const uncleaned_time_debuff  = 0.10 * (poop_uncleaned_time/3600);
         const total_poop_sickness_limit = poop_count_debuff + uncleaned_time_debuff;
         const poop_sickness_rng   = Math.random();
 
@@ -247,6 +310,8 @@ function get_sick() {
 
 }
 
+
+
 function get_healed(){
     let sick_icon = document.querySelector(".sick_icon");
     sick_icon.classList.add("hidden_display");
@@ -257,9 +322,23 @@ function get_healed(){
 }
 
 function sick_trigger(){
+    
     sick_chance_roll();
     //resets even if it gets sick, sickness makes the timer stop
     reset_sick_timer();
+}
+
+function die(){
+    closeAnimation();
+    closeFoodMenu();
+    closeMinigame();
+    closeStatsMenu();
+    let death_display = document.querySelector(".death_display");
+    death_display.classList.remove("hidden_display");
+
+    current_action = 10;
+
+    //todo: reborn display
 }
 
 function confirmToiletMenu(){
