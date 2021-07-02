@@ -27,9 +27,23 @@
 
 .pet{
     position: absolute;
+    top: 0px;
+    left: 0px;
+    /*up to 520px*/
+    /*MUST BE SAME AS PET-FRAME*/
+    width: 264px;
+    height: 282px;
+}
+
+.pet_frame{
+    position: absolute;
     top: 150px;
     left: 260px;
-    /*up to 520px*/
+    text-align: center;
+    /*MUST BE SAME AS PET*/
+    width: 264px;
+    height: 282px;
+
 }
 
 .menu_bar{
@@ -131,7 +145,7 @@
 }
 
 .discipline_title{
-    left: 250px;
+    left: 240px;
 }
 
 .heart_full{
@@ -201,7 +215,7 @@
     width: 576px;
     height: 62px;
     top: 200px;
-    left: 102px;
+    left: 111px;
 }
 
 .button_container{
@@ -287,3 +301,27 @@
     display: none;
 }
 
+.sick_icon{
+    position: absolute;
+    z-index: 2;
+    left: 160px;
+    top: 60px;
+}
+
+.sleepy_icon{
+    position: absolute;
+    z-index: 2;
+    left: 50px;
+    top: 100px;
+}
+
+.hidden_display{
+    display: none;
+}
+
+/*
+may not be necessary
+.not_hidden_display{
+    display: block;
+}
+*/

@@ -1,3 +1,5 @@
+let age_in_seconds = 0;
+
 let is_going_at_left = true;
 let limit_left = 0;
 let limit_right = 520;
@@ -6,24 +8,26 @@ let current_selected_icon = 0;
 
 let selected_stats_menu = 0;
 
-let food_stat = 4;
-let fun_stat = 4;
-let discipline = 100;
+let food_stat = 0.4;
+let fun_stat = 0;
+let discipline_stat = 0.1;
 
-
+let clear_animation_counter = 0;
 
 let selected_food = 0;
 
 
-
-let age_display = 0;
-let weight = 0;
+let weight = 30;
 
 //5400 base value
 //randomize between 0 and 3600 to add to base
-let poop_timer = 10;
+let poop_timer = 10000;
 let poop_count = 0;
+let poop_uncleaned_time = 0;
 
+let is_sick = false;
+let sickness_death_timer = 18000;
+let sick_check_timer = 2;
 
 let menu = Array();
 menu[0] = "menu_food"
@@ -55,14 +59,15 @@ function wander(){
 }
 
 function initPosition(){
-    let pet = document.querySelector(".pet")
+    let pet = document.querySelector(".pet_frame")
     pet.style.left = "260px"
     is_going_at_left = true;
 }
 
 function movePet(){
-    let pet = document.querySelector(".pet")
-    let num_values = (pet.style.left).replace("px","");
+    let pet_frame = document.querySelector(".pet_frame");
+    let pet_sprite = document.querySelector(".pet_sprite");
+    let num_values = (pet_frame.style.left).replace("px","");
     num_values = parseInt(num_values);
 
     
@@ -71,22 +76,28 @@ function movePet(){
         
         if(num_values > limit_left){
             num_values -= 10;
-            pet.style.left = num_values + "px";
+            pet_frame.style.left = num_values + "px";
         }else{
             is_going_at_left = false;
-            pet.classList.remove("left");
-            pet.classList.add("right");
+            pet_sprite.classList.remove("left");
+            pet_sprite.classList.add("right");
+
+            num_values += 10;
+            pet_frame.style.left = num_values + "px";
         }
 
     }else{
         
         if(num_values < limit_right){
             num_values += 10;
-            pet.style.left = num_values + "px";
+            pet_frame.style.left = num_values + "px";
         }else{
             is_going_at_left = true;
-            pet.classList.remove("right");
-            pet.classList.add("left");
+            pet_sprite.classList.remove("right");
+            pet_sprite.classList.add("left");
+
+            num_values -= 10;
+            pet_frame.style.left = num_values + "px";
         }
     }
 
@@ -109,7 +120,23 @@ function currentTime() {
 
 function game_clock_tick(){
     poop_tick();
-    console.log(poop_timer);
+    aging_tick();
+    clear_animation_tick();
+    sick_tick();
+}
+
+function clear_animation_tick(){
+    if (current_action == 9){
+        if(clear_animation_counter <= 0){
+            closeAnimation();
+        }else{
+            clear_animation_counter--;
+        }
+    }
+}
+
+function aging_tick(){
+    age_in_seconds++;
 }
 
 function poop_tick(){
@@ -118,11 +145,18 @@ function poop_tick(){
     if(poop_timer <= 0)poop_trigger();
 }
 
+function update_poop_uncleaned_time(){
+    if(poop_count > 0){
+        poop_uncleaned_time++;
+    }else{
+        poop_uncleaned_time = 0;
+    }
+}
+
 function poop_trigger(){
-    poop_count++;
+    if(poop_count < 3)poop_count++;
     update_poop_display();
-    //reset_poop_timer();
-    poop_timer = 5;
+    reset_poop_timer();
 }
 
 function update_poop_display(){
@@ -146,6 +180,94 @@ function reset_poop_timer(){
     let variable_time_max = 3600;
 
     poop_timer = base_time + Math.floor(Math.random()*variable_time_max);
+}
+
+function clean_poop(){
+    poop_count = 0;
+    update_poop_display();
+    displayAnimation(6);
+}
+
+function sick_tick(){
+    //doesn't make rolls if sick
+    if(!is_sick){
+        sick_check_timer--;
+        if( sick_check_timer <= 0) sick_trigger();
+    }
+
+    if(is_sick){
+        sickness_death_timer--;
+        if(sickness_death_timer <= 0){
+            //TODO: Death triggers
+            console.log("Na moral cê morreu")
+        }
+    }
+}
+
+function reset_sick_timer(){
+    let base_time = 7200;
+    let variable_time_max = 1800;
+
+    sick_check_timer = base_time + Math.floor(Math.random()*variable_time_max);
+}
+
+function sick_chance_roll(){
+    console.log("sick_check")
+    //POOP RELATED
+    if(poop_count > 0){
+
+        const poop_count_debuff      = 0.15 * poop_count;
+        const uncleaned_time_debuff  = 0.1 * (poop_uncleaned_time/3600);
+        const total_poop_sickness_limit = poop_count_debuff + uncleaned_time_debuff;
+        const poop_sickness_rng   = Math.random();
+
+        if(total_poop_sickness_limit > poop_sickness_rng){
+            get_sick();
+            return;
+        }
+    }
+    //RANDOM CHANCE;
+    const random_sickness_limit = 0.15;
+    const random_sickness_rng   = Math.random();
+
+    if(random_sickness_limit > random_sickness_rng){
+        get_sick();
+        return;
+    }
+
+    //TODO: candy digestion check
+
+}
+
+function get_sick() {
+    let sick_icon = document.querySelector(".sick_icon");
+    sick_icon.classList.remove("hidden_display");
+    is_sick = true;
+    sickness_death_timer = 18000;
+
+}
+
+function get_healed(){
+    let sick_icon = document.querySelector(".sick_icon");
+    sick_icon.classList.add("hidden_display");
+    is_sick = false;
+    sickness_death_timer = 18000;
+
+    displayAnimation(7);
+}
+
+function sick_trigger(){
+    sick_chance_roll();
+    //resets even if it gets sick, sickness makes the timer stop
+    reset_sick_timer();
+}
+
+function confirmToiletMenu(){
+    if(poop_count>0) clean_poop();
+}
+
+function confirmMedicMenu() {
+    if(is_sick) get_healed();
 }
   
 function updateTime(k) {
@@ -209,6 +331,8 @@ function openStatsMenu(){
     menu.style.display = "block";
     selected_stats_menu = 0;
 
+    update_stats_display();
+
     selectMenu(0)
     unselectMenu(1);
     unselectMenu(2);
@@ -228,10 +352,58 @@ function changeStatsMenu(){
     selected_stats_menu++;
     if(selected_stats_menu == 4) selected_stats_menu = 0;
 
+    if(selected_stats_menu == 0) update_stats_display();
+    if(selected_stats_menu == 1) update_heart_display("hunger");
+    if(selected_stats_menu == 2) update_heart_display("happy");
+    if(selected_stats_menu == 3) update_discipline_display();
 
     unselectMenu(prev_selected);
     selectMenu(selected_stats_menu);
 
+}
+
+function update_stats_display(){
+    let age_display = document.querySelector(".stats_age_display");
+    let weight_display = document.querySelector(".stats_weight_display");
+
+    let ingame_years_age = Math.floor(age_in_seconds/86400);
+
+
+    age_display.innerText    = ingame_years_age;
+    weight_display.innerText = weight; 
+}
+
+//Arguments: "hunger" or "happy"
+function update_heart_display(display){
+    let displayed_hearts
+    if(display == "hunger"){
+        displayed_hearts = Math.round(food_stat);
+    }else if(display == "happy"){
+        displayed_hearts = Math.round(fun_stat);
+    }
+    
+    let target_heart;
+    let max_hearts = 4;
+
+    for(let i=1; i < max_hearts+1; i++){
+        target_heart = document.querySelector("." + display + "_heart_" + i);
+        if(i <= displayed_hearts){
+            target_heart.classList.remove("heart_empty");
+            target_heart.classList.add("heart_full");
+        }else{
+            target_heart.classList.remove("haert_full");
+            target_heart.classList.add("heart_empty");
+        }
+    }
+}
+
+//discipline only
+//max width = 576px
+function update_discipline_display(){
+    const max_width = 576;
+    let bar_display;
+    bar_display = document.querySelector(".discipline_bar_fill");
+    bar_display.style.width = (discipline_stat * max_width) + "px";
 }
 
 function selectMenu(to_select){
@@ -284,6 +456,8 @@ function displayAnimation(anim_index){
     anim_array[7] = "vaccine";
 
     current_action = 9;
+
+    clear_animation_counter = 3;
 
     let menu = document.querySelector(".animation_display");
     let image = menu.querySelector("img");
@@ -356,6 +530,15 @@ function switchMinigameGuess(){
     }
 }
 
+function win_minigame (is_perfect){
+    if(is_perfect){
+        fun_stat += 2;
+    }else{
+        fun_stat += 1;
+    }
+
+    if(fun_stat > 4) fun_stat = 4;
+}
 
 function randomize_revealed_number(){
     let symbol_display = document.querySelector(".revealed_minigame_number");
@@ -424,16 +607,15 @@ function prepare_minigame_round(){
 function complete_minigame(){
     
     if(minigame_score == 5){
-        console.log("Perfect victory")
+        win_minigame(true);
         closeMinigame();
         displayAnimation(3);
         
     }else if(minigame_score ==4 || minigame_score ==3 ){
-        console.log("Victory");
+        win_minigame(false);
         closeMinigame();
         displayAnimation(3);
     }else{
-        console.log("Defeat")
         closeMinigame();
         displayAnimation(4);
     }
@@ -486,6 +668,12 @@ function pressB(){
             current_action = 2;
             openMinigameMenu();
         }
+        if(current_selected_icon == 3){
+            confirmToiletMenu();
+        }
+        if(current_selected_icon == 4){
+            confirmMedicMenu();
+        }
 
         setInterval(() => {
             just_selected = false;
@@ -517,9 +705,13 @@ function pressC(){
         current_action = 8;
         closeStatsMenu();
     }
+    if(current_action == 2){
+        current_action = 8;
+        closeMinigame();
+    }
 
     if(current_action == 9){
-        current_action = 8;
+        //current_action = 8;
         closeAnimation();
 
     }
