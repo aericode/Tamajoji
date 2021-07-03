@@ -78,6 +78,7 @@ menu[7] = "menu_attention"
 let current_action = 8;
 
 let is_light_on = true;
+let is_sleeping = false;
 
 
 let is_moving = true;
@@ -868,15 +869,48 @@ function changeSelectedSleep(){
 }
 
 function openSleepMenu(){
-    let menu = document.querySelector(".sleep_display");
+    let menu = document.querySelector(".sleep_menu_display");
     selected_sleep_menu = 1;
 
     updateSleepArrow();
     menu.style.display = "block";
 }
 
+function closeSleepMenu(){
+    let menu = document.querySelector(".sleep_menu_display");
 
+    menu.style.display = "none";  
+}
 
+function confirmSleepMenu(){
+    if(selected_sleep_menu==1){
+        is_light_on = true; 
+    }
+
+    if(selected_sleep_menu==0){
+        is_light_on = false;
+    }
+
+    closeSleepMenu();
+    updateLightDisplay();
+    current_action = 8;
+
+}
+
+function updateLightDisplay(){
+    let menu  = document.querySelector(".sleep_display");
+    let clock = document.querySelector(".clock");
+
+    if(is_light_on){
+        clock.style.color = "black";
+        menu.style.display = "none";
+    }
+
+    if(!is_light_on){
+        clock.style.color = "white";
+        menu.style.display = "block";
+    }
+}
 
 function pressA(){
     if(current_action == 8){
@@ -903,6 +937,11 @@ function pressA(){
         }
     }
 
+    if(current_action == 3){
+        changeSelectedSleep();
+        updateSleepArrow();
+    }
+
 }
 
 function pressB(){
@@ -926,7 +965,10 @@ function pressB(){
         if(current_selected_icon == 4){
             confirmMedicMenu();
         }
-
+        if(current_selected_icon == 5){
+            current_action = 3;
+            openSleepMenu();
+        }
         if(current_selected_icon == 6){
             confirmScoldMenu();
         }
@@ -948,8 +990,9 @@ function pressB(){
         }
     }
 
-    
-
+    if(current_action == 3 && !just_selected){
+        confirmSleepMenu();
+    }
 }
 
 function pressC(){
@@ -964,6 +1007,10 @@ function pressC(){
     if(current_action == 2){
         current_action = 8;
         closeMinigame();
+    }
+    if(current_action == 3){
+        current_action = 8;
+        closeSleepMenu();
     }
 
     if(current_action == 9){

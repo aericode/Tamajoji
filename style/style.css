@@ -29,6 +29,7 @@
 
 .pet{
     position: absolute;
+    z-index: 1;
     top: 0px;
     left: 0px;
     /*up to 520px*/
@@ -66,8 +67,8 @@
 .sleep_display{
     position: absolute;
     z-index: 3;
-    left: 260px;
-    top: 10px;
+    left: 0px;
+    top: 0px;
     display: none;
 }
 
@@ -81,7 +82,7 @@
     padding-top: 20px;
     padding-bottom: 40px;
     text-align: center;
-    left: 580px;
+    left: 320px;
 }
 
 .menu_display{
@@ -338,11 +339,6 @@
     position: absolute;
     top: 250px;
     left: 350px;
-}
-
-
-.sleep_menu_display{
-    display: block;
 }
 
 .sleep_menu_arrow{
