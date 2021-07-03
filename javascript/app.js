@@ -19,25 +19,6 @@ critical_timer["sick"]  = 900;
 
 critical_timer["faking"]  = 900;
 
-//REMOVE COOLDOWN MECHANIC JUST RESET TIMER AND ACCOUNT FOR MISS
-
-/*
-let is_critical_cooldown = Array();
-
-
-is_critical_cooldown["food"]  = false;
-is_critical_cooldown["fun"]   = false;
-is_critical_cooldown["sleep"] = false;
-is_critical_cooldown["sick"]  = false;
-
-let critical_cooldown_timer = Array();
-
-critical_cooldown_timer["food"]  = 900;
-critical_cooldown_timer["fun"]   = 900;
-critical_cooldown_timer["sleep"] = 900;
-critical_cooldown_timer["sick"]  = 900;
-*/
-
 let faking_critical_timer = 7200;
 
 let age_in_seconds = 0;
@@ -50,9 +31,9 @@ let current_selected_icon = 0;
 
 let selected_stats_menu = 0;
 
-let food_stat = 0.001;
-let fun_stat = 0.001;
-let discipline_stat = 0.1;
+let food_stat = 2;
+let fun_stat = 2;
+let discipline_stat = 0;
 
 let clear_animation_counter = 0;
 
@@ -170,13 +151,16 @@ function currentTime() {
 function game_clock_tick(){
     
     aging_tick();
-    poop_tick();
     food_tick();
     fun_tick();
     clear_animation_tick();
     candy_digestion_tick();
+    skip_minigame_stage_tick();
+    forgive_miss_tick();  
 
     sick_tick();
+    poop_tick();
+    fake_tick();
 }
 
 function clear_animation_tick(){
@@ -216,13 +200,37 @@ function fun_tick(){
 }
 
 function candy_digestion_tick(){
-    if(candy_sick_counter > 0) candy_sick_counter -= 0.0003;
+    if(candy_sick_counter > 0) candy_sick_counter -= 0.00003;
+}
+
+function reset_fake_critical_timer(){
+    faking_critical_timer = 7200 + Math.floor(Math.random()*3600) - Math.floor( (1 - discipline_stat)*3600);
+}
+
+
+
+function fake_tick(){
+    if(!is_critical["food"] || !is_critical["fun"] || !is_critical["sick"] || !is_critical["sleep"] ){
+        if(is_critical["faking"]){
+            faking_critical_timer--;
+            if(faking_critical_timer <= 0)remove_critical("faking");
+        }else{
+            faking_critical_timer--;
+            if(faking_critical_timer <= 0){
+                declare_critical("faking");
+                reset_fake_critical_timer();
+            }
+        }
+    }
 }
 
 function declare_critical(key){
+
     is_critical[key] = true;
     critical_timer[key] = 900;
     update_critical_icon();
+
+    if(key != "faking")remove_critical("faking");
 }
 
 function remove_critical(key){
@@ -242,8 +250,17 @@ function critical_miss(key){
     care_miss_death_score++;
 
 
-    //reset critical timer
-    critical_timer[key] = 900;
+    //food and fun just keep going for criticals after first critical
+    if(key=="food" || key=="fun"){
+        //reset critical timer
+        critical_timer[key] = 900;
+    }
+
+    //sleep and sick just remove critical after first miss
+    if(key=="sleep" || key == "sick"){
+        remove_critical(key);
+    }
+    check_death_by_miss();
 
 }
 
@@ -342,7 +359,8 @@ function sick_chance_roll(){
         const poop_sickness_rng   = Math.random();
 
         if(total_poop_sickness_limit > poop_sickness_rng){
-            //care miss
+            //issue critical miss if uncleaned for a long time
+            if(uncleaned_time_debuff > 900)critical_miss(null);
             get_sick();
             return;
         }
@@ -393,6 +411,14 @@ function sick_trigger(){
     sick_chance_roll();
     //resets even if it gets sick, sickness makes the timer stop
     reset_sick_timer();
+}
+
+function forgive_miss_tick(){
+    if(care_miss_death_score>0)care_miss_death_score -= 0.0003;
+}
+
+function check_death_by_miss(){
+    if(care_miss_death_score >= 0)die();
 }
 
 function die(){
@@ -643,6 +669,8 @@ let guess_is_secret_greater;
 let revealed_value;
 let secret_value;
 let minigame_stage;
+
+let autoskip_minigame_stage_count = 3;
 /*
 minigame_stage guide:
 0 - reveals new revealed_value // hides secret_value
@@ -706,6 +734,13 @@ function win_minigame (is_perfect){
     if(fun_stat > 4) fun_stat = 4;
 }
 
+function skip_minigame_stage_tick(){
+    //if the current action is gaming and the game stage is wait
+    if(current_action==2 && minigame_stage==1){
+        autoskip_minigame_stage_count--;
+        if(autoskip_minigame_stage_count <= 0)prepare_minigame_round();
+    }
+}
 
 function randomize_revealed_number(){
     let symbol_display = document.querySelector(".revealed_minigame_number");
@@ -728,6 +763,9 @@ function generate_guessed_number(){
 function confirm_round_game(){
     minigame_try++;
     minigame_stage = 1;
+
+    autoskip_minigame_stage_count = 3;
+
     generate_guessed_number();
 
     let is_final_secret_greater = (revealed_value < secret_value);
