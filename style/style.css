@@ -9,6 +9,8 @@
 
 .gameFrame{
     position: absolute;
+    z-index: 5;
+
     width: 800px;
     height: 500px;
     margin-left: 250px;
@@ -324,4 +326,30 @@
     z-index: 3;
     left: 260px;
     top: 10px;
+}
+
+.sleep_menu_text_on{
+    position: absolute;
+    top:  150px;
+    left: 350px;
+}
+
+.sleep_menu_text_off{
+    position: absolute;
+    top: 250px;
+    left: 350px;
+}
+
+
+.sleep_menu_display{
+    display: block;
+}
+
+.sleep_menu_arrow{
+    position: absolute;
+    z-index: 6;
+    /*200 540*/
+    top: 150px;
+    left: 200px;
+    
 }

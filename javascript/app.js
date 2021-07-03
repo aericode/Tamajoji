@@ -38,19 +38,20 @@ let discipline_stat = 0;
 let clear_animation_counter = 0;
 
 let selected_food = 0;
+let selected_sleep_menu = 0;
 
 
 let weight = 30;
 
 //5400 base value
 //randomize between 0 and 3600 to add to base
-let poop_timer = 10000;
+let poop_timer = 3600;
 let poop_count = 0;
 let poop_uncleaned_time = 0;
 
 let is_sick = false;
 let sickness_death_timer = 18000;
-let sick_check_timer = 10;
+let sick_check_timer = 3600;
 
 let candy_sick_counter = 0;
 
@@ -199,6 +200,11 @@ function fun_tick(){
     }
 }
 
+
+function discipline_tick(){
+    if(discipline_stat > 0)discipline_stat -= 0.000004;
+}
+
 function candy_digestion_tick(){
     if(candy_sick_counter > 0) candy_sick_counter -= 0.00003;
 }
@@ -325,6 +331,17 @@ function clean_poop(){
     poop_count = 0;
     update_poop_display();
     displayAnimation(6);
+}
+
+function confirmScoldMenu(){
+    if(is_critical["faking"]){
+        remove_critical("faking");
+        discipline_stat += 0.25;
+    }else{
+        fun_stat -= 1;
+        if(fun_stat < 0)fun_stat=0;
+    }
+    displayAnimation(8);
 }
 
 function sick_tick(){
@@ -644,6 +661,7 @@ function displayAnimation(anim_index){
     anim_array[5] = "refuse";
     anim_array[6] = "thrash";
     anim_array[7] = "vaccine";
+    anim_array[8] = "scold";
 
     current_action = 9;
 
@@ -831,6 +849,35 @@ function complete_minigame(){
 }
 
 
+function updateSleepArrow(){
+    let arrow = document.querySelector(".sleep_menu_arrow");
+
+    if(selected_sleep_menu == 1){
+        arrow.style.top = "150px";
+    }
+
+    if(selected_sleep_menu == 0){
+        arrow.style.top = "250px";
+    }
+
+}
+
+function changeSelectedSleep(){
+    selected_sleep_menu++;
+    if(selected_sleep_menu ==2) selected_sleep_menu=0;
+}
+
+function openSleepMenu(){
+    let menu = document.querySelector(".sleep_display");
+    selected_sleep_menu = 1;
+
+    updateSleepArrow();
+    menu.style.display = "block";
+}
+
+
+
+
 function pressA(){
     if(current_action == 8){
         switchMainMenu();
@@ -878,6 +925,10 @@ function pressB(){
         }
         if(current_selected_icon == 4){
             confirmMedicMenu();
+        }
+
+        if(current_selected_icon == 6){
+            confirmScoldMenu();
         }
 
         setInterval(() => {
