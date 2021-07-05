@@ -7,14 +7,20 @@
     url('../font/ArcadeClassic.svg#svgFontName') format('svg'); /* Legacy iOS */
 }
 
+
+body{
+    background-color: powderblue;
+}
+
 .gameFrame{
     position: absolute;
-    z-index: 5;
+    z-index: 0;
 
     width: 800px;
     height: 500px;
     margin-left: 250px;
     border: 2px solid black;
+    background-color: white;
 }
 
 .left{
@@ -223,7 +229,7 @@
 
 .button_container{
     position: absolute;
-    top: 530px;
+    top: 525px;
     left: 450px;
     width: 400px;
     justify-content: space-between;
@@ -234,6 +240,10 @@
     width: 100px;
     height: 50px;
     border: 4px solid black;
+    border-radius: 10px;
+
+    /*background-image: url("../images/button_skins/heart.png");*/
+    background-color: pink;
 }
 
 .minigame_menu_symbol{
@@ -307,14 +317,14 @@
 .sick_icon{
     position: absolute;
     z-index: 2;
-    left: 160px;
+    left: 190px;
     top: 60px;
 }
 
 .sleepy_icon{
     position: absolute;
     z-index: 2;
-    left: 50px;
+    left: 30px;
     top: 100px;
 }
 
@@ -348,4 +358,35 @@
     top: 150px;
     left: 200px;
     
+}
+
+.screen_tint{
+    position: absolute;
+    z-index: 8;
+
+    top: 10px;
+    left: 260px;
+
+    width: 800px;
+    height: 500px;
+
+    background-color: #D3F6DB;
+    opacity: 0.30;
+
+}
+
+.shell_skin{
+    position: absolute;
+    z-index: -1;
+    left: 160px;
+    top: -10px;
+    width: 990px;
+    height: 610px;
+    margin-top: 0;
+    background-image: url("../images/shell_skins/preview.jpg");
+
+    border: 5px solid black;
+    border-radius: 0px 0px 15px 15px;
+
+    background-color: pink;
 }
