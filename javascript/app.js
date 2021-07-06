@@ -31,16 +31,21 @@ let current_selected_icon = 0;
 
 let selected_stats_menu = 0;
 
-let food_stat = 2;
-let fun_stat = 2;
+let food_stat = 1;
+let fun_stat = 1;
 let discipline_stat = 0;
 
 let clear_animation_counter = 0;
 
 let selected_food = 0;
 let selected_sleep_menu = 0;
+let satiety = 0;
 
+let obedience_roll = 0.5;
+let obedience_reroll_timer = 60;
 
+//base weight
+//add gained weight as separate variable
 let weight = 30;
 
 //5400 base value
@@ -51,9 +56,18 @@ let poop_uncleaned_time = 0;
 
 let is_sick = false;
 let sickness_death_timer = 18000;
+//random sickness limit may be changed for diferent evolutions
+let random_sickness_limit = 0.15;
 let sick_check_timer = 3600;
 
 let candy_sick_counter = 0;
+
+let perfect_minigame_count = 0;
+
+let sleep_time = new Date(0,0,0,20,0,0);
+let wake_up_time = new Date(0,0,0,8,0,0);
+
+let is_toolbar_menu_open = false;
 
 let menu = Array();
 menu[0] = "menu_food"
@@ -150,19 +164,24 @@ function currentTime() {
     let t = setTimeout(function(){ currentTime() }, 1000); /* setting timer */
 }
 
-function game_clock_tick(){
+function game_clock_tick(){ 
     
     aging_tick();
-    food_tick();
-    fun_tick();
     clear_animation_tick();
-    candy_digestion_tick();
     skip_minigame_stage_tick();
-    forgive_miss_tick();  
+    candy_digestion_tick();
+    satiety_tick();
 
-    sick_tick();
-    poop_tick();
-    fake_tick();
+    if(!is_sleeping){
+        food_tick();
+        fun_tick();    
+        forgive_miss_tick();  
+        sick_tick();
+        poop_tick();
+        fake_tick();
+    }
+
+    sleep_tick();
 }
 
 function clear_animation_tick(){
@@ -178,6 +197,12 @@ function clear_animation_tick(){
 function aging_tick(){
     age_in_seconds++;
 }
+
+
+function satiety_tick(){
+    if(satiety > 0) satiety -= 0.0018;
+}
+
 
 function food_tick(){
     if(food_stat > 0){
@@ -204,6 +229,23 @@ function fun_tick(){
 
 function discipline_tick(){
     if(discipline_stat > 0)discipline_stat -= 0.000004;
+}
+
+function reroll_obedience(){
+    obedience_roll = Math.random();
+}
+
+function obedience_tick(){
+    obedience_reroll_timer--;
+    if(obedience_reroll_timer <= 0)reroll_obedience();
+}
+
+function obedience_check(stat_to_check){
+    const order_value = 0.6 + discipline_stat*0.4;
+    if(stat_to_check == "food" && food_stat <= 1)return true;
+    if(stat_to_check == "fun"  &&  fun_stat <= 1)return true;
+
+    return (order_value > obedience_roll);
 }
 
 function candy_digestion_tick(){
@@ -355,7 +397,7 @@ function sick_tick(){
     if(is_sick){
         sickness_death_timer--;
         if(sickness_death_timer <= 0){
-            die();
+            die(false);
         }
     }
 }
@@ -378,7 +420,7 @@ function sick_chance_roll(){
 
         if(total_poop_sickness_limit > poop_sickness_rng){
             //issue critical miss if uncleaned for a long time
-            if(uncleaned_time_debuff > 900)critical_miss(null);
+            if(uncleaned_time_debuff > 1800)critical_miss(null);
             get_sick();
             return;
         }
@@ -386,13 +428,13 @@ function sick_chance_roll(){
     //TOO MUCH CANDY
 
     if(candy_sick_counter > 5){
-        //care miss
+        critical_miss(null);
         get_sick();
         return;
     }
 
     //RANDOM CHANCE;
-    const random_sickness_limit = 0.15;
+    //const random_sickness_limit = 0.15;
     const random_sickness_rng   = Math.random();
 
     if(random_sickness_limit > random_sickness_rng){
@@ -436,16 +478,20 @@ function forgive_miss_tick(){
 }
 
 function check_death_by_miss(){
-    if(care_miss_death_score >= 0)die();
+    if(care_miss_death_score >= 0)die(false);
 }
 
-function die(){
+function die(is_death_by_aging){
+    is_light_on = true;
+    updateLightDisplay();
+
     closeAnimation();
     closeFoodMenu();
     closeMinigame();
     closeStatsMenu();
     let death_display = document.querySelector(".death_display");
     death_display.classList.remove("hidden_display");
+
 
     current_action = 10;
 
@@ -511,8 +557,14 @@ function closeFoodMenu(){
     menu.style.display = "none";
 }
 
+function satiety_check(){
+    let satiety_limit = 5;
+    return (satiety < satiety_limit);
+}
+
 function eat_selected_food(){
     if (selected_food == 0){
+        satiety += 1;
         weight += 1;
         food_stat += 1;
         if(food_stat >= 4) food_stat = 4;
@@ -520,6 +572,7 @@ function eat_selected_food(){
     }
 
     if(selected_food == 1){
+        satiety += 1;
         weight += 2;
         food_stat += 1;
         fun_stat += 1;
@@ -639,15 +692,23 @@ function unselectMenu(to_unselect){
 
 function confirmFoodMenu(){
 
-    if(selected_food == 0){
-        displayAnimation(1);
-        eat_selected_food();
+    if(satiety_check() && !is_sick ){
+        if(selected_food == 0){
+            if(obedience_check("food") ){
+                displayAnimation(1);
+                eat_selected_food();
+            }else{
+                displayAnimation(5);
+            }
 
-    }
-    if(selected_food == 1){
-        displayAnimation(2);
-        eat_selected_food();
+        }
+        if(selected_food == 1){
+            displayAnimation(2);
+            eat_selected_food();
 
+        }
+    }else{
+        displayAnimation(5);
     }
 
 }
@@ -743,6 +804,7 @@ function switchMinigameGuess(){
 
 function win_minigame (is_perfect){
     if(is_perfect){
+        perfect_minigame_count++;
         fun_stat += 2;
         remove_critical("fun");
     }else{
@@ -884,11 +946,13 @@ function closeSleepMenu(){
 
 function confirmSleepMenu(){
     if(selected_sleep_menu==1){
-        is_light_on = true; 
+        is_light_on = true;
+        if(is_sleeping)declare_critical("sleep");
     }
 
     if(selected_sleep_menu==0){
         is_light_on = false;
+        remove_critical("sleep");
     }
 
     closeSleepMenu();
@@ -898,6 +962,7 @@ function confirmSleepMenu(){
 }
 
 function updateLightDisplay(){
+
     let menu  = document.querySelector(".sleep_display");
     let clock = document.querySelector(".clock");
 
@@ -910,6 +975,80 @@ function updateLightDisplay(){
         clock.style.color = "white";
         menu.style.display = "block";
     }
+
+    if(is_sleeping){
+        menu.querySelector("img").src = "./images/menus/sleeping.png";
+    }else{
+        menu.querySelector("img").src = "./images/menus/dark.png";
+    }
+}
+
+function date_to_seconds_elapsed(date){
+    let current_hour   = date.getHours();
+    let current_minute = date.getMinutes()
+    let current_second = date.getSeconds();
+
+
+    let seconds_val = current_hour*3600 + current_minute * 60 + current_second;
+    return seconds_val;
+}
+
+function is_sleeptime(current_time){
+    const current_time_seconds = date_to_seconds_elapsed(current_time);
+    const sleep_time_seconds   = date_to_seconds_elapsed(sleep_time);
+    const wake_up_time_seconds = date_to_seconds_elapsed(wake_up_time);
+    const day_begin = 0;
+    const day_end   = 86400;
+
+    return ((day_begin < current_time_seconds && current_time_seconds<wake_up_time_seconds) || (sleep_time_seconds<current_time_seconds&&current_time_seconds<day_end))
+}
+
+function sleep(){
+    let icon = document.querySelector(".sleepy_icon");
+    icon.classList.remove("hidden_display");
+
+
+    is_sleeping = true;
+    is_moving = false;
+
+    updateLightDisplay();
+}
+
+function wake_up(){
+    let icon = document.querySelector(".sleepy_icon");
+    icon.classList.add("hidden_display");
+
+    is_sleeping = false;
+    is_moving = true;
+
+    is_light_on = true;
+    updateLightDisplay();
+}
+
+function sleep_tick(){
+    console.log(critical_timer["sleep"]);
+    if(is_sleeptime(new Date())){
+        if(!is_sleeping){
+            if(is_light_on && !is_critical["sleep"])declare_critical("sleep");
+            sleep();
+        }
+        if(is_light_on)critical_tick("sleep");
+        
+    }
+}
+
+function open_toolbar_customize(){
+    if(!is_toolbar_menu_open){
+        is_toolbar_menu_open = true;
+        let menu = document.querySelector(".customize_menu");
+        menu.style.display = "block";
+    }
+}
+
+function close_toolbar_customize(){
+    is_toolbar_menu_open = false;
+    let menu = document.querySelector(".customize_menu");
+    menu.style.display = "none";
 }
 
 function pressA(){
@@ -947,29 +1086,33 @@ function pressA(){
 function pressB(){
     if(current_action == 8){
         just_selected = true;
-        if(current_selected_icon == 0){
+        if(current_selected_icon == 0 && is_light_on){
             current_action = 0;
             openFoodMenu();
         }
-        if(current_selected_icon == 1){
+        if(current_selected_icon == 1 ){
             current_action = 1;
             openStatsMenu();
         }
-        if(current_selected_icon == 2){
-            current_action = 2;
-            openMinigameMenu();
+        if(current_selected_icon == 2 && is_light_on){
+            if(obedience_check("fun")){
+                current_action = 2;
+                openMinigameMenu();
+            }else{
+                displayAnimation(5);
+            }
         }
-        if(current_selected_icon == 3){
+        if(current_selected_icon == 3 && is_light_on){
             confirmToiletMenu();
         }
-        if(current_selected_icon == 4){
+        if(current_selected_icon == 4 && is_light_on){
             confirmMedicMenu();
         }
         if(current_selected_icon == 5){
             current_action = 3;
             openSleepMenu();
         }
-        if(current_selected_icon == 6){
+        if(current_selected_icon == 6 && is_light_on){
             confirmScoldMenu();
         }
 
@@ -1024,6 +1167,7 @@ function start(){
     currentTime();
     initPosition();
     wander();
+
 }
 
 start();

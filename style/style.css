@@ -356,7 +356,7 @@ body{
     z-index: 6;
     /*200 540*/
     top: 150px;
-    left: 200px;
+    left: 240px;
     
 }
 
@@ -383,10 +383,48 @@ body{
     width: 990px;
     height: 610px;
     margin-top: 0;
-    background-image: url("../images/shell_skins/preview.jpg");
+    background-image: url("../images/shell_skins/desert.jpg");
 
     border: 5px solid black;
     border-radius: 0px 0px 15px 15px;
 
     background-color: pink;
+}
+
+.customize_menu{
+    position: absolute;
+    z-index: 9;
+    border: 3px solid black;
+    top: 90px;
+    left: 425px;
+    width: 450px;
+    height: 350px;
+    background-color: rgb(105, 240, 145);
+    /*display: none;*/
+}
+
+.toolbar{
+    position: absolute;
+    left: 1300px
+}
+
+.toolbar_icon{
+    width: 48px;
+    height: 48px;
+}
+
+.close_toolbar_button{
+    position: absolute;
+    left: 416px;
+    top: 2px;
+}
+
+.toolbar_container{
+    position: absolute;
+    width: 400px;
+    height: 300px;
+    left: 25px;
+    top: 25px;
+    border-radius: 30px;
+    background-color: rgb(222, 255, 221);
 }

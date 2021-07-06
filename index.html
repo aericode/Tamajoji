@@ -8,12 +8,72 @@
     
 </head>
 <body>
+
+    <div class="toolbar">
+        <img src="./images/icons/customize_icon.png" class="toolbar_icon" onclick="open_toolbar_customize()"> <br>
+        <img src="./images/icons/sound_icon.png" class="toolbar_icon"> <br>
+        <img src="./images/icons/help_icon.png" class="toolbar_icon"> <br>
+    </div>
+
+    <div class="customize_menu">
+        <div class="toolbar_container">
+            <div class="customize_color_section">
+                <label>Screen Color:</label>
+                <select name="select">
+                    <option value="#D3F6DB">Blue</option>
+                    <option value="orange">Orange</option>
+                    <option value="pink">Pink</option>
+                    <option value="green">Retro-Green</option>
+                    <option value="yellow">Yellow</option>
+                </select>
+            </div>
+            <div class="customize_shell_section">
+                <label>Frame Skin:</label>
+                <select name="select">
+                    <optgroup label="Colors">
+                        <option value="#FF0000">Red</option>
+                        <option value="orange">Blue</option>
+                        <option value="pink">Green</option>
+                        <option value="green">Pink</option>
+                        <option value="yellow">Orange</option>
+                        <option value="yellow">Gray</option>
+                        <option value="yellow">Purple</option>
+                        <option value="yellow">Violet</option>
+                        <option value="yellow">White</option>
+                        <option value="yellow">Yellow</option>
+                    </optgroup>
+                    <optgroup label="Skins">
+                        <option value="blue_stripes">Blue Stripes</option>
+                        <option value="blurred">Blurred</option>
+                        <option value="checkered">Checkered</option>
+                        <option value="cosmic_human">Cosmic Human</option>
+                        <option value="desert">Desert</option>
+                        <option value="pink_stripes">Pink Stripes</option>
+                        <option value="rainbow">Rainbow</option>
+                        <option value="squared">Squared</option>
+                        <option value="waves">Waves</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div>
+                <select name="select">
+                    <option value="#D3F6DB">Blue</option>
+                    <option value="orange">Orange</option>
+                    <option value="pink">Pink</option>
+                    <option value="green">Retro-Green</option>
+                    <option value="yellow">Yellow</option>
+                </select>
+            </div>            
+        </div>
+        <img src="./images/icons/close_icon.png" class="close_toolbar_button close_customize" onclick="close_toolbar_customize()">
+    </div>
+
     <div class="shell_skin"></div>
     <div class="screen_tint"></div>
     <div class="gameFrame">
         <div class="clock"></div>
         <div class="sleep_display">
-            <img src="./images/menus/sleeping.png">
+            <img src="./images/menus/dark.png">
         </div>
         
         <div class="pet_frame">
@@ -119,7 +179,7 @@
 
 
     <div class="button_container">
-        <div class="btn ButtonA" onclick="pressA()"></div>
+        <div class="btn ButtonA" onclick="pressA()"></div> 
         <div class="btn ButtonB" onclick="pressB()"></div>
         <div class="btn ButtonC" onclick="pressC()"></div>
     </div>
