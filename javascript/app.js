@@ -1026,7 +1026,6 @@ function wake_up(){
 }
 
 function sleep_tick(){
-    console.log(critical_timer["sleep"]);
     if(is_sleeptime(new Date())){
         if(!is_sleeping){
             if(is_light_on && !is_critical["sleep"])declare_critical("sleep");

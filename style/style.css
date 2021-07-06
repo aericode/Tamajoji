@@ -383,7 +383,7 @@ body{
     width: 990px;
     height: 610px;
     margin-top: 0;
-    background-image: url("../images/shell_skins/desert.jpg");
+    background-image: url("../images/shell_skins/cosmic_human.jpg");
 
     border: 5px solid black;
     border-radius: 0px 0px 15px 15px;
@@ -391,17 +391,6 @@ body{
     background-color: pink;
 }
 
-.customize_menu{
-    position: absolute;
-    z-index: 9;
-    border: 3px solid black;
-    top: 90px;
-    left: 425px;
-    width: 450px;
-    height: 350px;
-    background-color: rgb(105, 240, 145);
-    /*display: none;*/
-}
 
 .toolbar{
     position: absolute;
@@ -413,18 +402,62 @@ body{
     height: 48px;
 }
 
-.close_toolbar_button{
+.close_toolbar_menu_button{
     position: absolute;
     left: 416px;
     top: 2px;
 }
 
-.toolbar_container{
+
+.customize_menu{
     position: absolute;
-    width: 400px;
-    height: 300px;
-    left: 25px;
-    top: 25px;
+    z-index: 9;
+    border: 3px solid black;
+    top: 150px;
+    left: 425px;
+    width: 450px;
+    height: 250px;
+    /*background-color: rgb(105, 240, 145);*/
+    background-color: rgb(154, 153, 228);
+    display: none;
+}
+
+.customize_menu_decoration{
+    position: absolute;
+    width: 280px;
+    height: 180px;
+    left: 45px;
+    top: 35px;
     border-radius: 30px;
-    background-color: rgb(222, 255, 221);
+    background-color: rgb(240, 200, 234);
+}
+
+.customize_screen_section{
+    position: absolute;
+    left: 15px;
+    top: 50px;
+
+}
+
+.customize_shell_section{
+    position: absolute;
+    left: 15px;
+    top:80px
+}
+
+.customize_button_section{
+    position: absolute;
+    left: 15px;
+    top: 110px;
+}
+
+.customize_menu select{
+    width: 150px
+}
+
+.customize_apply_button{
+    position: absolute;
+
+    left: 340px;
+    top: 80px;
 }
