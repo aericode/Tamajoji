@@ -1050,6 +1050,38 @@ function close_toolbar_customize(){
     menu.style.display = "none";
 }
 
+function update_customization(screen_color,frame_color,button_color){
+    let screen_display = document.querySelector(".screen_tint");
+    let frame_display  = document.querySelector(".shell_skin");
+    let button_array = document.querySelectorAll(".btn");
+
+    screen_display.style.backgroundColor = screen_color;
+
+    let frame_color_array = frame_color.split('.');
+    if(frame_color_array[0]=="color"){
+        frame_display.style.backgroundColor = frame_color_array[1];
+        frame_display.style.backgroundImage = "none";
+    }else if(frame_color_array[0]=="skin"){
+        frame_display.style.backgroundColor = "none"
+        frame_display.style.backgroundImage = "url('./images/shell_skins/"+ frame_color_array[1] +".jpg')"
+    }
+
+    for(i=0;i<3;i++){
+        button_array[i].style.backgroundColor = button_color;
+    }
+
+
+}
+
+function click_customize_apply_button(){
+    let screen_color = document.querySelector(".select_screen_color").value;
+    let frame_color  = document.querySelector(".select_shell_color").value;
+    let button_color = document.querySelector(".select_button_color").value;
+
+    console.log(screen_color,frame_color,button_color);
+    update_customization(screen_color,frame_color,button_color);
+}
+
 function pressA(){
     if(current_action == 8){
         switchMainMenu();

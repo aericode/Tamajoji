@@ -242,7 +242,6 @@ body{
     border: 4px solid black;
     border-radius: 10px;
 
-    /*background-image: url("../images/button_skins/heart.png");*/
     background-color: pink;
 }
 
@@ -460,4 +459,13 @@ body{
 
     left: 340px;
     top: 80px;
+}
+
+.customize_apply_button:hover{
+    position: absolute;
+
+    left: 340px;
+    top: 80px;
+
+    content:url("../images/icons/apply_button_hover.png")
 }

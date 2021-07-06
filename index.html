@@ -19,53 +19,55 @@
         <div class="customize_menu_decoration">
             <div class="customize_screen_section">
                 <label>Screen Color:</label>
-                <select name="select">
-                    <option value="#D3F6DB">Blue</option>
-                    <option value="orange">Orange</option>
-                    <option value="pink">Pink</option>
-                    <option value="green">Retro-Green</option>
-                    <option value="yellow">Yellow</option>
+                <select class="select_screen_color" >
+                    <option value="#d3f6dB">Blue</option>
+                    <option value="#F8b878">Orange</option>
+                    <option value="#efbbcc">Pink</option>
+                    <option value="#808000">Retro-Green</option>
+                    <option value="#ffff00">Yellow</option>
                 </select>
             </div>
             <div class="customize_shell_section">
                 <label>Frame Skin:&nbsp;&nbsp;</label>
-                <select name="select">
+                <select class="select_shell_color">
                     <optgroup label="Colors">
-                        <option value="#FF0000">Red</option>
-                        <option value="orange">Blue</option>
-                        <option value="pink">Green</option>
-                        <option value="green">Pink</option>
-                        <option value="yellow">Orange</option>
-                        <option value="yellow">Gray</option>
-                        <option value="yellow">Violet</option>
-                        <option value="yellow">White</option>
+                        <option value="color.#43b3ae">Blue</option>
+                        <option value="color.#008000">Green</option>
+                        <option value="color.#708090">Gray</option>
+                        <option value="color.#ff4500">Red</option>
+                        <option value="color.#ffc0cb">Pink</option>
+                        <option value="color.#ff7f00">Orange</option>
+                        <option value="color.#9932cc">Violet</option>
+                        <option value="color.#f2f3f4">White</option>
                     </optgroup>
                     <optgroup label="Skins">
-                        <option value="blue_stripes">Blue Stripes</option>
-                        <option value="blurred">Blurred</option>
-                        <option value="checkered">Checkered</option>
-                        <option value="cosmic_human">Cosmic Human</option>
-                        <option value="desert">Desert</option>
-                        <option value="pink_stripes">Pink Stripes</option>
-                        <option value="rainbow">Rainbow</option>
-                        <option value="squared">Squared</option>
-                        <option value="waves">Waves</option>
+                        <option value="skin.blue_stripes">Blue Stripes</option>
+                        <option value="skin.blurred">Blurred</option>
+                        <option value="skin.checkered">Checkered</option>
+                        <option value="skin.cosmic_human">Cosmic Human</option>
+                        <option value="skin.desert">Desert</option>
+                        <option value="skin.pink_stripes">Pink Stripes</option>
+                        <option value="skin.rainbow">Rainbow</option>
+                        <option value="skin.squared">Squared</option>
+                        <option value="skin.waves">Waves</option>
                     </optgroup>
                 </select>
             </div>
             <div class="customize_button_section">
                 <label>Button Color:</label>
-                <select name="select">
-                    <option value="#D3F6DB">Blue</option>
-                    <option value="orange">Orange</option>
-                    <option value="pink">Pink</option>
-                    <option value="green">Retro-Green</option>
-                    <option value="yellow">Yellow</option>
+                <select class="select_button_color">
+                    <option value="#191970">Blue</option>
+                    <option value="#d0ff14">Green</option>
+                    <option value="#708090">Gray</option>
+                    <option value="#f4bbff">Pink</option>
+                    <option value="#ff6961">Red</option>
+                    <option value="#ffd800">Yellow</option>
+                    <option value="#faebd7">White</option>
                 </select>
             </div>            
         </div>
         <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button close_customize" onclick="close_toolbar_customize()">
-        <img src="./images/icons/apply_button.png" class="customize_apply_button">
+        <img src="./images/icons/apply_button.png" class="customize_apply_button" onclick="click_customize_apply_button()">
     </div>
 
     <div class="shell_skin"></div>
