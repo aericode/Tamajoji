@@ -59,11 +59,13 @@ let sickness_death_timer = 18000;
 //random sickness limit may be changed for diferent evolutions
 let random_sickness_limit = 0.15;
 let sick_check_timer = 3600;
+let is_missed_sick_call = false;
 
 let candy_sick_counter = 0;
 
 let perfect_minigame_count = 0;
 
+let is_missed_bedtime = false;
 let sleep_time = new Date(0,0,0,20,0,0);
 let wake_up_time = new Date(0,0,0,8,0,0);
 
@@ -182,6 +184,9 @@ function game_clock_tick(){
     }
 
     sleep_tick();
+
+    debug();
+    update_critical_icon()
 }
 
 function clear_animation_tick(){
@@ -284,6 +289,7 @@ function declare_critical(key){
 
 function remove_critical(key){
     is_critical[key] = false;
+    critical_timer[key] = 900;
     update_critical_icon();
 }
 
@@ -309,12 +315,18 @@ function critical_miss(key){
     if(key=="sleep" || key == "sick"){
         remove_critical(key);
     }
+
+    //prevents sleep and sick from triggering multiple miss calls in a row
+    if(key=="sleep")is_missed_bedtime = true;
+    if(key=="sick")is_missed_sick_call = true;
+    
+
     check_death_by_miss();
 
 }
 
 function update_critical_icon(){
-    let is_icon_active = (is_critical["food"]||is_critical["fun"]||is_critical["sleep"]||is_critical["faking"]);
+    let is_icon_active = (is_critical["food"]||is_critical["fun"]||is_critical["sleep"]||is_critical["sick"]||is_critical["faking"]);
     let critical_icon = document.querySelector(".menu_attention");
 
     if(is_icon_active){
@@ -389,12 +401,15 @@ function confirmScoldMenu(){
 
 function sick_tick(){
     //doesn't make rolls if sick
+
     if(!is_sick){
         sick_check_timer--;
         if( sick_check_timer <= 0) sick_trigger();
     }
 
     if(is_sick){
+        //issues a single critical miss upon not responding to critical call
+        if(!is_missed_sick_call)critical_tick("sick");
         sickness_death_timer--;
         if(sickness_death_timer <= 0){
             die(false);
@@ -451,7 +466,9 @@ function get_sick() {
     sick_icon.classList.remove("hidden_display");
     is_sick = true;
     sickness_death_timer = 18000;
+    is_missed_sick_call = false;
 
+    declare_critical("sick");
 }
 
 
@@ -461,6 +478,8 @@ function get_healed(){
     sick_icon.classList.add("hidden_display");
     is_sick = false;
     sickness_death_timer = 18000;
+
+    is_missed_sick_call = false;
 
     displayAnimation(7);
 }
@@ -477,7 +496,7 @@ function forgive_miss_tick(){
 }
 
 function check_death_by_miss(){
-    if(care_miss_death_score >= 0)die(false);
+    if(care_miss_death_score >= 7)die(false);
 }
 
 function die(is_death_by_aging){
@@ -1017,6 +1036,7 @@ function wake_up(){
     let icon = document.querySelector(".sleepy_icon");
     icon.classList.add("hidden_display");
 
+    is_missed_bedtime = false;
     is_sleeping = false;
     is_moving = true;
 
@@ -1030,7 +1050,7 @@ function sleep_tick(){
             if(is_light_on && !is_critical["sleep"])declare_critical("sleep");
             sleep();
         }
-        if(is_light_on)critical_tick("sleep");
+        if(is_light_on && !is_missed_bedtime)critical_tick("sleep");
         
     }
 }
@@ -1255,11 +1275,17 @@ function pressC(){
     }
 }
 
+function debug(){
+    console.log("is sick? "+ is_sick);
+    console.log("sick critical: " + critical_timer["sick"]);
+}
+
 function start(){
     currentTime();
     initPosition();
     wander();
     load_local_customization();
+
 }
 
 start();
