@@ -46,7 +46,8 @@ let obedience_reroll_timer = 60;
 
 //base weight
 //add gained weight as separate variable
-let weight = 30;
+let base_weight  = 30; 
+let extra_weight = 0;
 
 //5400 base value
 //randomize between 0 and 3600 to add to base
@@ -64,6 +65,7 @@ let is_missed_sick_call = false;
 let candy_sick_counter = 0;
 
 let perfect_minigame_count = 0;
+let is_ever_played_game = false;
 
 let is_missed_bedtime = false;
 let sleep_time = new Date(0,0,0,20,0,0);
@@ -90,12 +92,12 @@ menu[7] = "menu_attention"
 
 //main menu - 8
 //animation - 9
-//death - 10
+//death - 10 (removed)
 let current_action = 8;
 
 let is_light_on = true;
 let is_sleeping = false;
-
+let is_dead = false;
 
 let is_moving = true;
 function wander(){
@@ -184,9 +186,6 @@ function game_clock_tick(){
     }
 
     sleep_tick();
-
-    debug();
-    update_critical_icon()
 }
 
 function clear_animation_tick(){
@@ -208,10 +207,10 @@ function satiety_tick(){
     if(satiety > 0) satiety -= 0.0018;
 }
 
-
+//current base rate: depletes 4 hearts after 1h
 function food_tick(){
     if(food_stat > 0){
-        food_stat -= 0.0015;
+        food_stat -= 0.0011;
         if(food_stat < 0)food_stat=0;
     }else if(!is_critical["food"]){
         declare_critical("food");
@@ -220,9 +219,18 @@ function food_tick(){
     }
 }
 
+function weight_tick(){
+    //doesn't loses weight while sleeping
+    //trend is to lose 0.32 gram each hour after meal
+    if(extra_weight > 0 && !is_sleeping){
+        extra_weight -= 0.00012;
+    }
+}
+
+//current base rate: depletes 4 hearts after 1h
 function fun_tick(){
     if(fun_stat > 0){
-        fun_stat -= 0.0015;
+        fun_stat -= 0.0011;
         if(fun_stat < 0)fun_stat=0;
     }else if(!is_critical["fun"]){
         declare_critical("fun");
@@ -511,7 +519,7 @@ function die(is_death_by_aging){
     death_display.classList.remove("hidden_display");
 
 
-    current_action = 10;
+    is_dead = true;
 
     //todo: reborn display
 }
@@ -583,7 +591,7 @@ function satiety_check(){
 function eat_selected_food(){
     if (selected_food == 0){
         satiety += 1;
-        weight += 1;
+        extra_weight += 1;
         food_stat += 1;
         if(food_stat >= 4) food_stat = 4;
         remove_critical("food");
@@ -591,7 +599,7 @@ function eat_selected_food(){
 
     if(selected_food == 1){
         satiety += 1;
-        weight += 2;
+        extra_weight += 2;
         food_stat += 1;
         fun_stat += 1;
         if(food_stat >= 4) food_stat = 4;
@@ -645,9 +653,10 @@ function update_stats_display(){
 
     let ingame_years_age = Math.floor(age_in_seconds/86400);
 
+    let total_weight_display = Math.round(base_weight+extra_weight);
 
     age_display.innerText    = ingame_years_age;
-    weight_display.innerText = weight; 
+    weight_display.innerText = total_weight_display; 
 }
 
 //Arguments: "hunger" or "happy"
@@ -894,6 +903,7 @@ function prepare_minigame_round(){
 
     if(minigame_try == 5){
         complete_minigame();
+        is_ever_played_game = true;
         return;
     }
 
@@ -1144,8 +1154,10 @@ function save_local_gameState(){
     localStorage.setItem("localsave_discipline_stat", discipline_stat);
 
     localStorage.setItem("localsave_obedience_roll", obedience_roll);
+    localStorage.setItem("localsave_obedience_reroll_timer", obedience_reroll_timer);
 
-    localStorage.setItem("localsave_weight", weight);
+    localStorage.setItem("localsave_base_weight", base_weight);
+    localStorage.setItem("localsave_base_weight", extra_weight);
 
     localStorage.setItem("localsave_poop_timer", poop_timer);
     localStorage.setItem("localsave_poop_count", poop_count);
@@ -1158,10 +1170,78 @@ function save_local_gameState(){
 
     localStorage.setItem("localstorage_candy_sick_counter", candy_sick_counter);
     localStorage.setItem("localstorage_perfect_minigame_count", perfect_minigame_count );
+    localStorage.setItem("localstorage_is_ever_played_game", is_ever_played_game );
 
     localStorage.setItem("localstorage_is_light_on", is_light_on );
     localStorage.setItem("localstorage_is_sleeping", is_sleeping );
-    localStorage.setItem("localstorage_is_sleeping", is_moving );
+    localStorage.setItem("localstorage_is_moving", is_moving );
+}
+
+//TODO: add egg to restrictions
+function is_action_menu_available(){
+    return (is_light_on && !is_dead )
+}
+
+function set_unload_autosave(){
+    window.addEventListener("beforeunload", function () {
+        save_local_gameState();
+    });
+}
+
+function load_local_savestate(){
+
+    stage_care_miss_count = localStorage.getItem("localsave_stage_care_miss_count")
+    care_miss_death_score = localStorage.getItem("localsave_stage_care_miss_count")
+
+    is_critical["food"] = localStorage.getItem("localsave_is_critical_food") === "true";
+    is_critical["fun"] = localStorage.getItem("localsave_is_critical_fun") === "true";
+    is_critical["sleep"] = localStorage.getItem("localsave_is_critical_sleep") === "true";
+    is_critical["sick"] = localStorage.getItem("localsave_is_critical_sick") === "true";
+    is_critical["faking"] =  localStorage.getItem("localsave_is_critical_faking") === "true";
+
+    critical_timer["food"] = Number.parseInt(localStorage.getItem("localsave_critical_timer_food"), 10);
+    critical_timer["fun"] = Number.parseInt(localStorage.getItem("localsave_critical_timer_fun"), 10);
+    critical_timer["sleep"] = Number.parseInt(localStorage.getItem("localsave_critical_timer_sleep"), 10);
+    critical_timer["sick"] = Number.parseInt(localStorage.getItem("localsave_critical_timer_sick"), 10);
+    critical_timer["faking"] = Number.parseInt(localStorage.getItem("localsave_critical_timer_faking"), 10);
+
+    faking_critical_timer = Number.parseInt(localStorage.getItem("localsave_faking_critical_timer"), 10);
+    age_in_seconds = Number.parseInt(localStorage.getItem("localsave_age_in_seconds"), 10);
+
+    food_stat = Number.parseFloat(localStorage.getItem("localsave_food_stat"), 10);
+    fun_stat = Number.parseFloat(localStorage.getItem("localsave_fun_stat"), 10);
+    discipline_stat = Number.parseFloat(localStorage.getItem("localsave_discipline_stat"), 10);
+
+    obedience_roll = Number.parseFloat(localStorage.getItem("localsave_obedience_roll"), 10);
+    obedience_reroll_timer = Number.parseFloat(localStorage.getItem("localsave_obedience_reroll_timer"), 10);
+
+    base_weight = Number.parseFloat(localStorage.getItem("localsave_base_weight"), 10);
+    extra_weight = Number.parseFloat(localStorage.getItem("localsave_base_weight"), 10);
+
+    poop_timer = Number.parseInt(localStorage.getItem("localsave_poop_timer"), 10);
+    poop_count = Number.parseInt(localStorage.getItem("localsave_poop_count"), 10);
+    poop_uncleaned_time = Number.parseInt(localStorage.getItem("localsave_poop_uncleaned_time"), 10);
+
+    is_sick = localStorage.getItem("localstorage_is_sick") === "true";
+    sickness_death_timer = Number.parseInt(localStorage.getItem("localstorage_sickness_death_timer"), 10);
+    random_sickness_limit = Number.parseFloat(localStorage.getItem("localstorage_random_sickness_limit"), 10);
+    sick_check_timer = Number.parseInt(localStorage.getItem("localstorage_sick_check_timer"), 10);
+
+    candy_sick_counter = Number.parseFloat(localStorage.getItem("localstorage_candy_sick_counter"), 10);
+    perfect_minigame_count = Number.parseInt(localStorage.getItem("localstorage_perfect_minigame_count"), 10); 
+    is_ever_played_game = localStorage.getItem("localstorage_is_ever_played_game") === "true";
+
+    is_light_on = localStorage.getItem("localstorage_is_light_on") === "true";
+    is_sleeping = localStorage.getItem("localstorage_is_sleeping") === "true";
+    is_moving = localStorage.getItem("localstorage_is_moving") === "true";
+
+    
+
+    let loaded = Number.parseFloat(localStorage.getItem("localsave_food_stat"), 10);
+    let test_boolean = localStorage.getItem("localstorage_is_light_on") === "true";
+    //myValue === 'true');
+    //console.log(loaded);
+    console.log(test_boolean);
 }
 
 function pressA(){
@@ -1199,7 +1279,7 @@ function pressA(){
 function pressB(){
     if(current_action == 8){
         just_selected = true;
-        if(current_selected_icon == 0 && is_light_on){
+        if(current_selected_icon == 0 && is_action_menu_available()){
             current_action = 0;
             openFoodMenu();
         }
@@ -1207,7 +1287,7 @@ function pressB(){
             current_action = 1;
             openStatsMenu();
         }
-        if(current_selected_icon == 2 && is_light_on){
+        if(current_selected_icon == 2 && is_action_menu_available()){
             if(obedience_check("fun")){
                 current_action = 2;
                 openMinigameMenu();
@@ -1215,17 +1295,17 @@ function pressB(){
                 displayAnimation(5);
             }
         }
-        if(current_selected_icon == 3 && is_light_on){
+        if(current_selected_icon == 3 && is_action_menu_available()){
             confirmToiletMenu();
         }
-        if(current_selected_icon == 4 && is_light_on){
+        if(current_selected_icon == 4 && is_action_menu_available()){
             confirmMedicMenu();
         }
-        if(current_selected_icon == 5){
+        if(current_selected_icon == 5 && !is_dead){
             current_action = 3;
             openSleepMenu();
         }
-        if(current_selected_icon == 6 && is_light_on){
+        if(current_selected_icon == 6 && is_action_menu_available()){
             confirmScoldMenu();
         }
 
@@ -1275,17 +1355,14 @@ function pressC(){
     }
 }
 
-function debug(){
-    console.log("is sick? "+ is_sick);
-    console.log("sick critical: " + critical_timer["sick"]);
-}
-
 function start(){
     currentTime();
     initPosition();
     wander();
     load_local_customization();
 
+    set_unload_autosave();
+    load_local_savestate();
 }
 
 start();
