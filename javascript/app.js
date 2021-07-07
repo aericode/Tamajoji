@@ -434,7 +434,6 @@ function sick_chance_roll(){
     }
 
     //RANDOM CHANCE;
-    //const random_sickness_limit = 0.15;
     const random_sickness_rng   = Math.random();
 
     if(random_sickness_limit > random_sickness_rng){
@@ -832,7 +831,7 @@ function randomize_revealed_number(){
 
 function conceal_guessed_number(){
     let symbol_display = document.querySelector(".guessed_minigame_number");
-    symbol_display.innerHTML = "x";
+    symbol_display.innerHTML = "?";
 }
 
 function generate_guessed_number(){
@@ -1051,6 +1050,12 @@ function close_toolbar_customize(){
 }
 
 function update_customization(screen_color,frame_color,button_color){
+
+    //DEFAULT SETTINGS
+    if(screen_color==null)screen_color="#d3f6dB";
+    if(frame_color==null)frame_color="color.#708090";
+    if(button_color==null)button_color="#d0ff14";
+
     let screen_display = document.querySelector(".screen_tint");
     let frame_display  = document.querySelector(".shell_skin");
     let button_array = document.querySelectorAll(".btn");
@@ -1078,8 +1083,65 @@ function click_customize_apply_button(){
     let frame_color  = document.querySelector(".select_shell_color").value;
     let button_color = document.querySelector(".select_button_color").value;
 
-    console.log(screen_color,frame_color,button_color);
+    localStorage.setItem("localsave_screen_color" , screen_color );
+    localStorage.setItem("localsave_frame_color"  , frame_color);
+    localStorage.setItem("localsave_button_color" , button_color);
+
+
     update_customization(screen_color,frame_color,button_color);
+}
+
+function load_local_customization(){
+    let screen_color = localStorage.getItem("localsave_screen_color")
+    let frame_color  = localStorage.getItem("localsave_frame_color")
+    let button_color = localStorage.getItem("localsave_button_color")
+
+
+    update_customization(screen_color,frame_color,button_color);
+}
+
+function save_local_gameState(){
+    localStorage.setItem("localsave_stage_care_miss_count" , stage_care_miss_count );
+    localStorage.setItem("localsave_stage_care_miss_count" , care_miss_death_score );
+
+    localStorage.setItem("localsave_is_critical_food", is_critical["food"]);
+    localStorage.setItem("localsave_is_critical_fun", is_critical["fun"]);
+    localStorage.setItem("localsave_is_critical_sleep", is_critical["sleep"]);
+    localStorage.setItem("localsave_is_critical_sick", is_critical["sick"]);
+    localStorage.setItem("localsave_is_critical_faking", is_critical["faking"]);
+
+    localStorage.setItem("localsave_critical_timer_food", critical_timer["food"]);
+    localStorage.setItem("localsave_critical_timer_fun", critical_timer["fun"]);
+    localStorage.setItem("localsave_critical_timer_sleep", critical_timer["sleep"]);
+    localStorage.setItem("localsave_critical_timer_sick", critical_timer["sick"]);
+    localStorage.setItem("localsave_critical_timer_faking", critical_timer["faking"]);
+
+    localStorage.setItem("localsave_faking_critical_timer", faking_critical_timer);
+    localStorage.setItem("localsave_age_in_seconds", age_in_seconds);
+
+    localStorage.setItem("localsave_food_stat", food_stat);
+    localStorage.setItem("localsave_fun_stat", fun_stat);
+    localStorage.setItem("localsave_discipline_stat", discipline_stat);
+
+    localStorage.setItem("localsave_obedience_roll", obedience_roll);
+
+    localStorage.setItem("localsave_weight", weight);
+
+    localStorage.setItem("localsave_poop_timer", poop_timer);
+    localStorage.setItem("localsave_poop_count", poop_count);
+    localStorage.setItem("localsave_poop_uncleaned_time", poop_uncleaned_time);
+
+    localStorage.setItem("localstorage_is_sick", is_sick)
+    localStorage.setItem("localstorage_sickness_death_timer", sickness_death_timer);
+    localStorage.setItem("localstorage_random_sickness_limit", random_sickness_limit);
+    localStorage.setItem("localstorage_sick_check_timer", sick_check_timer);
+
+    localStorage.setItem("localstorage_candy_sick_counter", candy_sick_counter);
+    localStorage.setItem("localstorage_perfect_minigame_count", perfect_minigame_count );
+
+    localStorage.setItem("localstorage_is_light_on", is_light_on );
+    localStorage.setItem("localstorage_is_sleeping", is_sleeping );
+    localStorage.setItem("localstorage_is_sleeping", is_moving );
 }
 
 function pressA(){
@@ -1188,7 +1250,6 @@ function pressC(){
     }
 
     if(current_action == 9){
-        //current_action = 8;
         closeAnimation();
 
     }
@@ -1198,7 +1259,7 @@ function start(){
     currentTime();
     initPosition();
     wander();
-
+    load_local_customization();
 }
 
 start();

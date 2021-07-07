@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 <metadata>
-Created by FontForge 20170731 at Sat Feb  8 23:44:24 2003
+Created by FontForge 20170731 at Wed Jul  7 08:51:13 2021
  By Aleksey,,,
 (c) Jakob Fischer at www.pizzadude.dk - DO NOT DISTRIBUTE WITHOUT AUTHOR'S PERMISSION!
 </metadata>
@@ -20,7 +20,7 @@ Created by FontForge 20170731 at Sat Feb  8 23:44:24 2003
     cap-height="563"
     bbox="-35 0 508 812"
     underline-thickness="20"
-    underline-position="-163"
+    underline-position="-183"
     unicode-range="U+0020-0491"
   />
 <missing-glyph horiz-adv-x="500" 
@@ -55,6 +55,8 @@ d="M499 423h-68v-72h-71v-71h-72v-215h-144v213h68v71h71v72h74v71h-211v-69h-145v14
 d="M499 137h-68v-72h-358v68h-72v145h70v70h-70v144h68v71h287v-68h72v-144h-70v-70h141v-144zM356 351v141h-212v-73h72v-68h140zM356 137v73h-142v68h-141v-141h283z" />
     <glyph glyph-name="nine" unicode="9" 
 d="M499 208h-68v-71h-71v-72h-287v70h210v71h74v70h-284v72h-72v144h68v71h359v-68h71v-287zM356 351v141h-212v-141h212z" />
+    <glyph glyph-name="question" unicode="?" 
+d="M144 110h143v-25v-3v-50h-142zM140 63zM499 423h-68v-72h-71v-71h-72v-116h-17h-127v114h68v71h71v72h74v71h-99h-112v-69h-145v140l65 1l-2 63l362 2v-67l73 1v-140z" />
     <glyph glyph-name="A" unicode="A" 
 d="M499 65h-141v142h-212v-142h-145v356h68v71h72v71h215v-68h72v-71h71v-359zM356 280v144h-71v68h-73v-72h-68v-140h212z" />
     <glyph glyph-name="B" unicode="B" 
