@@ -65,7 +65,7 @@ let is_missed_sick_call = false;
 let candy_sick_counter = 0;
 
 let perfect_minigame_count = 0;
-let is_ever_played_game = false;
+let is_ever_played_minigame = false;
 
 let is_missed_bedtime = false;
 let sleep_time = new Date(0,0,0,20,0,0);
@@ -903,7 +903,7 @@ function prepare_minigame_round(){
 
     if(minigame_try == 5){
         complete_minigame();
-        is_ever_played_game = true;
+        is_ever_played_minigame = true;
         return;
     }
 
@@ -1157,24 +1157,27 @@ function save_local_gameState(){
     localStorage.setItem("localsave_obedience_reroll_timer", obedience_reroll_timer);
 
     localStorage.setItem("localsave_base_weight", base_weight);
-    localStorage.setItem("localsave_base_weight", extra_weight);
+    localStorage.setItem("localsave_extra_weight", extra_weight);
 
     localStorage.setItem("localsave_poop_timer", poop_timer);
     localStorage.setItem("localsave_poop_count", poop_count);
     localStorage.setItem("localsave_poop_uncleaned_time", poop_uncleaned_time);
 
-    localStorage.setItem("localstorage_is_sick", is_sick)
-    localStorage.setItem("localstorage_sickness_death_timer", sickness_death_timer);
-    localStorage.setItem("localstorage_random_sickness_limit", random_sickness_limit);
-    localStorage.setItem("localstorage_sick_check_timer", sick_check_timer);
+    localStorage.setItem("localsave_is_sick", is_sick)
+    localStorage.setItem("localsave_sickness_death_timer", sickness_death_timer);
+    localStorage.setItem("localsave_random_sickness_limit", random_sickness_limit);
+    localStorage.setItem("localsave_sick_check_timer", sick_check_timer);
 
-    localStorage.setItem("localstorage_candy_sick_counter", candy_sick_counter);
-    localStorage.setItem("localstorage_perfect_minigame_count", perfect_minigame_count );
-    localStorage.setItem("localstorage_is_ever_played_game", is_ever_played_game );
+    localStorage.setItem("localsave_candy_sick_counter", candy_sick_counter);
+    localStorage.setItem("localsave_perfect_minigame_count", perfect_minigame_count );
+    localStorage.setItem("localsave_is_ever_played_minigame", is_ever_played_minigame );
 
-    localStorage.setItem("localstorage_is_light_on", is_light_on );
-    localStorage.setItem("localstorage_is_sleeping", is_sleeping );
-    localStorage.setItem("localstorage_is_moving", is_moving );
+    localStorage.setItem("localsave_is_light_on", is_light_on );
+    localStorage.setItem("localsave_is_sleeping", is_sleeping );
+    localStorage.setItem("localsave_is_moving", is_moving );
+    localStorage.setItem("localsave_is_dead", is_dead );
+
+
 }
 
 //TODO: add egg to restrictions
@@ -1216,32 +1219,43 @@ function load_local_savestate(){
     obedience_reroll_timer = Number.parseFloat(localStorage.getItem("localsave_obedience_reroll_timer"), 10);
 
     base_weight = Number.parseFloat(localStorage.getItem("localsave_base_weight"), 10);
-    extra_weight = Number.parseFloat(localStorage.getItem("localsave_base_weight"), 10);
+    extra_weight = Number.parseFloat(localStorage.getItem("localsave_extra_weight"), 10);
 
     poop_timer = Number.parseInt(localStorage.getItem("localsave_poop_timer"), 10);
     poop_count = Number.parseInt(localStorage.getItem("localsave_poop_count"), 10);
     poop_uncleaned_time = Number.parseInt(localStorage.getItem("localsave_poop_uncleaned_time"), 10);
 
-    is_sick = localStorage.getItem("localstorage_is_sick") === "true";
-    sickness_death_timer = Number.parseInt(localStorage.getItem("localstorage_sickness_death_timer"), 10);
-    random_sickness_limit = Number.parseFloat(localStorage.getItem("localstorage_random_sickness_limit"), 10);
-    sick_check_timer = Number.parseInt(localStorage.getItem("localstorage_sick_check_timer"), 10);
+    is_sick = localStorage.getItem("localsave_is_sick") === "true";
+    sickness_death_timer = Number.parseInt(localStorage.getItem("localsave_sickness_death_timer"), 10);
+    random_sickness_limit = Number.parseFloat(localStorage.getItem("localsave_random_sickness_limit"), 10);
+    sick_check_timer = Number.parseInt(localStorage.getItem("localsave_sick_check_timer"), 10);
 
-    candy_sick_counter = Number.parseFloat(localStorage.getItem("localstorage_candy_sick_counter"), 10);
-    perfect_minigame_count = Number.parseInt(localStorage.getItem("localstorage_perfect_minigame_count"), 10); 
-    is_ever_played_game = localStorage.getItem("localstorage_is_ever_played_game") === "true";
+    candy_sick_counter = Number.parseFloat(localStorage.getItem("localsave_candy_sick_counter"), 10);
+    perfect_minigame_count = Number.parseInt(localStorage.getItem("localsave_perfect_minigame_count"), 10); 
+    is_ever_played_minigame = localStorage.getItem("localsave_is_ever_played_game") === "true";
 
-    is_light_on = localStorage.getItem("localstorage_is_light_on") === "true";
-    is_sleeping = localStorage.getItem("localstorage_is_sleeping") === "true";
-    is_moving = localStorage.getItem("localstorage_is_moving") === "true";
+    is_light_on = localStorage.getItem("localsave_is_light_on") === "true";
+    is_sleeping = localStorage.getItem("localsave_is_sleeping") === "true";
+    is_moving = localStorage.getItem("localsave_is_moving") === "true";
+    is_dead = localStorage.getItem("localsave_is_dead") === "true";
+
+
+}
+
+function is_first_time_loading(){
+    let is_first = localStorage.getItem("localsave_is_savestate_empty") === null;
+    localStorage.setItem("localsave_is_savestate_empty", true );
+    return is_first;
+}
+
+function load_session(){
+    
+    load_local_savestate();
+    updateLightDisplay();
+    update_poop_display();
+    update_critical_icon();
 
     
-
-    let loaded = Number.parseFloat(localStorage.getItem("localsave_food_stat"), 10);
-    let test_boolean = localStorage.getItem("localstorage_is_light_on") === "true";
-    //myValue === 'true');
-    //console.log(loaded);
-    console.log(test_boolean);
 }
 
 function pressA(){
@@ -1359,10 +1373,12 @@ function start(){
     currentTime();
     initPosition();
     wander();
-    load_local_customization();
+    
 
     set_unload_autosave();
-    load_local_savestate();
+    if(!is_first_time_loading())load_session();
+    load_local_customization();
+    is_first_time_loading();
 }
 
 start();
