@@ -101,11 +101,9 @@ let is_dead = false;
 
 let is_moving = true;
 function wander(){
-    if(is_moving){
-        setInterval(() => {
-            movePet();
-        }, 1000);
-    }
+    setInterval(() => {
+        if(is_moving)movePet();
+    }, 1000);
 }
 
 function initPosition(){
@@ -115,6 +113,7 @@ function initPosition(){
 }
 
 function movePet(){
+    console.log("moving_pet");
     let pet_frame = document.querySelector(".pet_frame");
     let pet_sprite = document.querySelector(".pet_sprite");
     let num_values = (pet_frame.style.left).replace("px","");
@@ -185,6 +184,7 @@ function game_clock_tick(){
         fake_tick();
     }
 
+    debug();
     sleep_tick();
 }
 
@@ -1051,6 +1051,7 @@ function wake_up(){
     is_moving = true;
 
     is_light_on = true;
+    remove_critical("sleep");
     updateLightDisplay();
 }
 
@@ -1062,6 +1063,8 @@ function sleep_tick(){
         }
         if(is_light_on && !is_missed_bedtime)critical_tick("sleep");
         
+    }else{
+        wake_up();
     }
 }
 
@@ -1367,6 +1370,10 @@ function pressC(){
         closeAnimation();
 
     }
+}
+
+function debug(){
+    console.log(is_moving);
 }
 
 function start(){
