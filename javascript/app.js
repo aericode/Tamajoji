@@ -496,6 +496,7 @@ function get_healed(){
     sickness_death_timer = 18000;
 
     is_missed_sick_call = false;
+    remove_critical("sick");
 
     displayAnimation(7);
 }
@@ -536,7 +537,7 @@ function die(is_death_by_aging){
     remove_critical("food");
     remove_critical("fun");
     remove_critical("sleep");
-    remove_critical("sisck");
+    remove_critical("sick");
     remove_critical("faking");
 
     is_dead = true;
@@ -1377,12 +1378,8 @@ function load_session(){
 
 function select_by_value(array, searched_value) {
     for(let i = 0; i < array.length; i++){
-        if(array[i].value == searched_value){
-            array[i].selected = 'selected';
-            console.log(array[i].value, searched_value);
-        }
+        if(array[i].value == searched_value)array[i].selected = 'selected';
     }
-
 }
 
 function preselect_current_skins(){
