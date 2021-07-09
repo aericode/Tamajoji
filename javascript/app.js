@@ -68,8 +68,10 @@ let perfect_minigame_count = 0;
 let is_ever_played_minigame = false;
 
 let is_missed_bedtime = false;
+let is_already_slept = false;
 let sleep_time = new Date(0,0,0,20,0,0);
 let wake_up_time = new Date(0,0,0,8,0,0);
+
 
 let is_toolbar_menu_open = false;
 
@@ -1038,6 +1040,7 @@ function sleep(){
 
     is_sleeping = true;
     is_moving = false;
+    is_already_slept = true;
 
     updateLightDisplay();
 }
@@ -1046,13 +1049,18 @@ function wake_up(){
     let icon = document.querySelector(".sleepy_icon");
     icon.classList.add("hidden_display");
 
+    //turn on the light
+    if(is_already_slept){
+        is_light_on = true;
+        updateLightDisplay();
+    }
+
     is_missed_bedtime = false;
     is_sleeping = false;
     is_moving = true;
+    is_already_slept = false;
 
-    is_light_on = true;
     remove_critical("sleep");
-    updateLightDisplay();
 }
 
 function sleep_tick(){
@@ -1064,7 +1072,7 @@ function sleep_tick(){
         if(is_light_on && !is_missed_bedtime)critical_tick("sleep");
         
     }else{
-        wake_up();
+        if(is_already_slept)wake_up();
     }
 }
 
@@ -1171,6 +1179,9 @@ function save_local_gameState(){
     localStorage.setItem("localsave_random_sickness_limit", random_sickness_limit);
     localStorage.setItem("localsave_sick_check_timer", sick_check_timer);
 
+    localStorage.setItem("localsave_is_missed_bedtime", is_missed_bedtime);
+    localStorage.setItem("localsave_is_already_slept", is_already_slept);
+
     localStorage.setItem("localsave_candy_sick_counter", candy_sick_counter);
     localStorage.setItem("localsave_perfect_minigame_count", perfect_minigame_count );
     localStorage.setItem("localsave_is_ever_played_minigame", is_ever_played_minigame );
@@ -1232,6 +1243,9 @@ function load_local_savestate(){
     sickness_death_timer = Number.parseInt(localStorage.getItem("localsave_sickness_death_timer"), 10);
     random_sickness_limit = Number.parseFloat(localStorage.getItem("localsave_random_sickness_limit"), 10);
     sick_check_timer = Number.parseInt(localStorage.getItem("localsave_sick_check_timer"), 10);
+
+    is_missed_bedtime = localStorage.getItem("localsave_is_missed_bedtime") === "true";
+    is_already_slept = localStorage.getItem("localsave_is_already_slept") === "true";
 
     candy_sick_counter = Number.parseFloat(localStorage.getItem("localsave_candy_sick_counter"), 10);
     perfect_minigame_count = Number.parseInt(localStorage.getItem("localsave_perfect_minigame_count"), 10); 
