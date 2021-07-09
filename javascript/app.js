@@ -34,12 +34,12 @@ let selected_stats_menu = 0;
 let food_stat = 1;
 let fun_stat = 1;
 let discipline_stat = 0;
+let satiety = 0;
 
 let clear_animation_counter = 0;
 
 let selected_food = 0;
 let selected_sleep_menu = 0;
-let satiety = 0;
 
 let obedience_roll = 0.5;
 let obedience_reroll_timer = 60;
@@ -95,16 +95,21 @@ menu[7] = "menu_attention"
 //main menu - 8
 //animation - 9
 //death - 10 (removed)
+//in reborn menu - 10
 let current_action = 8;
 
 let is_light_on = true;
 let is_sleeping = false;
 let is_dead = false;
+let is_egg = false;
 
-let is_moving = true;
+function is_moving(){
+    return (!is_sleeping&&!is_dead&&!is_egg);
+}
+
 function wander(){
     setInterval(() => {
-        if(is_moving)movePet();
+        if(is_moving())movePet();
     }, 1000);
 }
 
@@ -170,22 +175,25 @@ function currentTime() {
 
 function game_clock_tick(){ 
     
-    aging_tick();
-    clear_animation_tick();
-    skip_minigame_stage_tick();
-    candy_digestion_tick();
-    satiety_tick();
+    if(!is_dead){
+        aging_tick();
+        clear_animation_tick();
+        skip_minigame_stage_tick();
+        candy_digestion_tick();
+        satiety_tick();
+        
 
-    if(!is_sleeping){
-        food_tick();
-        fun_tick();    
-        forgive_miss_tick();  
-        sick_tick();
-        poop_tick();
-        fake_tick();
+        if(!is_sleeping){
+            food_tick();
+            fun_tick();    
+            forgive_miss_tick();  
+            sick_tick();
+            poop_tick();
+            fake_tick();
+        }
+
+        sleep_tick();
     }
-
-    sleep_tick();
 }
 
 function clear_animation_tick(){
@@ -507,6 +515,15 @@ function check_death_by_miss(){
     if(care_miss_death_score >= 7)die(false);
 }
 
+function update_death_display(){
+    let death_display = document.querySelector(".death_display");
+    if(is_dead){
+        death_display.classList.remove("hidden_display");
+    }else{
+        death_display.classList.add("hidden_display");
+    }
+}
+
 function die(is_death_by_aging){
     is_light_on = true;
     updateLightDisplay();
@@ -515,13 +532,100 @@ function die(is_death_by_aging){
     closeFoodMenu();
     closeMinigame();
     closeStatsMenu();
-    let death_display = document.querySelector(".death_display");
-    death_display.classList.remove("hidden_display");
 
+    remove_critical("food");
+    remove_critical("fun");
+    remove_critical("sleep");
+    remove_critical("sisck");
+    remove_critical("faking");
 
     is_dead = true;
+    current_action = 8;
 
-    //todo: reborn display
+    update_death_display();    
+
+}
+
+function reset_stats(){
+    stage_care_miss_count = 0;
+    care_miss_death_score = 0;
+
+    is_critical["food"]  = false;
+    is_critical["fun"]   = false;
+    is_critical["sleep"] = false;
+    is_critical["sick"]  = false;
+    is_critical["faking"] = false;
+
+
+
+    critical_timer["food"]  = 900;
+    critical_timer["fun"]   = 900;
+    critical_timer["sleep"] = 900;
+    critical_timer["sick"]  = 900;
+    critical_timer["faking"]  = 900;
+
+    faking_critical_timer = reset_fake_critical_timer();
+
+    age_in_seconds = 0;
+
+    is_going_at_left = true;
+
+    selected_stats_menu = 0;
+
+    food_stat = 1;
+    fun_stat = 1;
+    discipline_stat = 0;
+
+    clear_animation_counter = 0;
+
+    selected_food = 0;
+    selected_sleep_menu = 0;
+    satiety = 0;
+
+    obedience_roll = 0.5;
+    obedience_reroll_timer = 60;
+
+    //base weight
+    //add gained weight as separate variable
+    base_weight  = 30; 
+    extra_weight = 0;
+
+    //5400 base value
+    //randomize between 0 and 3600 to add to base
+    poop_timer = reset_poop_timer();
+    poop_count = 0;
+    poop_uncleaned_time = 0;
+
+    is_sick = false;
+    sickness_death_timer = 18000;
+    //random sickness limit may be changed for diferent evolutions
+    random_sickness_limit = 0.15;
+    sick_check_timer = 3600;
+    is_missed_sick_call = false;
+
+    candy_sick_counter = 0;
+
+    perfect_minigame_count = 0;
+    is_ever_played_minigame = false;
+
+    is_missed_bedtime = false;
+    is_already_slept = false;
+
+    current_action = 8;
+
+    is_light_on = true;
+    is_sleeping = false;
+    is_dead = false;
+    is_egg = false;
+}
+
+function reborn(){
+    reset_stats();
+    updateLightDisplay();
+    update_death_display();
+    update_poop_display();
+
+    current_action = 8;
 }
 
 function confirmToiletMenu(){
@@ -1037,7 +1141,6 @@ function sleep(){
 
 
     is_sleeping = true;
-    is_moving = false;
     is_already_slept = true;
 
     updateLightDisplay();
@@ -1055,7 +1158,6 @@ function wake_up(){
 
     is_missed_bedtime = false;
     is_sleeping = false;
-    is_moving = true;
     is_already_slept = false;
 
     remove_critical("sleep");
@@ -1161,6 +1263,7 @@ function save_local_gameState(){
     localStorage.setItem("localsave_food_stat", food_stat);
     localStorage.setItem("localsave_fun_stat", fun_stat);
     localStorage.setItem("localsave_discipline_stat", discipline_stat);
+    localStorage.setItem("localsave_satiety", satiety);
 
     localStorage.setItem("localsave_obedience_roll", obedience_roll);
     localStorage.setItem("localsave_obedience_reroll_timer", obedience_reroll_timer);
@@ -1186,9 +1289,8 @@ function save_local_gameState(){
 
     localStorage.setItem("localsave_is_light_on", is_light_on );
     localStorage.setItem("localsave_is_sleeping", is_sleeping );
-    localStorage.setItem("localsave_is_moving", is_moving );
     localStorage.setItem("localsave_is_dead", is_dead );
-
+    localStorage.setItem("localsave_is_egg", is_egg );
 
 }
 
@@ -1226,6 +1328,7 @@ function load_local_savestate(){
     food_stat = Number.parseFloat(localStorage.getItem("localsave_food_stat"), 10);
     fun_stat = Number.parseFloat(localStorage.getItem("localsave_fun_stat"), 10);
     discipline_stat = Number.parseFloat(localStorage.getItem("localsave_discipline_stat"), 10);
+    satiety = Number.parseFloat(localStorage.getItem("localsave_satiety"), 10);
 
     obedience_roll = Number.parseFloat(localStorage.getItem("localsave_obedience_roll"), 10);
     obedience_reroll_timer = Number.parseFloat(localStorage.getItem("localsave_obedience_reroll_timer"), 10);
@@ -1251,9 +1354,8 @@ function load_local_savestate(){
 
     is_light_on = localStorage.getItem("localsave_is_light_on") === "true";
     is_sleeping = localStorage.getItem("localsave_is_sleeping") === "true";
-    is_moving = localStorage.getItem("localsave_is_moving") === "true";
     is_dead = localStorage.getItem("localsave_is_dead") === "true";
-
+    is_egg = localStorage.getItem("localsave_is_egg") === "true";
 
 }
 
@@ -1269,6 +1371,7 @@ function load_session(){
     updateLightDisplay();
     update_poop_display();
     update_critical_icon();
+    update_death_display();
 
     
 }
@@ -1303,9 +1406,11 @@ function pressA(){
         updateSleepArrow();
     }
 
+
 }
 
 function pressB(){
+    let just_selected;
     if(current_action == 8){
         just_selected = true;
         if(current_selected_icon == 0 && is_action_menu_available()){
@@ -1338,6 +1443,7 @@ function pressB(){
             confirmScoldMenu();
         }
 
+
         setInterval(() => {
             just_selected = false;
         }, 500);
@@ -1358,9 +1464,13 @@ function pressB(){
     if(current_action == 3 && !just_selected){
         confirmSleepMenu();
     }
+
 }
 
+
 function pressC(){
+    let just_selected;
+
     if(current_action == 0){
         current_action = 8;
         closeFoodMenu();
@@ -1368,6 +1478,10 @@ function pressC(){
     if(current_action == 1){
         current_action = 8;
         closeStatsMenu();
+        just_selected = true;
+        setInterval(() => {
+            just_selected = false;
+    }, 500);
     }
     if(current_action == 2){
         current_action = 8;
@@ -1380,8 +1494,13 @@ function pressC(){
 
     if(current_action == 9){
         closeAnimation();
-
     }
+
+    if(current_action == 8 && is_dead){
+        if(!just_selected)reborn();
+    }
+
+
 }
 
 
@@ -1394,7 +1513,8 @@ function start(){
     set_unload_autosave();
     if(!is_first_time_loading())load_session();
     load_local_customization();
-    is_first_time_loading();
+    //is_first_time_loading();
+    die(false);
 }
 
 start();
