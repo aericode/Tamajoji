@@ -115,7 +115,6 @@ function initPosition(){
 }
 
 function movePet(){
-    console.log("moving_pet");
     let pet_frame = document.querySelector(".pet_frame");
     let pet_sprite = document.querySelector(".pet_sprite");
     let num_values = (pet_frame.style.left).replace("px","");
@@ -186,7 +185,6 @@ function game_clock_tick(){
         fake_tick();
     }
 
-    debug();
     sleep_tick();
 }
 
@@ -1386,9 +1384,6 @@ function pressC(){
     }
 }
 
-function debug(){
-    console.log(is_moving);
-}
 
 function start(){
     currentTime();
