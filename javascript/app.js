@@ -1372,8 +1372,31 @@ function load_session(){
     update_poop_display();
     update_critical_icon();
     update_death_display();
+}
 
-    
+
+function select_by_value(array, searched_value) {
+    for(let i = 0; i < array.length; i++){
+        if(array[i].value == searched_value){
+            array[i].selected = 'selected';
+            console.log(array[i].value, searched_value);
+        }
+    }
+
+}
+
+function preselect_current_skins(){
+    let screen_color = localStorage.getItem("localsave_screen_color")
+    let frame_color  = localStorage.getItem("localsave_frame_color")
+    let button_color = localStorage.getItem("localsave_button_color")
+
+    let screenOptionArray = document.querySelector(".select_screen_color").querySelectorAll("option");
+    let frameOptionArray = document.querySelector(".select_shell_color").querySelectorAll("option");
+    let buttonOptionArray = document.querySelector(".select_button_color").querySelectorAll("option");
+
+    select_by_value(screenOptionArray, screen_color);
+    select_by_value(frameOptionArray, frame_color);
+    select_by_value(buttonOptionArray, button_color);
 }
 
 function pressA(){
@@ -1513,8 +1536,7 @@ function start(){
     set_unload_autosave();
     if(!is_first_time_loading())load_session();
     load_local_customization();
-    //is_first_time_loading();
-    die(false);
+    preselect_current_skins();
 }
 
 start();
