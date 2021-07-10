@@ -70,8 +70,7 @@ let is_ever_played_minigame = false;
 let is_missed_bedtime = false;
 let is_already_slept = false;
 let sleep_time = new Date(0,0,0,20,0,0);
-let wake_up_time = new Date(0,0,0,0,20,0);
-
+let wake_up_time = new Date(0,0,0,8,0,0);
 
 let is_toolbar_menu_open = false;
 
@@ -85,6 +84,21 @@ menu[5] = "menu_sleep"
 menu[6] = "menu_scold"
 menu[7] = "menu_attention"
 
+
+let audio_array = Array();
+audio_array[0]  = new Audio("./audio/attention_call.wav");
+audio_array[1]  = new Audio("./audio/button_beep.wav");
+audio_array[2]  = new Audio("./audio/clean_poop.wav");
+audio_array[3]  = new Audio("./audio/death.wav");
+audio_array[4]  = new Audio("./audio/disobey.wav");
+audio_array[5]  = new Audio("./audio/eat.wav");
+audio_array[6]  = new Audio("./audio/evolution.wav");
+audio_array[7]  = new Audio("./audio/minigame_final_lose.wav");
+audio_array[8]  = new Audio("./audio/minigame_final_win.wav");
+audio_array[9]  = new Audio("./audio/minigame_round_correct.wav");
+audio_array[10] = new Audio("./audio/minigame_round_wrong.wav");
+audio_array[11] = new Audio("./audio/vaccine.wav");
+
 //in food menu - 0
 //in status menu - 1
 //in game menu - 2
@@ -94,8 +108,6 @@ menu[7] = "menu_attention"
 
 //main menu - 8
 //animation - 9
-//death - 10 (removed)
-//in reborn menu - 10
 let current_action = 8;
 
 let is_light_on = true;
@@ -104,10 +116,16 @@ let is_dead = false;
 let is_egg = true;
 
 let evolution_count = 0;
-let next_evolution_limit = 60;
+let next_evolution_limit = 300;
 
-let current_stage = 0;
-let current_version = 0;
+let current_pet_stage = 0;
+let current_pet_version = "a";
+
+let is_evolution_final = false;
+
+function play_audio(index){
+    audio_array[index].play();
+}
 
 function is_moving(){
     return (!is_sleeping&&!is_dead&&!is_egg);
@@ -231,19 +249,22 @@ function aging_tick(){
 }
 
 function evolve(){
-    if(current_stage == "0-a"){
-        current_stage= "1-a"
+    if(current_pet_stage == 0 && current_pet_version == "a"){
+        current_pet_stage= 1;
+        current_pet_version = "a"
+        is_egg = false;
         next_evolution_limit = 86400;
     }
 
     evolution_count = 0;
     update_pet_sprite();
+    play_audio(6)
     
 }
 
 function update_pet_sprite(){
     let pet_sprite = document.querySelector(".pet_sprite");
-    pet_sprite.src = "./images/pet_stages/"+ current_stage +".png";
+    pet_sprite.src = "./images/pet_stages/"+ current_pet_stage +"-" + current_pet_version +".png";
 }
 
 function evolution_tick(){
@@ -255,6 +276,23 @@ function evolution_tick(){
 
 function satiety_tick(){
     if(satiety > 0) satiety -= 0.0018;
+}
+
+function declare_critical(key){
+
+    is_critical[key] = true;
+    critical_timer[key] = 900;
+    update_critical_icon();
+
+    if(key != "faking")remove_critical("faking");
+
+    play_audio(0);
+}
+
+function remove_critical(key){
+    is_critical[key] = false;
+    critical_timer[key] = 900;
+    update_critical_icon();
 }
 
 //current base rate: depletes 4 hearts after 1h
@@ -338,21 +376,6 @@ function fake_tick(){
             }
         }
     }
-}
-
-function declare_critical(key){
-
-    is_critical[key] = true;
-    critical_timer[key] = 900;
-    update_critical_icon();
-
-    if(key != "faking")remove_critical("faking");
-}
-
-function remove_critical(key){
-    is_critical[key] = false;
-    critical_timer[key] = 900;
-    update_critical_icon();
 }
 
 
@@ -448,6 +471,7 @@ function clean_poop(){
     poop_count = 0;
     update_poop_display();
     displayAnimation(6);
+    play_audio(2);
 }
 
 function confirmScoldMenu(){
@@ -545,6 +569,7 @@ function get_healed(){
     remove_critical("sick");
 
     displayAnimation(7);
+    play_audio(11);
 }
 
 function sick_trigger(){
@@ -589,7 +614,8 @@ function die(is_death_by_aging){
     is_dead = true;
     current_action = 8;
 
-    update_death_display();    
+    update_death_display();
+    play_audio(3);
 
 }
 
@@ -664,6 +690,12 @@ function reset_stats(){
     is_sleeping = false;
     is_dead = false;
     is_egg = false;
+
+
+    evolution_count = 0;
+    next_evolution_limit = 300;
+    current_pet_stage = 0;
+    current_pet_version = "a";
 }
 
 function reborn(){
@@ -874,19 +906,24 @@ function confirmFoodMenu(){
         if(selected_food == 0){
             if(obedience_check("food") ){
                 displayAnimation(1);
+                play_audio(5);
                 eat_selected_food();
             }else{
                 displayAnimation(5);
+                play_audio(4);
             }
 
         }
         if(selected_food == 1){
             displayAnimation(2);
+            play_audio(5);
             eat_selected_food();
 
         }
     }else{
+
         displayAnimation(5);
+        play_audio(4);
     }
 
 }
@@ -1031,7 +1068,12 @@ function confirm_round_game(){
 
     let is_round_won = ((is_final_secret_greater == guess_is_secret_greater)||(revealed_value==secret_value))
 
-    if(is_round_won) minigame_score++;    
+    if(is_round_won){
+        minigame_score++;
+        play_audio(9);
+    }else{ 
+        play_audio(10);
+    }
     update_minigame_display(is_round_won);
 
 }
@@ -1075,14 +1117,17 @@ function complete_minigame(){
         win_minigame(true);
         closeMinigame();
         displayAnimation(3);
+        play_audio(8);
         
     }else if(minigame_score ==4 || minigame_score ==3 ){
         win_minigame(false);
         closeMinigame();
         displayAnimation(3);
+        play_audio(8);
     }else{
         closeMinigame();
         displayAnimation(4);
+        play_audio(7);
     }
 
     current_stage = 9;
@@ -1339,6 +1384,11 @@ function save_local_gameState(){
     localStorage.setItem("localsave_is_dead", is_dead );
     localStorage.setItem("localsave_is_egg", is_egg );
 
+    localStorage.setItem("localsave_evolution_count", evolution_count );
+    localStorage.setItem("localsave_next_evolution_limit", next_evolution_limit );
+    localStorage.setItem("localsave_current_pet_stage", current_pet_stage );
+    localStorage.setItem("localsave_current_pet_version", current_pet_version );
+
 }
 
 //TODO: add egg to restrictions
@@ -1404,6 +1454,11 @@ function load_local_savestate(){
     is_dead = localStorage.getItem("localsave_is_dead") === "true";
     is_egg = localStorage.getItem("localsave_is_egg") === "true";
 
+    evolution_count = Number.parseInt(localStorage.getItem("localsave_evolution_count"));
+    next_evolution_limit = Number.parseInt(localStorage.getItem("localsave_next_evolution_limit"));
+    current_pet_stage = localStorage.getItem("localsave_current_pet_stage");
+    current_pet_version = localStorage.getItem("localsave_current_pet_version");
+
 }
 
 function is_first_time_loading(){
@@ -1443,6 +1498,8 @@ function preselect_current_skins(){
 }
 
 function pressA(){
+    play_audio(1);
+
     if(current_action == 8){
         switchMainMenu();
     }
@@ -1476,6 +1533,7 @@ function pressA(){
 }
 
 function pressB(){
+    play_audio(1);
     let just_selected;
     if(current_action == 8){
         just_selected = true;
@@ -1493,6 +1551,7 @@ function pressB(){
                 openMinigameMenu();
             }else{
                 displayAnimation(5);
+                play_audio(4);
             }
         }
         if(current_selected_icon == 3 && is_action_menu_available()){
@@ -1535,6 +1594,8 @@ function pressB(){
 
 
 function pressC(){
+    play_audio(1);
+
     let just_selected;
 
     if(current_action == 0){
@@ -1581,6 +1642,7 @@ function start(){
     load_local_customization();
     preselect_current_skins();
     update_pet_sprite();
+
 }
 
 start();
