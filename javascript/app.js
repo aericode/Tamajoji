@@ -70,7 +70,7 @@ let is_ever_played_minigame = false;
 let is_missed_bedtime = false;
 let is_already_slept = false;
 let sleep_time = new Date(0,0,0,20,0,0);
-let wake_up_time = new Date(0,0,0,8,0,0);
+let wake_up_time = new Date(0,0,0,0,20,0);
 
 
 let is_toolbar_menu_open = false;
@@ -101,7 +101,13 @@ let current_action = 8;
 let is_light_on = true;
 let is_sleeping = false;
 let is_dead = false;
-let is_egg = false;
+let is_egg = true;
+
+let evolution_count = 0;
+let next_evolution_limit = 60;
+
+let current_stage = 0;
+let current_version = 0;
 
 function is_moving(){
     return (!is_sleeping&&!is_dead&&!is_egg);
@@ -109,7 +115,7 @@ function is_moving(){
 
 function wander(){
     setInterval(() => {
-        if(is_moving())movePet();
+        movePet();
     }, 1000);
 }
 
@@ -125,34 +131,47 @@ function movePet(){
     let num_values = (pet_frame.style.left).replace("px","");
     num_values = parseInt(num_values);
 
-    
-    if(is_going_at_left){
-        
-        
-        if(num_values > limit_left){
-            num_values -= 10;
-            pet_frame.style.left = num_values + "px";
-        }else{
-            is_going_at_left = false;
+    if(is_egg){
+        if(is_going_at_left){
             pet_sprite.classList.remove("left");
             pet_sprite.classList.add("right");
-
-            num_values += 10;
-            pet_frame.style.left = num_values + "px";
-        }
-
-    }else{
-        
-        if(num_values < limit_right){
-            num_values += 10;
-            pet_frame.style.left = num_values + "px";
+            is_going_at_left = false;
         }else{
-            is_going_at_left = true;
             pet_sprite.classList.remove("right");
             pet_sprite.classList.add("left");
+            is_going_at_left = true;
+        }
+    }
 
-            num_values -= 10;
-            pet_frame.style.left = num_values + "px";
+    if(is_moving()){
+        if(is_going_at_left){
+            
+            
+            if(num_values > limit_left){
+                num_values -= 10;
+                pet_frame.style.left = num_values + "px";
+            }else{
+                is_going_at_left = false;
+                pet_sprite.classList.remove("left");
+                pet_sprite.classList.add("right");
+
+                num_values += 10;
+                pet_frame.style.left = num_values + "px";
+            }
+
+        }else{
+            
+            if(num_values < limit_right){
+                num_values += 10;
+                pet_frame.style.left = num_values + "px";
+            }else{
+                is_going_at_left = true;
+                pet_sprite.classList.remove("right");
+                pet_sprite.classList.add("left");
+
+                num_values -= 10;
+                pet_frame.style.left = num_values + "px";
+            }
         }
     }
 
@@ -182,7 +201,7 @@ function game_clock_tick(){
         candy_digestion_tick();
         satiety_tick();
         obedience_tick();
-        
+        evolution_tick();
 
         if(!is_sleeping){
             food_tick();
@@ -209,6 +228,28 @@ function clear_animation_tick(){
 
 function aging_tick(){
     age_in_seconds++;
+}
+
+function evolve(){
+    if(current_stage == "0-a"){
+        current_stage= "1-a"
+        next_evolution_limit = 86400;
+    }
+
+    evolution_count = 0;
+    update_pet_sprite();
+    
+}
+
+function update_pet_sprite(){
+    let pet_sprite = document.querySelector(".pet_sprite");
+    pet_sprite.src = "./images/pet_stages/"+ current_stage +".png";
+}
+
+function evolution_tick(){
+    evolution_count++;
+    console.log(evolution_count);
+    if(evolution_count >= next_evolution_limit)evolve();
 }
 
 
@@ -1539,6 +1580,7 @@ function start(){
     if(!is_first_time_loading())load_session();
     load_local_customization();
     preselect_current_skins();
+    update_pet_sprite();
 }
 
 start();
