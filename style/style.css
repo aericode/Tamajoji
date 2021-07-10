@@ -384,12 +384,12 @@ body{
     width: 990px;
     height: 610px;
     margin-top: 0;
-    background-image: url("../images/shell_skins/cosmic_human.jpg");
+    background-image: "none";
 
     border: 5px solid black;
     border-radius: 0px 0px 15px 15px;
 
-    background-color: pink;
+    background-color: #1b5583;
 }
 
 

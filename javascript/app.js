@@ -181,6 +181,7 @@ function game_clock_tick(){
         skip_minigame_stage_tick();
         candy_digestion_tick();
         satiety_tick();
+        obedience_tick();
         
 
         if(!is_sleeping){
@@ -258,11 +259,15 @@ function reroll_obedience(){
 
 function obedience_tick(){
     obedience_reroll_timer--;
-    if(obedience_reroll_timer <= 0)reroll_obedience();
+    if(obedience_reroll_timer <= 0){
+
+        reroll_obedience();
+        obedience_reroll_timer = 60;
+    }
 }
 
 function obedience_check(stat_to_check){
-    const order_value = 0.6 + discipline_stat*0.4;
+    let order_value = 0.6 + discipline_stat*0.4;
     if(stat_to_check == "food" && food_stat <= 1)return true;
     if(stat_to_check == "fun"  &&  fun_stat <= 1)return true;
 
