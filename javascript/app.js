@@ -97,7 +97,8 @@ audio_array[7]  = new Audio("./audio/minigame_final_lose.wav");
 audio_array[8]  = new Audio("./audio/minigame_final_win.wav");
 audio_array[9]  = new Audio("./audio/minigame_round_correct.wav");
 audio_array[10] = new Audio("./audio/minigame_round_wrong.wav");
-audio_array[11] = new Audio("./audio/vaccine.wav");
+audio_array[11] = new Audio("./audio/scold.wav");
+audio_array[12] = new Audio("./audio/vaccine.wav");
 
 //in food menu - 0
 //in status menu - 1
@@ -483,6 +484,7 @@ function confirmScoldMenu(){
         if(fun_stat < 0)fun_stat=0;
     }
     displayAnimation(8);
+    play_audio(11);
 }
 
 function sick_tick(){
@@ -569,7 +571,7 @@ function get_healed(){
     remove_critical("sick");
 
     displayAnimation(7);
-    play_audio(11);
+    play_audio(12);
 }
 
 function sick_trigger(){
@@ -1170,8 +1172,8 @@ function closeSleepMenu(){
 
 function confirmSleepMenu(){
     if(selected_sleep_menu==1){
-        is_light_on = true;
-        if(is_sleeping)declare_critical("sleep");
+        if(is_sleeping && !is_light_on)declare_critical("sleep");
+        is_light_on = true;        
     }
 
     if(selected_sleep_menu==0){
