@@ -124,6 +124,7 @@ let current_pet_version = "a";
 
 let is_evolution_final = false;
 
+
 function play_audio(index){
     audio_array[index].play();
 }
@@ -1632,8 +1633,14 @@ function pressC(){
 
 }
 
+function debug(){
+    let pet_sprite = document.querySelector(".pet_sprite");
+    pet_sprite.src = "./images/pet_stages/2-b.png";
+}
 
 function start(){
+    
+
     currentTime();
     initPosition();
     wander();
@@ -1645,6 +1652,7 @@ function start(){
     preselect_current_skins();
     update_pet_sprite();
 
+    debug();
 }
 
 start();
