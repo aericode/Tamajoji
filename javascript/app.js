@@ -1635,7 +1635,7 @@ function pressC(){
 
 function debug(){
     let pet_sprite = document.querySelector(".pet_sprite");
-    pet_sprite.src = "./images/pet_stages/2-b.png";
+    pet_sprite.src = "./images/pet_stages/2-a.png";
 }
 
 function start(){
