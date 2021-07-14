@@ -133,6 +133,19 @@ let fun_need_per_second  = 0.0011;
 
 let evolution_array = Array();
 
+evolution_array["0-a"] = {
+    food_need_per_second: 0,
+    fun_need_per_second: 0,
+    is_evolution_final: false,
+    random_sickness_limit: 0,
+    base_weight:0,
+    sleep_time:  new Date(0,0,0,22,00,0),
+    wake_up_time:  new Date(0,0,0,8,0,0),
+    next_evolution_limit: 300
+};
+
+
+
 //KID
 evolution_array["1-a"] = {
     food_need_per_second: 0.0011,
@@ -422,7 +435,18 @@ function import_species_stats(stage,version){
     next_evolution_limit = evolve_to.next_evolution_limit;
 }
 
-function evolve(){ 
+function update_pet_sprite(){
+    let pet_sprite = document.querySelector(".pet_sprite");
+    pet_sprite.src = "./images/pet_stages/"+ current_pet_stage +"-" + current_pet_version +".png";
+}
+
+function evolve(){
+
+    //final evolutions don't evolve
+    //prevents from reseting the evolution counter
+    if(is_evolution_final)return;
+
+    let is_silent = false;
 
     if(current_pet_stage == 0){
         current_pet_stage = 1;
@@ -471,6 +495,7 @@ function evolve(){
             current_pet_version = "a";
             return; 
         }else{
+            is_silent = true;
             is_evolution_final = true;
             evolution_count += 2 * DAY_SECONDS;
         }
@@ -480,6 +505,7 @@ function evolve(){
             current_pet_version = "b";
             return; 
         }else{
+            is_silent = true;
             is_evolution_final = true;
             evolution_count += 2 * DAY_SECONDS;
         }
@@ -488,6 +514,7 @@ function evolve(){
             current_pet_stage = 4;
             current_pet_version = "c";
         }else{
+            is_silent = true;
             is_evolution_final = true;
             evolution_count += 2 * DAY_SECONDS;
         }       
@@ -500,12 +527,7 @@ function evolve(){
     stage_care_miss_count = 0;
     evolution_count = 0;
     update_pet_sprite();
-    play_audio(6)
-}
-
-function update_pet_sprite(){
-    let pet_sprite = document.querySelector(".pet_sprite");
-    pet_sprite.src = "./images/pet_stages/"+ current_pet_stage +"-" + current_pet_version +".png";
+    if(!is_silent)play_audio(6)
 }
 
 function evolution_tick(){
@@ -516,7 +538,7 @@ function evolution_tick(){
 
 
 function satiety_tick(){
-    if(satiety > 0) satiety -= 0.0018;
+    if(satiety > 0) satiety -= 0.0016;
 }
 
 function declare_critical(key){
@@ -933,7 +955,8 @@ function reset_stats(){
     is_light_on = true;
     is_sleeping = false;
     is_dead = false;
-    is_egg = false;
+    is_egg = true;
+    is_evolution_final = false;
 
 
     evolution_count = 0;
@@ -947,6 +970,9 @@ function reborn(){
     updateLightDisplay();
     update_death_display();
     update_poop_display();
+    update_sleepy_icon();
+    update_pet_sprite();
+
 
     current_action = 8;
 }
@@ -1471,6 +1497,15 @@ function is_sleeptime(current_time){
     return ((day_begin < current_time_seconds && current_time_seconds<wake_up_time_seconds) || (sleep_time_seconds<current_time_seconds&&current_time_seconds<day_end))
 }
 
+function update_sleepy_icon(){
+    let icon = document.querySelector(".sleepy_icon");
+    if(is_sleeping){
+        icon.classList.remove("hidden_display");
+    }else{
+        icon.classList.add("hidden_display");
+    }
+}
+
 function sleep(){
     let icon = document.querySelector(".sleepy_icon");
     icon.classList.remove("hidden_display");
@@ -1898,13 +1933,14 @@ function debug(){
     //let pet_sprite = document.querySelector(".pet_sprite");
     //pet_sprite.src = "./images/pet_stages/3-a.png";
 
-    console.log(evolution_array["1-a"]);
-    console.log(current_pet_stage)
+    /*
+    evolution_count += 30000;
+    console.log("next evolution: " + next_evolution_limit)
+    console.log("next evolutiom: " + next_evolution_limit)
+    */
 }
 
 function start(){
-    
-
     currentTime();
     initPosition();
     wander();
@@ -1915,8 +1951,8 @@ function start(){
     load_local_customization();
     preselect_current_skins();
     update_pet_sprite();
-
-    debug();
+    update_sleepy_icon();
+ 
 }
 
 start();
