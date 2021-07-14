@@ -1,3 +1,6 @@
+const DAY_SECONDS = 86400;
+
+
 let stage_care_miss_count = 0;
 let care_miss_death_score = 0;
 
@@ -124,6 +127,143 @@ let current_pet_version = "a";
 
 let is_evolution_final = false;
 
+let food_need_per_second = 0.0011;
+let fun_need_per_second  = 0.0011;
+
+
+let evolution_array = Array();
+
+//KID
+evolution_array["1-a"] = {
+    food_need_per_second: 0.0011,
+    fun_need_per_second: 0.0011,
+    is_evolution_final: false,
+    random_sickness_limit: 0.15,
+    base_weight:30,
+    sleep_time:  new Date(0,0,0,20,30,0),
+    wake_up_time:  new Date(0,0,0,8,0,0),
+    next_evolution_limit: 1 * DAY_SECONDS
+};
+
+//TEENS
+evolution_array["2-a"] = {
+    food_need_per_second: 0.0011,
+    fun_need_per_second: 0.0009,
+    is_evolution_final: false,
+    random_sickness_limit: 0.15,
+    base_weight: 40,
+    sleep_time:  new Date(0,0,0,21,30,0),
+    wake_up_time:  new Date(0,0,0,8,0,0),
+    next_evolution_limit: 2 * DAY_SECONDS
+};
+evolution_array["2-b"] = {
+    food_need_per_second: 0.0013,
+    fun_need_per_second: 0.0011,
+    is_evolution_final: false,
+    random_sickness_limit: 0.20,
+    base_weight: 50,
+    sleep_time:  new Date(0,0,0,21,0,0),
+    wake_up_time:  new Date(0,0,0,9,0,0),
+    next_evolution_limit: 2 * DAY_SECONDS
+};
+
+
+//ADULTS
+evolution_array["3-a"] = {
+    food_need_per_second: 0.0009,
+    fun_need_per_second: 0.0009,
+    is_evolution_final: true,
+    random_sickness_limit: 0.1,
+    base_weight: 55,
+    sleep_time:  new Date(0,0,0,22,0,0),
+    wake_up_time:  new Date(0,0,0,8,30,0),
+    next_evolution_limit: 19 * DAY_SECONDS
+};
+evolution_array["3-b"] = {
+    food_need_per_second: 0.0011,
+    fun_need_per_second: 0.0009,
+    is_evolution_final: false,
+    random_sickness_limit: 0.15,
+    base_weight: 50,
+    sleep_time:  new Date(0,0,0,22,30,0),
+    wake_up_time:  new Date(0,0,0,9,0,0),
+    next_evolution_limit: 9 * DAY_SECONDS
+    
+};
+evolution_array["3-c"] = {
+    food_need_per_second: 0.0011,
+    fun_need_per_second: 0.0013,
+    is_evolution_final: false,
+    base_weight: 50,
+    random_sickness_limit: 0.20,
+    sleep_time:  new Date(0,0,0,23,0,0),
+    wake_up_time:  new Date(0,0,0,8,30,0),
+    next_evolution_limit: 7 * DAY_SECONDS
+};
+evolution_array["3-d"] = {
+    food_need_per_second: 0.0013,
+    fun_need_per_second: 0.0011,
+    is_evolution_final: false,
+    random_sickness_limit: 0.25,
+    base_weight: 55,
+    sleep_time:  new Date(0,0,0,22,0,0),
+    wake_up_time:  new Date(0,0,0,9,0,0),
+    next_evolution_limit: 7 * DAY_SECONDS
+};
+evolution_array["3-e"] = {
+    food_need_per_second: 0.0013,
+    fun_need_per_second: 0.0013,
+    is_evolution_final: true,
+    random_sickness_limit: 0.35,
+    base_weight: 65,
+    sleep_time:  new Date(0,0,0,21,0,0),
+    wake_up_time:  new Date(0,0,0,8,30,0),
+    next_evolution_limit: 7 * DAY_SECONDS
+};
+evolution_array["3-f"] = {
+    food_need_per_second: 0.0015,
+    fun_need_per_second: 0.0014,
+    is_evolution_final: true,
+    random_sickness_limit: 0.20,
+    base_weight: 70,
+    sleep_time:  new Date(0,0,0,21,0,0),
+    wake_up_time:  new Date(0,0,0,9,30,0),
+    next_evolution_limit: 5 * DAY_SECONDS
+};
+
+//SENIOR
+evolution_array["4-a"] = {
+    food_need_per_second: 0.0009,
+    fun_need_per_second:  0.0008,
+    is_evolution_final: true,
+    random_sickness_limit: 0.1,
+    base_weight: 70,
+    sleep_time:  new Date(0,0,0,20,30,0),
+    wake_up_time:  new Date(0,0,0,9,30,0),
+    next_evolution_limit: 5 * DAY_SECONDS
+};
+evolution_array["4-b"] = {
+    food_need_per_second: 0.0012,
+    fun_need_per_second:  0.0013,
+    is_evolution_final: true,
+    random_sickness_limit: 0.15,
+    base_weight: 70,
+    sleep_time:  new Date(0,0,0,23,30,0),
+    wake_up_time:  new Date(0,0,0,10,0,0),
+    next_evolution_limit: 5 * DAY_SECONDS
+    
+};
+evolution_array["4-c"] = {
+    food_need_per_second: 0.0014,
+    fun_need_per_second:  0.0007,
+    is_evolution_final: true,
+    random_sickness_limit: 0.25,
+    base_weight: 55,
+    sleep_time:  new Date(0,0,0,20,0,0),
+    wake_up_time:  new Date(0,0,0,9,0,0),
+    next_evolution_limit: 5 * DAY_SECONDS
+};
+
 
 function play_audio(index){
     audio_array[index].play();
@@ -217,22 +357,27 @@ function game_clock_tick(){
     if(!is_dead){
         aging_tick();
         clear_animation_tick();
-        skip_minigame_stage_tick();
-        candy_digestion_tick();
-        satiety_tick();
-        obedience_tick();
         evolution_tick();
 
-        if(!is_sleeping){
-            food_tick();
-            fun_tick();    
-            forgive_miss_tick();  
-            sick_tick();
-            poop_tick();
-            fake_tick();
-        }
+        if(!is_egg){
+            skip_minigame_stage_tick();
+            candy_digestion_tick();
+            satiety_tick();
+            obedience_tick();
+            
 
-        sleep_tick();
+            if(!is_sleeping){
+                food_tick();
+                fun_tick();    
+                forgive_miss_tick();  
+                sick_tick();
+                poop_tick();
+                fake_tick();
+            }
+
+            sleep_tick();
+            natural_death_tick();
+        }
     }
 }
 
@@ -246,22 +391,116 @@ function clear_animation_tick(){
     }
 }
 
+function natural_death_tick(){
+    if(is_evolution_final){
+        let lifespan_reduction = ( (extra_weight-5) /10) * DAY_SECONDS;
+        if(lifespan_reduction < 0)lifespan_reduction = 0;
+
+        let life_line = next_evolution_limit - lifespan_reduction;
+
+        if(evolution_count > life_line){
+            die();
+        }
+    }
+}
+
 function aging_tick(){
     age_in_seconds++;
 }
 
-function evolve(){
-    if(current_pet_stage == 0 && current_pet_version == "a"){
-        current_pet_stage= 1;
-        current_pet_version = "a"
+//full version of loading characteristics from species array
+//only apply once, during evolution
+function import_species_stats(stage,version){
+    let species = stage + "-" + version;
+    evolve_to = evolution_array[species];
+    food_need_per_second = evolve_to.food_need_per_second;
+    fun_need_per_second = evolve_to.fun_need_per_second;
+    is_evolution_final = evolve_to.is_evolution_final;
+    base_weight = evolve_to.base_weight;
+    sleep_time = evolve_to.sleep_time;
+    wake_up_time = evolve_to.wake_up_time;
+    next_evolution_limit = evolve_to.next_evolution_limit;
+}
+
+function evolve(){ 
+
+    if(current_pet_stage == 0){
+        current_pet_stage = 1;
+        current_pet_version = "a";
         is_egg = false;
-        next_evolution_limit = 86400;
+
+    }else if(current_pet_stage == 1){
+        current_pet_stage = 2;
+        if(stage_care_miss_count < 4){
+            current_pet_version = "a";
+        }else{
+            current_pet_version = "b";
+        }
+    }else if(current_pet_stage == 2){
+        current_pet_stage = 3;
+
+        if(current_pet_version == "a"){
+            if(stage_care_miss_count < 2){
+                current_pet_version = "a";                
+            }else if(stage_care_miss_count < 4){
+                current_pet_version = "b";  
+            }else if(stage_care_miss_count < 6){
+                current_pet_version = "c";  
+            }else if(stage_care_miss_count < 8){
+                current_pet_version = "d";
+            }else if(stage_care_miss_count < 10){
+                current_pet_version = "e";  
+            }else{
+                current_pet_version = "f";
+            }
+        }else if(urrent_pet_version == "b"){
+            if(stage_care_miss_count < 3){
+                current_pet_version = "d";                
+            }else if(stage_care_miss_count < 6){
+                current_pet_version = "e";  
+            }else{
+                current_pet_version = "f";  
+            }
+        }
+
+
+    }else if(current_pet_stage == 3 && !is_evolution_final){
+
+        if(current_pet_version == "b" && perfect_minigame_count >= 20 && current_pet_stage != 4){
+            current_pet_stage = 4;
+            current_pet_version = "a";
+            return; 
+        }else{
+            is_evolution_final = true;
+            evolution_count += 2 * DAY_SECONDS;
+        }
+
+        if(current_pet_version == "c" && !is_ever_been_disciplined && current_pet_stage != 4){
+            current_pet_stage = 4;
+            current_pet_version = "b";
+            return; 
+        }else{
+            is_evolution_final = true;
+            evolution_count += 2 * DAY_SECONDS;
+        }
+
+        if(current_pet_version == "d" && !is_ever_played_minigame && current_pet_stage != 4){
+            current_pet_stage = 4;
+            current_pet_version = "c";
+        }else{
+            is_evolution_final = true;
+            evolution_count += 2 * DAY_SECONDS;
+        }       
+
     }
 
+    
+    import_species_stats(current_pet_stage,current_pet_version);
+
+    stage_care_miss_count = 0;
     evolution_count = 0;
     update_pet_sprite();
     play_audio(6)
-    
 }
 
 function update_pet_sprite(){
@@ -300,7 +539,7 @@ function remove_critical(key){
 //current base rate: depletes 4 hearts after 1h
 function food_tick(){
     if(food_stat > 0){
-        food_stat -= 0.0011;
+        food_stat -= food_need_per_second;
         if(food_stat < 0)food_stat=0;
     }else if(!is_critical["food"]){
         declare_critical("food");
@@ -320,7 +559,7 @@ function weight_tick(){
 //current base rate: depletes 4 hearts after 1h
 function fun_tick(){
     if(fun_stat > 0){
-        fun_stat -= 0.0011;
+        fun_stat -= fun_need_per_second;
         if(fun_stat < 0)fun_stat=0;
     }else if(!is_critical["fun"]){
         declare_critical("fun");
@@ -480,6 +719,7 @@ function confirmScoldMenu(){
     if(is_critical["faking"]){
         remove_critical("faking");
         discipline_stat += 0.25;
+        is_ever_been_disciplined = true;
     }else{
         fun_stat -= 1;
         if(fun_stat < 0)fun_stat=0;
@@ -683,6 +923,7 @@ function reset_stats(){
 
     perfect_minigame_count = 0;
     is_ever_played_minigame = false;
+    is_ever_been_disciplined = false;
 
     is_missed_bedtime = false;
     is_already_slept = false;
@@ -1327,6 +1568,7 @@ function click_customize_apply_button(){
     update_customization(screen_color,frame_color,button_color);
 }
 
+
 function load_local_customization(){
     let screen_color = localStorage.getItem("localsave_screen_color")
     let frame_color  = localStorage.getItem("localsave_frame_color")
@@ -1381,6 +1623,7 @@ function save_local_gameState(){
     localStorage.setItem("localsave_candy_sick_counter", candy_sick_counter);
     localStorage.setItem("localsave_perfect_minigame_count", perfect_minigame_count );
     localStorage.setItem("localsave_is_ever_played_minigame", is_ever_played_minigame );
+    localStorage.setItem("localsave_is_ever_been_disciplined", is_ever_been_disciplined );
 
     localStorage.setItem("localsave_is_light_on", is_light_on );
     localStorage.setItem("localsave_is_sleeping", is_sleeping );
@@ -1394,9 +1637,25 @@ function save_local_gameState(){
 
 }
 
-//TODO: add egg to restrictions
+
+//Light load species for game load
+function reload_species_characteristics(current_pet_stage,current_pet_version){
+    let species = current_pet_stage + "-" + current_pet_version;
+    evolve_to = evolution_array[species];
+
+    food_need_per_second = evolve_to.food_need_per_second;
+    fun_need_per_second = evolve_to.fun_need_per_second;
+    base_weight = evolve_to.base_weight;
+    sleep_time = evolve_to.sleep_time;
+    wake_up_time = evolve_to.wake_up_time;
+
+    //next_evolution_limit needs to be saved because of secret evolutions lifespan variations
+    //is_evolution_final is also dynamic, can't be loaded from here
+}
+
+
 function is_action_menu_available(){
-    return (is_light_on && !is_dead )
+    return (is_light_on && !is_dead && !is_egg)
 }
 
 function set_unload_autosave(){
@@ -1451,6 +1710,7 @@ function load_local_savestate(){
     candy_sick_counter = Number.parseFloat(localStorage.getItem("localsave_candy_sick_counter"), 10);
     perfect_minigame_count = Number.parseInt(localStorage.getItem("localsave_perfect_minigame_count"), 10); 
     is_ever_played_minigame = localStorage.getItem("localsave_is_ever_played_game") === "true";
+    is_ever_been_disciplined = localStorage.getItem("localsave_is_ever_been_disciplined") === "true";
 
     is_light_on = localStorage.getItem("localsave_is_light_on") === "true";
     is_sleeping = localStorage.getItem("localsave_is_sleeping") === "true";
@@ -1477,6 +1737,7 @@ function load_session(){
     update_poop_display();
     update_critical_icon();
     update_death_display();
+    reload_species_characteristics(current_pet_stage,current_pet_version);
 }
 
 
@@ -1544,7 +1805,7 @@ function pressB(){
             current_action = 0;
             openFoodMenu();
         }
-        if(current_selected_icon == 1 ){
+        if(current_selected_icon == 1 && !is_egg){
             current_action = 1;
             openStatsMenu();
         }
@@ -1563,7 +1824,7 @@ function pressB(){
         if(current_selected_icon == 4 && is_action_menu_available()){
             confirmMedicMenu();
         }
-        if(current_selected_icon == 5 && !is_dead){
+        if(current_selected_icon == 5 && !is_dead && !is_egg){
             current_action = 3;
             openSleepMenu();
         }
@@ -1634,8 +1895,11 @@ function pressC(){
 }
 
 function debug(){
-    let pet_sprite = document.querySelector(".pet_sprite");
-    pet_sprite.src = "./images/pet_stages/2-a.png";
+    //let pet_sprite = document.querySelector(".pet_sprite");
+    //pet_sprite.src = "./images/pet_stages/3-a.png";
+
+    console.log(evolution_array["1-a"]);
+    console.log(current_pet_stage)
 }
 
 function start(){
