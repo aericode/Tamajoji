@@ -10,8 +10,8 @@
 <body>
 
     <div class="toolbar">
-        <img src="./images/icons/customize_icon.png" class="toolbar_icon" onclick="open_toolbar_customize()"> <br>
-        <img src="./images/icons/sound_icon.png" class="toolbar_icon"> <br>
+        <img src="./images/icons/customize_icon.png" class="toolbar_icon" onclick="open_toolbar('customize')"> <br>
+        <img src="./images/icons/sound_icon.png" class="toolbar_icon" onclick="open_toolbar('sound')">  <br>
         <img src="./images/icons/help_icon.png" class="toolbar_icon"> <br>
     </div>
 
@@ -65,8 +65,29 @@
                 </select>
             </div>            
         </div>
-        <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button close_customize" onclick="close_toolbar_customize()">
-        <img src="./images/icons/apply_button.png" class="customize_apply_button" onclick="click_customize_apply_button()">
+        <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button close_customize" onclick="close_toolbar('customize')">
+        <img src="./images/icons/apply_button_cosmetics.png" class="customize_apply_button" onclick="click_customize_apply_button()">
+    </div>
+
+    <div class="sound_menu">
+        <div class="sound_menu_decoration">
+            <div class="action_volume_section">
+                <label>Action Volume:&nbsp;</label>
+                <input type="range" min="0" max="4" class="action_volume_slider slider_handle slider">
+            </div>    
+            <div class="alert_volume_section">
+                <label>Alert Volume:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="range" min="0" max="4" class="button_volume_slider slider_handle slider">
+            </div>
+            <div class="button_volume_section">
+                <label>Button Volume:&nbsp;</label>
+                <input type="range" min="0" max="4" class="button_volume_slider slider_handle slider">
+            </div>
+                    
+        </div>
+
+        <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button " onclick="close_toolbar('sound')">
+        <img src="./images/icons/apply_button_sound.png" class="sound_apply_button">
     </div>
 
     <div class="shell_skin"></div>

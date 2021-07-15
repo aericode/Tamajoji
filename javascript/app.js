@@ -130,6 +130,10 @@ let is_evolution_final = false;
 let food_need_per_second = 0.0011;
 let fun_need_per_second  = 0.0011;
 
+let is_simulating = false;
+let simulation_date;
+
+let is_simulate_time_away_mode = false;
 
 let evolution_array = Array();
 
@@ -381,7 +385,7 @@ function game_clock_tick(){
 
             if(!is_sleeping){
                 food_tick();
-                fun_tick();    
+                fun_tick();
                 forgive_miss_tick();  
                 sick_tick();
                 poop_tick();
@@ -532,7 +536,6 @@ function evolve(){
 
 function evolution_tick(){
     evolution_count++;
-    console.log(evolution_count);
     if(evolution_count >= next_evolution_limit)evolve();
 }
 
@@ -1535,7 +1538,15 @@ function wake_up(){
 }
 
 function sleep_tick(){
-    if(is_sleeptime(new Date())){
+    let date_to_check;
+    if(!is_simulating){
+        date_to_check = new Date();
+    }else{
+        date_to_check = simulation_date;
+    }
+
+
+    if(is_sleeptime(date_to_check)){
         if(!is_sleeping){
             if(is_light_on && !is_critical["sleep"])declare_critical("sleep");
             sleep();
@@ -1546,18 +1557,22 @@ function sleep_tick(){
         if(is_already_slept)wake_up();
     }
 }
+//options: Customize Volu
+function open_toolbar(menu_option){
+    let menu_class_name = "." + menu_option + "_menu";
 
-function open_toolbar_customize(){
     if(!is_toolbar_menu_open){
         is_toolbar_menu_open = true;
-        let menu = document.querySelector(".customize_menu");
+        let menu = document.querySelector(menu_class_name);
         menu.style.display = "block";
     }
 }
 
-function close_toolbar_customize(){
+function close_toolbar(menu_option){
+    let menu_class_name = "." + menu_option + "_menu";
+
     is_toolbar_menu_open = false;
-    let menu = document.querySelector(".customize_menu");
+    let menu = document.querySelector(menu_class_name );
     menu.style.display = "none";
 }
 
@@ -1693,9 +1708,54 @@ function is_action_menu_available(){
     return (is_light_on && !is_dead && !is_egg)
 }
 
+function save_logout_date(){
+    let logout_date = new Date();
+    let logout_parsed_date = Date.parse(logout_date);
+
+    localStorage.setItem("logout_date", logout_date.toUTCString() );
+    localStorage.setItem("logout_parsed_date", logout_parsed_date);
+}
+
+function get_time_elapsed_since_logout(){
+    let current_date = Date.parse( new Date() );
+    let logout_date  =  Number.parseInt(localStorage.getItem("logout_date"));
+
+    let elapsed_seconds = Math.round((current_date - logout_date)/1000);
+
+    return elapsed_seconds;
+}
+
+function simulation_clock_tick(){
+    simulation_date.setSeconds( simulation_date.getSeconds() + 1);
+}
+
+function simulate_time_away(time_away){
+
+    if(time_away < 0 ) time_away = 0;
+    if(time_away > 3 * DAY_SECONDS  ) time_away = 3 * DAY_SECONDS;
+
+    is_simulating = true;
+    let simulated_seconds = 0;
+
+    simulation_date = new Date(localStorage.getItem("logout_date"));
+
+    while( simulated_seconds <= time_away){
+        console.log(simulated_seconds);
+        simulation_clock_tick();
+        game_clock_tick();
+        simulated_seconds++;
+    }
+
+    is_simulating = false;
+}
+
 function set_unload_autosave(){
     window.addEventListener("beforeunload", function () {
-        save_local_gameState();
+        //check if is simulating before saving ()
+        if(!is_simulating){
+            save_local_gameState();
+            save_logout_date();
+        }
     });
 }
 
@@ -1930,14 +1990,29 @@ function pressC(){
 }
 
 function debug(){
-    //let pet_sprite = document.querySelector(".pet_sprite");
-    //pet_sprite.src = "./images/pet_stages/3-a.png";
+    
+    let moment =  new Date(localStorage.getItem("logout_date"));
+    console.log(moment);
 
-    /*
-    evolution_count += 30000;
-    console.log("next evolution: " + next_evolution_limit)
-    console.log("next evolutiom: " + next_evolution_limit)
-    */
+    
+}
+
+function set_default_skins(){
+    screen_color="#d3f6dB";
+    frame_color="color.#708090";
+    button_color="#d0ff14";
+
+    localStorage.setItem("localsave_screen_color" , screen_color );
+    localStorage.setItem("localsave_frame_color"  , frame_color);
+    localStorage.setItem("localsave_button_color" , button_color);
+
+
+    update_customization(screen_color,frame_color,button_color);
+}
+
+function first_load(){
+    set_default_skins();
+    reborn();
 }
 
 function start(){
@@ -1947,7 +2022,12 @@ function start(){
     
 
     set_unload_autosave();
-    if(!is_first_time_loading())load_session();
+    if(is_first_time_loading()){
+        first_load();
+    }else{
+        load_session();
+        if(is_simulate_time_away_mode)simulate_time_away();
+    }
     load_local_customization();
     preselect_current_skins();
     update_pet_sprite();
