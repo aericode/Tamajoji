@@ -558,3 +558,73 @@ body{
     background: url('../images/icons/slider_handle.png');
     cursor: pointer;
 }
+
+.savestate_menu{
+    position: absolute;
+    z-index: 9;
+    border: 3px solid black;
+    top: 80px;
+    left: 425px;
+    width: 450px;
+    height: 380px;
+    /*background-color: rgb(105, 240, 145);*/
+    background-color: rgb(136, 25, 139);
+    display: block;
+}
+
+.savestate_menu_decoration_1{
+    position: absolute;
+    width: 430px;
+    height: 180px;
+    left: 10px;
+    top: 40px;
+    border-radius: 30px;
+    background-color: rgb(130, 193, 223);
+}
+
+.savestate_menu_decoration_2{
+    position: absolute;
+    width: 220px;
+    height: 120px;
+    left: 25px;
+    top: 240px;
+    border-radius: 30px;
+    background-color: rgb(212, 149, 12);
+}
+
+.reset_section{
+    position: absolute;
+    left: 30px;
+    top: 10px;
+
+}
+
+.reset_section p{
+    text-align: center;
+    font-weight: bold;
+    padding: 2px;
+    margin: 1px;
+    left: 5px;
+}
+
+.savestate_apply_button{
+    position: absolute;
+
+    left: 300px;
+    top: 250px;
+}
+
+.reset_lock_icon{
+    position: absolute;
+    z-index: 11;
+    left: 0px;
+    top: 25px;
+
+}
+
+.reset_button{
+    z-index: 10;
+    position: absolute;
+    left: 16px;
+    top: 34px;
+}

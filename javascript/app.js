@@ -134,6 +134,7 @@ let is_simulating = false;
 let simulation_date;
 
 let is_simulate_time_away_mode = false;
+let is_auto_pause_mode = false;
 
 let is_muted = false;
 
@@ -1559,7 +1560,7 @@ function sleep_tick(){
         if(is_already_slept)wake_up();
     }
 }
-//options: Customize Volu
+//options: customize volume savestate
 function open_toolbar(menu_option){
     let menu_class_name = "." + menu_option + "_menu";
 
@@ -1767,6 +1768,15 @@ function simulation_clock_tick(){
     simulation_date.setSeconds( simulation_date.getSeconds() + 1);
 }
 
+function auto_pause_tick(){
+    if(is_sleeptime){
+        is_simulating = false;
+        is_simulate_time_away_mode = false;
+    }else{
+        is_simulate_time_away_mode = true;
+    }
+}
+
 function simulate_time_away(time_away){
 
     if(time_away < 0 ) time_away = 0;
@@ -1782,6 +1792,9 @@ function simulate_time_away(time_away){
         simulation_clock_tick();
         game_clock_tick();
         simulated_seconds++;
+
+        //autopause
+        if(!is_simulating)break;
     }
 
     is_simulating = false;
@@ -2071,6 +2084,31 @@ function set_default_skins(){
 
 
     update_customization(screen_color,frame_color,button_color);
+}
+
+
+
+
+let reset_lock_break_count = 0;
+function update_reset_lock_icon(){
+    let lock_icon = document.querySelector(".reset_lock_icon");
+    if(reset_lock_break_count >= 0 && reset_lock_break_count <= 10){
+        lock_icon.src = "./images/icons/reset_lock/reset_lock_"+reset_lock_break_count+".png";
+    }
+}
+
+
+function click_reset_lock(){
+
+    let lock_icon = document.querySelector(".reset_lock_icon");
+    reset_lock_break_count++;
+
+    if(reset_lock_break_count>10){
+        lock_icon.style.display = "none";
+    }else{
+        update_reset_lock_icon();
+    }
+    
 }
 
 function first_load(){
