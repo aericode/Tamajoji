@@ -2117,6 +2117,11 @@ function click_reset_lock(){
     
 }
 
+function click_reset_button(){
+    reborn();
+    close_toolbar("savestate");
+}
+
 function first_load(){
     set_default_skins();
     set_default_audio();

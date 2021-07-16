@@ -568,8 +568,8 @@ body{
     width: 450px;
     height: 380px;
     /*background-color: rgb(105, 240, 145);*/
-    background-color: rgb(136, 25, 139);
-    display: block;
+    background-color: rgb(118, 92, 179);
+    display: none;
 }
 
 .savestate_menu_decoration_1{
@@ -579,7 +579,7 @@ body{
     left: 20px;
     top: 40px;
     border-radius: 30px;
-    background-color: rgb(130, 193, 223);
+    background-color: rgb(107, 199, 241);
 }
 
 .savestate_menu_decoration_2{
@@ -589,7 +589,7 @@ body{
     left: 25px;
     top: 240px;
     border-radius: 30px;
-    background-color: rgb(212, 149, 12);
+    background-color: rgb(247, 178, 100);
 }
 
 .reset_section{
@@ -627,4 +627,59 @@ body{
     position: absolute;
     left: 16px;
     top: 34px;
+}
+
+.gamemode_card{
+    position: absolute;
+    background-color: white;
+    width: 100px;
+    height: 150px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+.gamemode_card img{
+    position: absolute;
+    top: 5px;
+    left: 25px
+}
+
+.gamemode_card h4{
+    width: 100%;
+    position: absolute;
+    top:35px;
+    text-align: center;
+}
+
+.gamemode_card p{
+    width: 100%;
+    position: absolute;
+    top: 65px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auto-pause_mode p{
+    font-size: 12px;
+}
+
+.gamemode_card input{
+    position: absolute;
+    top: 125px;
+    left: 40px;
+}
+
+.pause_mode{
+    top: 10px;
+    left: 25px
+}
+
+.auto-pause_mode{
+    top: 10px;
+    left: 155px
+}
+
+.continuous_mode{
+    top: 10px;
+    left: 285px;
 }
