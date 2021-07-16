@@ -134,7 +134,7 @@ let is_simulating = false;
 let simulation_date;
 
 let is_simulate_time_away_mode = false;
-let is_auto_pause_mode = false;
+let is_smart_pause_mode = false;
 
 let is_muted = false;
 
@@ -375,6 +375,8 @@ function currentTime() {
 function game_clock_tick(){ 
     
     if(!is_dead){
+        if(is_smart_pause_mode)smart_pause_tick();
+
         aging_tick();
         clear_animation_tick();
         evolution_tick();
@@ -1662,6 +1664,45 @@ function click_customize_apply_button(){
     update_customization(screen_color,frame_color,button_color);
 }
 
+function update_gamemode_radio_button(){
+    let radio_array = document.querySelectorAll(".gamemode_radio");
+    let gamemode = Number.parseInt(localStorage.getItem("config_gamemode"));
+
+    radio_array[gamemode].checked =  true;
+}
+
+function update_gamemode(){
+    let gamemode = Number.parseInt(localStorage.getItem("config_gamemode"));
+    
+
+    if (gamemode==0){//pause
+        is_simulate_time_away_mode = false;
+        is_smart_pause_mode = false;
+    }else if(gamemode==1){//smart-pause
+        is_simulate_time_away_mode = false;
+        is_smart_pause_mode = true;
+    }else if(gamemode==2){//continuous
+        is_simulate_time_away_mode = true;
+        is_smart_pause_mode = false;
+    }else{
+        
+        set_default_gamemode();
+    }
+
+
+}
+
+function click_savestate_apply_button(){
+    let radio_array = document.querySelectorAll(".gamemode_radio");
+    let gamemode;
+
+    for(let i = 0; i< 3; i++){
+        if(radio_array[i].checked)gamemode = radio_array[i].value;
+    }
+
+    localStorage.setItem("config_gamemode" , gamemode);
+    update_gamemode();
+}
 
 function load_local_customization(){
     let screen_color = localStorage.getItem("localsave_screen_color")
@@ -1773,7 +1814,7 @@ function simulation_clock_tick(){
     simulation_date.setSeconds( simulation_date.getSeconds() + 1);
 }
 
-function auto_pause_tick(){
+function smart_pause_tick(){
     if(is_sleeptime){
         is_simulating = false;
         is_simulate_time_away_mode = false;
@@ -1913,6 +1954,7 @@ function preselect_current_skins(){
 }
 
 function pressA(){
+    debug();
     play_audio(1);
 
     if(current_action == 8){
@@ -2091,8 +2133,16 @@ function set_default_skins(){
     update_customization(screen_color,frame_color,button_color);
 }
 
+function set_default_gamemode(){
+    localStorage.setItem("config_gamemode" , 0);
+    update_gamemode();
+}
 
+function debug(){
 
+    console.log(is_simulate_time_away_mode);
+    console.log(is_smart_pause_mode);
+}
 
 let reset_lock_break_count = 0;
 function update_reset_lock_icon(){
@@ -2125,11 +2175,16 @@ function click_reset_button(){
 function first_load(){
     set_default_skins();
     set_default_audio();
+    set_default_gamemode();
     reborn();
 }
 
 function start(){
     toggle_is_muted();
+
+    update_gamemode();//loads gamemode from localstate and applies to local variables
+    update_gamemode_radio_button();
+
     currentTime();
     initPosition();
     wander();

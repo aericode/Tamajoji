@@ -579,7 +579,7 @@ body{
     left: 20px;
     top: 40px;
     border-radius: 30px;
-    background-color: rgb(107, 199, 241);
+    background-color: rgb(51, 167, 221);
 }
 
 .savestate_menu_decoration_2{
@@ -589,8 +589,9 @@ body{
     left: 25px;
     top: 240px;
     border-radius: 30px;
-    background-color: rgb(247, 178, 100);
+    background-color: rgb(51, 167, 221);
 }
+
 
 .reset_section{
     position: absolute;
@@ -612,6 +613,15 @@ body{
 
     left: 300px;
     top: 250px;
+}
+
+.savestate_apply_button:hover{
+    position: absolute;
+
+    left: 300px;
+    top: 250px;
+
+    content:url("../images/icons/apply_button_savestate_hover.png")
 }
 
 .reset_lock_icon{
@@ -654,8 +664,8 @@ body{
 .gamemode_card p{
     width: 100%;
     position: absolute;
-    top: 65px;
-    font-size: 14px;
+    top: 63px;
+    font-size: 13px;
     text-align: center;
 }
 

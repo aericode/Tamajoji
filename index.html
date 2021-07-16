@@ -98,22 +98,22 @@
                 <div class="pause_mode gamemode_card">
                     <img src=" ./images/icons/gamemode_icons/pause_mode_icon.png" >
                     <h4>Pause</h4>
-                    <p>Time freezes when the tab is closed</p>
-                    <input name="plan" class="radio" type="radio">
+                    <p>Time freezes whenever you quit</p>
+                    <input name="gamemode" class="gamemode_radio" type="radio" value='0'>
                 </div>
 
                 <div class="auto-pause_mode gamemode_card">
                     <img src=" ./images/icons/gamemode_icons/autopause_mode_icon.png" >
-                    <h4>Auto-pause</h4>
-                    <p>Time will flow until your pet's sleeptime, then it will freeze</p>
-                    <input name="plan" class="radio" type="radio">
+                    <h4>Smart-pause</h4>
+                    <p>When you quit, time flows until sleep time, then it freezes</p>
+                    <input name="gamemode" class="gamemode_radio" type="radio" value="1">
                 </div>
 
                 <div class="continuous_mode gamemode_card">
                     <img src=" ./images/icons/gamemode_icons/continuous_mode_icon.png" >
                     <h4>Continuous</h4>
-                    <p>Time never freezes, never</p>
-                    <input name="plan" class="radio" type="radio">
+                    <p>Time flows continuously even when you quit</p>
+                    <input name="gamemode" class="gamemode_radio" type="radio" value="2">
                 </div>
 
 
@@ -131,7 +131,7 @@
               
 
         <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button" onclick="close_toolbar('savestate')">
-        <img src="./images/icons/apply_button_sound.png" class="savestate_apply_button">
+        <img src="./images/icons/apply_button_savestate.png" class="savestate_apply_button" onclick="click_savestate_apply_button()" >
     </div>
 
     <div class="shell_skin"></div>
