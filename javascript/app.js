@@ -1565,6 +1565,11 @@ function open_toolbar(menu_option){
     let menu_class_name = "." + menu_option + "_menu";
 
     if(!is_toolbar_menu_open){
+        if(menu_option == "savestate"){
+            reset_lock_break_count = 0;
+            update_reset_lock_icon();
+        }
+
         is_toolbar_menu_open = true;
         let menu = document.querySelector(menu_class_name);
         menu.style.display = "block";
@@ -2094,6 +2099,7 @@ function update_reset_lock_icon(){
     let lock_icon = document.querySelector(".reset_lock_icon");
     if(reset_lock_break_count >= 0 && reset_lock_break_count <= 10){
         lock_icon.src = "./images/icons/reset_lock/reset_lock_"+reset_lock_break_count+".png";
+        lock_icon.style.display = "block";
     }
 }
 

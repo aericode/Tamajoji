@@ -574,9 +574,9 @@ body{
 
 .savestate_menu_decoration_1{
     position: absolute;
-    width: 430px;
+    width: 410px;
     height: 180px;
-    left: 10px;
+    left: 20px;
     top: 40px;
     border-radius: 30px;
     background-color: rgb(130, 193, 223);
