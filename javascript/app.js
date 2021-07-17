@@ -451,6 +451,11 @@ function update_pet_sprite(){
     pet_sprite.src = "./images/pet_stages/"+ current_pet_stage +"-" + current_pet_version +".png";
 }
 
+function lose_discipline(discipline_loss){
+    discipline_stat -= discipline_loss;
+    if(discipline_stat < 0 ) discipline_stat = 0;
+}
+
 function evolve(){
 
     //final evolutions don't evolve
@@ -466,9 +471,12 @@ function evolve(){
 
     }else if(current_pet_stage == 1){
         current_pet_stage = 2;
+
         if(stage_care_miss_count < 4){
+            lose_discipline(0.5);
             current_pet_version = "a";
         }else{
+            lose_discipline(0.5);
             current_pet_version = "b";
         }
     }else if(current_pet_stage == 2){
@@ -478,22 +486,30 @@ function evolve(){
             if(stage_care_miss_count < 2){
                 current_pet_version = "a";                
             }else if(stage_care_miss_count < 4){
+                lose_discipline(0.3);
                 current_pet_version = "b";  
             }else if(stage_care_miss_count < 6){
+                
                 current_pet_version = "c";  
             }else if(stage_care_miss_count < 8){
+                lose_discipline(0.25);
                 current_pet_version = "d";
             }else if(stage_care_miss_count < 10){
+                lose_discipline(0.1);
                 current_pet_version = "e";  
             }else{
+                lose_discipline(0.5);
                 current_pet_version = "f";
             }
         }else if(urrent_pet_version == "b"){
             if(stage_care_miss_count < 3){
+                lose_discipline(0.25);
                 current_pet_version = "d";                
             }else if(stage_care_miss_count < 6){
+                lose_discipline(0.1);
                 current_pet_version = "e";  
             }else{
+                lose_discipline(0.5);
                 current_pet_version = "f";  
             }
         }
@@ -854,12 +870,14 @@ function sick_trigger(){
     reset_sick_timer();
 }
 
+//16h forgive 4 misses
+//(doesn't ticks when sleeping)
 function forgive_miss_tick(){
-    if(care_miss_death_score>0)care_miss_death_score -= 0.0003;
+    if(care_miss_death_score>0)care_miss_death_score -= 0.00007;
 }
 
 function check_death_by_miss(){
-    if(care_miss_death_score >= 7)die();
+    if(care_miss_death_score >= 9)die();
 }
 
 function update_death_display(){
@@ -1575,6 +1593,7 @@ function open_toolbar(menu_option){
         if(menu_option == "savestate"){
             reset_lock_break_count = 0;
             update_reset_lock_icon();
+            update_gamemode_radio_button();
         }
 
         if(menu_option == "sound"){
