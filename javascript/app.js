@@ -138,6 +138,8 @@ let is_smart_pause_mode = false;
 
 let is_muted = false;
 
+let is_this_window_first_open = true;
+
 let evolution_array = Array();
 
 evolution_array["0-a"] = {
@@ -1572,6 +1574,14 @@ function open_toolbar(menu_option){
             update_reset_lock_icon();
         }
 
+        if(menu_option == "volume"){
+            load_audio_config();
+        }
+
+        if(menu_option == "customize"){
+            preselect_current_skins();
+        }
+
         is_toolbar_menu_open = true;
         let menu = document.querySelector(menu_class_name);
         menu.style.display = "block";
@@ -1834,7 +1844,6 @@ function simulate_time_away(time_away){
     simulation_date = new Date(localStorage.getItem("logout_date"));
 
     while( simulated_seconds <= time_away){
-        console.log(simulated_seconds);
         simulation_clock_tick();
         game_clock_tick();
         simulated_seconds++;
@@ -1849,7 +1858,7 @@ function simulate_time_away(time_away){
 function set_unload_autosave(){
     window.addEventListener("beforeunload", function () {
         //check if is simulating before saving ()
-        if(!is_simulating){
+        if(!is_simulating && is_this_window_first_open){
             save_local_gameState();
             save_logout_date();
         }
@@ -1954,7 +1963,6 @@ function preselect_current_skins(){
 }
 
 function pressA(){
-    debug();
     play_audio(1);
 
     if(current_action == 8){
@@ -2138,11 +2146,6 @@ function set_default_gamemode(){
     update_gamemode();
 }
 
-function debug(){
-
-    console.log(is_simulate_time_away_mode);
-    console.log(is_smart_pause_mode);
-}
 
 let reset_lock_break_count = 0;
 function update_reset_lock_icon(){
@@ -2179,7 +2182,37 @@ function first_load(){
     reborn();
 }
 
+
+// registerOpenTab FUNCTION
+function registerOpenTab () {
+    let tabsOpen = 1;
+    while (localStorage.getItem('openTab' + tabsOpen) !== null) {
+        tabsOpen++;
+    }
+    localStorage.setItem('openTab' + tabsOpen, 'open');
+    if (localStorage.getItem('openTab2') !== null) {
+        is_this_window_first_open = false;
+        window.alert("Tamajoji is already open in another tab progress on this tab won't be saved");
+        
+    }
+}
+  
+// unregisterOpenTab FUNCTION
+function unregisterOpenTab(){
+    let tabsOpen = 1;
+    while (localStorage.getItem('openTab' + tabsOpen) !== null) {
+        tabsOpen++;
+    }
+    localStorage.removeItem('openTab' + (tabsOpen - 1));
+}
+  
+function set_window_singleton(){
+    window.addEventListener('load', registerOpenTab);
+    window.addEventListener('beforeunload', unregisterOpenTab);
+}
+
 function start(){
+    set_window_singleton();
     toggle_is_muted();
 
     update_gamemode();//loads gamemode from localstate and applies to local variables
@@ -2202,6 +2235,7 @@ function start(){
     preselect_current_skins();
     update_pet_sprite();
     update_sleepy_icon();
+    
  
 }
 
