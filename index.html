@@ -12,6 +12,8 @@
     <div class="toolbar">
         <img src="./images/icons/customize_icon.png" class="toolbar_icon" onclick="open_toolbar('customize')"> <br>
         <img src="./images/icons/sound_icon.png" class="toolbar_icon" onclick="open_toolbar('sound')">  <br>
+        <img src="./images/icons/unmuted_icon.png" class="toolbar_icon toggle_mute_icon" onclick="toggle_is_muted()"> <br>
+        <img src="./images/icons/time_settings_icon.png" class="toolbar_icon"> <br>
         <img src="./images/icons/help_icon.png" class="toolbar_icon"> <br>
     </div>
 
@@ -77,7 +79,7 @@
             </div>    
             <div class="alert_volume_section">
                 <label>Alert Volume:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input type="range" min="0" max="4" class="button_volume_slider slider_handle slider">
+                <input type="range" min="0" max="4" class="alert_volume_slider slider_handle slider">
             </div>
             <div class="button_volume_section">
                 <label>Button Volume:&nbsp;</label>
@@ -87,7 +89,7 @@
         </div>
 
         <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button " onclick="close_toolbar('sound')">
-        <img src="./images/icons/apply_button_sound.png" class="sound_apply_button">
+        <img src="./images/icons/apply_button_sound.png" class="sound_apply_button" onclick="click_volume_apply_button()">
     </div>
 
     <div class="shell_skin"></div>

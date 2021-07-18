@@ -135,6 +135,8 @@ let simulation_date;
 
 let is_simulate_time_away_mode = false;
 
+let is_muted = false;
+
 let evolution_array = Array();
 
 evolution_array["0-a"] = {
@@ -766,7 +768,7 @@ function sick_tick(){
         if(!is_missed_sick_call)critical_tick("sick");
         sickness_death_timer--;
         if(sickness_death_timer <= 0){
-            die(false);
+            die();
         }
     }
 }
@@ -852,7 +854,7 @@ function forgive_miss_tick(){
 }
 
 function check_death_by_miss(){
-    if(care_miss_death_score >= 7)die(false);
+    if(care_miss_death_score >= 7)die();
 }
 
 function update_death_display(){
@@ -864,7 +866,7 @@ function update_death_display(){
     }
 }
 
-function die(is_death_by_aging){
+function die(){
     is_light_on = true;
     updateLightDisplay();
 
@@ -1497,7 +1499,7 @@ function is_sleeptime(current_time){
     const day_begin = 0;
     const day_end   = 86400;
 
-    return ((day_begin < current_time_seconds && current_time_seconds<wake_up_time_seconds) || (sleep_time_seconds<current_time_seconds&&current_time_seconds<day_end))
+    return ((day_begin < current_time_seconds && current_time_seconds<wake_up_time_seconds) || (sleep_time_seconds<current_time_seconds&&current_time_seconds<=day_end))
 }
 
 function update_sleepy_icon(){
@@ -1601,8 +1603,44 @@ function update_customization(screen_color,frame_color,button_color){
     for(i=0;i<3;i++){
         button_array[i].style.backgroundColor = button_color;
     }
+}
+
+function update_volume(action_volume,alert_volume,button_volume){
+    for(let i = 0;i < audio_array.length; i++){
+        if( i == 0 ){
+            audio_array[i].volume = alert_volume*0.2;
+        }else if( i == 1){
+            audio_array[i].volume = button_volume*0.25;
+        }else{
+            audio_array[i].volume = action_volume*0.2;
+        }
+    }
+}
+
+function load_audio_config(){
+    let action_volume = Number.parseInt(localStorage.getItem("config_action_volume"));
+    let alert_volume  = Number.parseInt(localStorage.getItem("config_alert_volume"));
+    let button_volume = Number.parseInt(localStorage.getItem("config_button_volume"));
 
 
+    update_volume(action_volume,alert_volume,button_volume);
+
+    document.querySelector(".action_volume_slider").value = action_volume;
+    document.querySelector(".alert_volume_slider").value  = alert_volume;
+    document.querySelector(".button_volume_slider").value = button_volume;
+}
+
+function click_volume_apply_button(){
+    let action_volume = document.querySelector(".action_volume_slider").value;
+    let alert_volume  = document.querySelector(".alert_volume_slider").value;
+    let button_volume = document.querySelector(".button_volume_slider").value;
+
+    localStorage.setItem("config_action_volume" , action_volume );
+    localStorage.setItem("config_alert_volume"  , alert_volume);
+    localStorage.setItem("config_button_volume" , button_volume);
+
+    update_volume(action_volume,alert_volume,button_volume);
+    play_audio(8);
 }
 
 function click_customize_apply_button(){
@@ -1989,12 +2027,37 @@ function pressC(){
 
 }
 
-function debug(){
-    
-    let moment =  new Date(localStorage.getItem("logout_date"));
-    console.log(moment);
+function toggle_is_muted(){
+    //changes is_muted to opposite value
+    is_muted = !is_muted;
+    let icon = document.querySelector(".toggle_mute_icon");
+    for(let i = 0;i < audio_array.length; i++){
+        audio_array[i].muted = is_muted;
+    }
 
-    
+    if(is_muted){
+        icon.src = "./images/icons/muted_icon.png";
+    }else{
+        icon.src = "./images/icons/unmuted_icon.png";
+    }
+
+}
+
+function set_default_audio(){
+    let default_action_volume  = 1;
+    let default_alert_volume   = 1;
+    let default_button_volume  = 2;
+
+    localStorage.setItem("config_action_volume" , default_action_volume);
+    localStorage.setItem("config_alert_volume"  , default_alert_volume);
+    localStorage.setItem("config_button_volume" , default_button_volume);
+
+    update_volume(default_action_volume,default_alert_volume,default_button_volume);
+
+    document.querySelector(".action_volume_slider").value = default_action_volume;
+    document.querySelector(".alert_volume_slider").value  = default_alert_volume;
+    document.querySelector(".button_volume_slider").value = default_button_volume;
+
 }
 
 function set_default_skins(){
@@ -2012,10 +2075,12 @@ function set_default_skins(){
 
 function first_load(){
     set_default_skins();
+    set_default_audio();
     reborn();
 }
 
 function start(){
+    toggle_is_muted();
     currentTime();
     initPosition();
     wander();
@@ -2029,6 +2094,7 @@ function start(){
         if(is_simulate_time_away_mode)simulate_time_away();
     }
     load_local_customization();
+    load_audio_config();
     preselect_current_skins();
     update_pet_sprite();
     update_sleepy_icon();
