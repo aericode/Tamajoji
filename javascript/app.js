@@ -600,7 +600,7 @@ function weight_tick(){
     //doesn't loses weight while sleeping
     //trend is to lose 0.32 gram each hour after meal
     if(extra_weight > 0 && !is_sleeping){
-        extra_weight -= 0.00012;
+        extra_weight -= 0.0012;
     }
 }
 
