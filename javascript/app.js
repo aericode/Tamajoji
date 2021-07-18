@@ -136,6 +136,7 @@ let simulation_date;
 let is_simulate_time_away_mode = false;
 let is_smart_pause_mode = false;
 
+let is_automute_enabled = true;
 let is_muted = false;
 
 let is_this_window_first_open = true;
@@ -1662,6 +1663,8 @@ function load_audio_config(){
     let alert_volume  = Number.parseInt(localStorage.getItem("config_alert_volume"));
     let button_volume = Number.parseInt(localStorage.getItem("config_button_volume"));
 
+    let is_automute_enabled = localStorage.getItem("config_is_automute_enabled")=="true";
+
 
     update_volume(action_volume,alert_volume,button_volume);
 
@@ -1669,6 +1672,7 @@ function load_audio_config(){
     document.querySelector(".alert_volume_slider").value  = alert_volume;
     document.querySelector(".button_volume_slider").value = button_volume;
 
+    document.querySelector(".automute_volume_checkbox").checked = is_automute_enabled;
 }
 
 function click_volume_apply_button(){
@@ -1676,9 +1680,13 @@ function click_volume_apply_button(){
     let alert_volume  = document.querySelector(".alert_volume_slider").value;
     let button_volume = document.querySelector(".button_volume_slider").value;
 
+    let is_automute_enabled = document.querySelector(".automute_volume_checkbox").checked;
+
     localStorage.setItem("config_action_volume" , action_volume );
     localStorage.setItem("config_alert_volume"  , alert_volume);
     localStorage.setItem("config_button_volume" , button_volume);
+
+    localStorage.setItem("config_is_automute_enabled" , is_automute_enabled);
 
     update_volume(action_volume,alert_volume,button_volume);
     play_audio(8);
@@ -1688,6 +1696,7 @@ function click_customize_apply_button(){
     let screen_color = document.querySelector(".select_screen_color").value;
     let frame_color  = document.querySelector(".select_shell_color").value;
     let button_color = document.querySelector(".select_button_color").value;
+
 
     localStorage.setItem("localsave_screen_color" , screen_color );
     localStorage.setItem("localsave_frame_color"  , frame_color);
@@ -2118,6 +2127,18 @@ function pressC(){
 
 }
 
+function load_auto_mute_config(){
+    let loaded_value = localStorage.getItem("config_is_automute_enabled");
+    if( loaded_value === null){
+        //sets true by default
+        localStorage.setItem("config_is_automute_enabled", true);
+    }
+
+    is_automute_enabled = localStorage.getItem("config_is_automute_enabled") === "true";
+    
+
+}
+
 function toggle_is_muted(){
     //changes is_muted to opposite value
     is_muted = !is_muted;
@@ -2143,12 +2164,15 @@ function set_default_audio(){
     localStorage.setItem("config_alert_volume"  , default_alert_volume);
     localStorage.setItem("config_button_volume" , default_button_volume);
 
+    localStorage.setItem("config_is_automute_enabled" , true);
+
     update_volume(default_action_volume,default_alert_volume,default_button_volume);
 
     document.querySelector(".action_volume_slider").value = default_action_volume;
     document.querySelector(".alert_volume_slider").value  = default_alert_volume;
     document.querySelector(".button_volume_slider").value = default_button_volume;
 
+    
 }
 
 function set_default_skins(){
@@ -2247,7 +2271,9 @@ function set_window_singleton(){
 
 function start(){
     set_window_singleton();
-    toggle_is_muted();
+    
+    load_auto_mute_config();
+    if(is_automute_enabled)toggle_is_muted();
 
     update_gamemode();//loads gamemode from localstate and applies to local variables
     update_gamemode_radio_button();

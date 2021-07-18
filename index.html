@@ -10,11 +10,14 @@
 <body>
 
     <div class="toolbar">
+        
         <img src="./images/icons/customize_icon.png" class="toolbar_icon" onclick="open_toolbar('customize')"> <br>
-        <img src="./images/icons/sound_icon.png" class="toolbar_icon" onclick="open_toolbar('sound')">  <br>
+        <img src="./images/icons/sound_icon.png" class="toolbar_icon" onclick="open_toolbar('sound')"> <br>
         <img src="./images/icons/unmuted_icon.png" class="toolbar_icon toggle_mute_icon" onclick="toggle_is_muted()"> <br>
         <img src="./images/icons/time_settings_icon.png" class="toolbar_icon" onclick="open_toolbar('savestate')"> <br>
         <img src="./images/icons/help_icon.png" class="toolbar_icon"> <br>
+        <img src="./images/icons/jojilogy_icon.png" class="toolbar_icon">
+        
     </div>
 
     <div class="customize_menu">
@@ -84,6 +87,11 @@
             <div class="button_volume_section">
                 <label>Button Volume:&nbsp;</label>
                 <input type="range" min="0" max="4" class="button_volume_slider slider_handle slider">
+            </div>
+
+            <div class= "automute_volume_scection">
+                <input type="checkbox" class="automute_volume_checkbox" name="automute">
+                <label for="automute">Auto-mute game when opening</label>
             </div>
                     
         </div>
