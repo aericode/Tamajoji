@@ -853,7 +853,7 @@ function reset_poop_timer(){
     poop_timer = base_time + Math.floor(Math.random()*variable_time_max);
 }
 
-//removes poop from the pet area, reseting the 
+//removes poop from the pet area, reseting the uncleaned poop time and count.
 function clean_poop(){
     poop_count = 0;
     update_poop_display();
@@ -861,10 +861,12 @@ function clean_poop(){
     play_audio(2);
 }
 
+//confirms the scold action and giv
 function confirmScoldMenu(){
     if(is_critical["faking"]){
         remove_critical("faking");
         discipline_stat += 0.25;
+        if(discipline_stat >= 1) discipline_stat = 1;
         is_ever_been_disciplined = true;
     }else{
         fun_stat -= 1;
