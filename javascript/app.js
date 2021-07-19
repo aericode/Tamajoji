@@ -389,6 +389,7 @@ function game_clock_tick(){
             candy_digestion_tick();
             satiety_tick();
             obedience_tick();
+            discipline_tick();
             
 
             if(!is_sleeping){
