@@ -1030,6 +1030,7 @@ function die(){
 
 }
 
+//returns pet to egg stage and resets it's stats
 function reset_stats(){
     stage_care_miss_count = 0;
     care_miss_death_score = 0;
@@ -1111,6 +1112,7 @@ function reset_stats(){
     current_pet_version = "a";
 }
 
+//return pet stats and game state to zero
 function reborn(){
     reset_stats();
     initPosition();
@@ -1125,14 +1127,17 @@ function reborn(){
     current_action = 8;
 }
 
+//checks if there is any poop to clean if so makes the clean action
 function confirmToiletMenu(){
     if(poop_count>0) clean_poop();
 }
 
+//checks if pet is sick before healing it
 function confirmMedicMenu() {
     if(is_sick) get_healed();
 }
-  
+
+//visual function for the game's clock
 function updateTime(k) {
     if (k < 10) {
         return "0" + k;
@@ -1142,6 +1147,7 @@ function updateTime(k) {
     }
 }
 
+//changes visually and logically the selected icon at the main menu
 function switchMainMenu(){
     let unselect = document.querySelector( "."+menu[current_selected_icon] );
     unselect.classList.remove("selected_icon");
@@ -1156,6 +1162,7 @@ function switchMainMenu(){
 
 }
 
+//opens the food menu and sets it to default initial option
 function openFoodMenu(){
     let menu = document.querySelector(".food_display");
     selected_food = 0;
@@ -1163,11 +1170,13 @@ function openFoodMenu(){
     menu.style.display = "block";
 }
 
+//changes the food selected in the food menu
 function changeSelectedFood(){
     selected_food++;
     if(selected_food ==2) selected_food=0;
 }
 
+//visually updates the game's arrow
 function updateFoodArrow(){
     let arrow = document.querySelector(".food_menu_arrow");
     if(selected_food == 0){
@@ -1179,16 +1188,19 @@ function updateFoodArrow(){
     }
 }
 
+//closes food menu
 function closeFoodMenu(){
     let menu = document.querySelector(".food_display");
     menu.style.display = "none";
 }
 
+//limits how much food the pet will want to eat at a time
 function satiety_check(){
     let satiety_limit = 5;
     return (satiety < satiety_limit);
 }
 
+//Confirms eating the selected food
 function eat_selected_food(){
     if (selected_food == 0){
         satiety += 1;
@@ -1212,6 +1224,7 @@ function eat_selected_food(){
     }
 }
 
+//opens the stats menu and brings the player to the initial stats menu screen
 function openStatsMenu(){
     let menu = document.querySelector(".stats_display");
     menu.style.display = "block";
@@ -1225,12 +1238,14 @@ function openStatsMenu(){
     unselectMenu(3);
 }
 
+//close stats menu
 function closeStatsMenu(){
     let menu = document.querySelector(".stats_display");
     menu.style.display = "none";
     selected_stats_menu = 0;
 }
 
+//flicks through stats menu screens
 function changeStatsMenu(){
 
 
@@ -1248,6 +1263,7 @@ function changeStatsMenu(){
 
 }
 
+//updates text info on stats menu
 function update_stats_display(){
     let age_display = document.querySelector(".stats_age_display");
     let weight_display = document.querySelector(".stats_weight_display");
@@ -1260,6 +1276,7 @@ function update_stats_display(){
     weight_display.innerText = total_weight_display; 
 }
 
+//updates heart bars on stats menu, based on rounding
 //Arguments: "hunger" or "happy"
 function update_heart_display(display){
     let displayed_hearts
@@ -1284,6 +1301,7 @@ function update_heart_display(display){
     }
 }
 
+//updates the length of the discipline bar
 //discipline only
 //max width = 576px
 function update_discipline_display(){
@@ -1293,6 +1311,7 @@ function update_discipline_display(){
     bar_display.style.width = (discipline_stat * max_width) + "px";
 }
 
+//shows the to_select menu
 function selectMenu(to_select){
     let menu_list = Array();
     menu_list[0] = "stats_inner_front"
@@ -1305,6 +1324,7 @@ function selectMenu(to_select){
     select.classList.add("selected_stats_menu");
 }
 
+//hides the to_unselect menu
 function unselectMenu(to_unselect){
     let menu_list = Array();
     menu_list[0] = "stats_inner_front"
@@ -1318,6 +1338,7 @@ function unselectMenu(to_unselect){
 
 }
 
+//check for sickness and obedience before confirming eat action
 function confirmFoodMenu(){
 
     if(satiety_check() && !is_sick ){
@@ -1346,6 +1367,7 @@ function confirmFoodMenu(){
 
 }
 
+//displays on screen one of the preselected images based on anim_index
 function displayAnimation(anim_index){
     let anim_array = Array();
     anim_array[0] = "blank_screen";
@@ -1376,14 +1398,15 @@ function closeAnimation(){
 }
 
 
-let minigame_score;
-let minigame_try;
-let guess_is_secret_greater;
-let revealed_value;
-let secret_value;
-let minigame_stage;
+//minigame variables
+let minigame_score;//right guesses
+let minigame_try;//attempts
+let guess_is_secret_greater;//current guess
+let revealed_value;//value from the number on the left
+let secret_value;//value from the number on the right (after reveal)
+let minigame_stage;//inner state of the game (waiting for guess, waiting for skip, gameover)
 
-let autoskip_minigame_stage_count = 3;
+let autoskip_minigame_stage_count = 3;//will wait 3 seconds before skipping
 /*
 minigame_stage guide:
 0 - reveals new revealed_value // hides secret_value
@@ -1393,6 +1416,8 @@ minigame_stage guide:
 
 2 - Ends the game, get the result and displays animation
 */
+
+//opens and resets the minigame
 function openMinigameMenu(){
     let menu = document.querySelector(".minigame_display");
     menu.style.display = "block";
@@ -1416,6 +1441,7 @@ function openMinigameMenu(){
     minigame_stage = 0;
 }
 
+//closes the minigame
 function closeMinigame(){
     let menu = document.querySelector(".minigame_display");
     menu.style.display = "none";
@@ -1435,6 +1461,7 @@ function switchMinigameGuess(){
     }
 }
 
+//decide whether game was "perfect" or not and contabilize it propperly
 function win_minigame (is_perfect){
     if(is_perfect){
         perfect_minigame_count++;
@@ -1448,6 +1475,7 @@ function win_minigame (is_perfect){
     if(fun_stat > 4) fun_stat = 4;
 }
 
+//skip minigame wait stage, goes to guess stage (or end screen)
 function skip_minigame_stage_tick(){
     //if the current action is gaming and the game stage is wait
     if(current_action==2 && minigame_stage==1){
@@ -1456,24 +1484,27 @@ function skip_minigame_stage_tick(){
     }
 }
 
+//get a random number to put on the left
 function randomize_revealed_number(){
     let symbol_display = document.querySelector(".revealed_minigame_number");
     revealed_value = 1 + Math.floor(Math.random() * 9);
     symbol_display.innerHTML = revealed_value
 }
 
-
+//change right value to a question mark
 function conceal_guessed_number(){
     let symbol_display = document.querySelector(".guessed_minigame_number");
     symbol_display.innerHTML = "?";
 }
 
+//get a random number for the right
 function generate_guessed_number(){
     let symbol_display = document.querySelector(".guessed_minigame_number");
     secret_value = 1 + Math.floor(Math.random() * 9);
     symbol_display.innerHTML = secret_value
 }
 
+//lock guess and generate number on the right, check if guess is rightt
 function confirm_round_game(){
     minigame_try++;
     minigame_stage = 1;
