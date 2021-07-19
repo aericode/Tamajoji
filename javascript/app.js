@@ -907,7 +907,8 @@ function reset_sick_timer(){
     sick_check_timer = base_time + Math.floor(Math.random()*variable_time_max);
 }
 
-//Makes random checkings for 
+//Checks random values and based on status will decide if pets sick or if it doesn't
+//gives mistake counts if sickness is caused by a care mistake.
 function sick_chance_roll(){
     //POOP RELATED
     if(poop_count > 0){
@@ -946,6 +947,7 @@ function sick_chance_roll(){
 
 }
 
+//updates logical and visual factors for your pet getting sick.
 function get_sick() {
     let sick_icon = document.querySelector(".sick_icon");
     sick_icon.classList.remove("hidden_display");
@@ -957,7 +959,7 @@ function get_sick() {
 }
 
 
-
+//updates logical and visual factors for your pet getting healed.
 function get_healed(){
     let sick_icon = document.querySelector(".sick_icon");
     sick_icon.classList.add("hidden_display");
@@ -971,6 +973,8 @@ function get_healed(){
     play_audio(12);
 }
 
+//checks if pet is sick
+//resets timer for pet sickness
 function sick_trigger(){
 
     sick_chance_roll();
@@ -984,10 +988,13 @@ function forgive_miss_tick(){
     if(care_miss_death_score>0)care_miss_death_score -= 0.00007;
 }
 
+//dies after 8 mistakes in a row
+//9 mistakes = both bars empty for 1 hour + any extra mistake.
 function check_death_by_miss(){
-    if(care_miss_death_score >= 9)die();
+    if(care_miss_death_score >= 8)die();
 }
 
+//if pet is dead, show the death screen
 function update_death_display(){
     let death_display = document.querySelector(".death_display");
     if(is_dead){
@@ -997,6 +1004,9 @@ function update_death_display(){
     }
 }
 
+//removes all critical, change pet's stage to dead
+//closes all menus, turns on llght
+//brings you back to main menu
 function die(){
     is_light_on = true;
     updateLightDisplay();
