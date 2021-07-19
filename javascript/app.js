@@ -1715,6 +1715,11 @@ function update_gamemode_radio_button(){
     radio_array[gamemode].checked =  true;
 }
 
+function select_gamemode_radio(index){
+    let radio_array = document.querySelectorAll(".gamemode_radio");
+    if(index >=0 && index <=2) radio_array[index].checked =  true;
+}
+
 function update_gamemode(){
     let gamemode = Number.parseInt(localStorage.getItem("config_gamemode"));
     

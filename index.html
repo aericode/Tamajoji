@@ -103,21 +103,21 @@
     <div class="savestate_menu">
         <div class="savestate_menu_decoration_1">
             <div class="gameplay_option_section">
-                <div class="pause_mode gamemode_card">
+                <div class="pause_mode gamemode_card" onclick="select_gamemode_radio(0)">
                     <img src=" ./images/icons/gamemode_icons/pause_mode_icon.png" >
                     <h4>Pause</h4>
                     <p>Time freezes whenever you quit</p>
                     <input name="gamemode" class="gamemode_radio" type="radio" value='0'>
                 </div>
 
-                <div class="auto-pause_mode gamemode_card">
+                <div class="auto-pause_mode gamemode_card" onclick="select_gamemode_radio(1)">
                     <img src=" ./images/icons/gamemode_icons/autopause_mode_icon.png" >
                     <h4>Smart-pause</h4>
                     <p>When you quit, time flows until the morning of the next day, then freezes</p>
                     <input name="gamemode" class="gamemode_radio" type="radio" value="1">
                 </div>
 
-                <div class="continuous_mode gamemode_card">
+                <div class="continuous_mode gamemode_card" onclick="select_gamemode_radio(2)">
                     <img src=" ./images/icons/gamemode_icons/continuous_mode_icon.png" >
                     <h4>Continuous</h4>
                     <p>Time flows continuously even when you quit</p>
