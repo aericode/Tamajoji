@@ -670,7 +670,7 @@ function food_tick(){
     }
 }
 
-//loses a bit of weight if pet is not sleeping
+//loses a bit of extra weight if pet is not sleeping
 function weight_tick(){
     //doesn't loses weight while sleeping
     //trend is to lose 0.32 gram each hour after meal
@@ -679,7 +679,9 @@ function weight_tick(){
     }
 }
 
-//current base rate: depletes 4 hearts after 1h
+//deduces a bit of the fun meter based on the food need variable
+//keeps the food meter abobe zero if it hits zero
+//call for care mistake when it hits zero.
 function fun_tick(){
     if(fun_stat > 0){
         fun_stat -= fun_need_per_second;
@@ -691,15 +693,17 @@ function fun_tick(){
     }
 }
 
-
+//loses a bit of discipline each second
 function discipline_tick(){
     if(discipline_stat > 0)discipline_stat -= 0.000004;
 }
 
+//roll new value for obedience
 function reroll_obedience(){
     obedience_roll = Math.random();
 }
 
+//controll timer for obedience value reroll
 function obedience_tick(){
     obedience_reroll_timer--;
     if(obedience_reroll_timer <= 0){
@@ -709,6 +713,8 @@ function obedience_tick(){
     }
 }
 
+//check if pet will obey you, considering a base of 60% obedience + up to extra 40% based on discipline
+//will always obey if under 1 bar in the stat checking
 function obedience_check(stat_to_check){
     let order_value = 0.6 + discipline_stat*0.4;
     if(stat_to_check == "food" && food_stat <= 1)return true;
@@ -717,16 +723,20 @@ function obedience_check(stat_to_check){
     return (order_value > obedience_roll);
 }
 
+//digests 1 candy per hour, accumulating undigested candy will get your pet sick
 function candy_digestion_tick(){
-    if(candy_sick_counter > 0) candy_sick_counter -= 0.00003;
+    if(candy_sick_counter > 0) candy_sick_counter -= 0.0003;
 }
 
+//Timer for the fake discipline calls
+//fake calls don't count as mistakes when timer hits zero
+//pets will call less the more disciplined they get
 function reset_fake_critical_timer(){
     faking_critical_timer = 7200 + Math.floor(Math.random()*3600) - Math.floor( (1 - discipline_stat)*3600);
 }
 
 
-
+//Don't ticks or calls during real calls
 function fake_tick(){
     if(!is_critical["food"] || !is_critical["fun"] || !is_critical["sick"] || !is_critical["sleep"] ){
         if(is_critical["faking"]){
@@ -742,13 +752,17 @@ function fake_tick(){
     }
 }
 
-
+//Timer for mistake calls
+//upon reaching zero will issue a mistake
+//different mistakes are treated differently by the critical_miss function
 function critical_tick(key){
     critical_timer[key]--;
     if(critical_timer[key]<= 0) critical_miss(key);
 }
 
-//Todo:verify death on each critical miss
+//Registers a miss and then acts differently depending on which key is calling
+//food and fun timers reset and keep going
+//sleep and sick are only registered once, they aren't recurrent
 function critical_miss(key){
     stage_care_miss_count++;
     care_miss_death_score++;
@@ -774,6 +788,7 @@ function critical_miss(key){
 
 }
 
+//light up or turn off the attention icon, depending on wheter there is an attention call going
 function update_critical_icon(){
     let is_icon_active = (is_critical["food"]||is_critical["fun"]||is_critical["sleep"]||is_critical["sick"]||is_critical["faking"]);
     let critical_icon = document.querySelector(".menu_attention");
@@ -788,12 +803,15 @@ function update_critical_icon(){
     
 }
 
+//ticks one second from poop timer, and if it's time to poop, calls for poop function
 function poop_tick(){
     poop_timer--;
+    update_poop_uncleaned_time();
 
     if(poop_timer <= 0)poop_trigger();
 }
 
+//counts how many seconds of cleaning your pet has been missing, used on calculations for sickness
 function update_poop_uncleaned_time(){
     if(poop_count > 0){
         poop_uncleaned_time++;
@@ -802,12 +820,15 @@ function update_poop_uncleaned_time(){
     }
 }
 
+//poops, increasing amound of poop on the screen, adding 1 poop for sickness calculation counts and
+//reseting poop timer
 function poop_trigger(){
     if(poop_count < 3)poop_count++;
     update_poop_display();
     reset_poop_timer();
 }
 
+//visually updates amount of poop on the screen
 function update_poop_display(){
     let max_poop = 3;
     let poop_icon;
@@ -824,6 +845,7 @@ function update_poop_display(){
     }
 }
 
+//resets the counter for the next time the pet will need to poop (1:30h~2:30h)
 function reset_poop_timer(){
     let base_time = 5400;
     let variable_time_max = 3600;
@@ -831,6 +853,7 @@ function reset_poop_timer(){
     poop_timer = base_time + Math.floor(Math.random()*variable_time_max);
 }
 
+//removes poop from the pet area, reseting the 
 function clean_poop(){
     poop_count = 0;
     update_poop_display();
