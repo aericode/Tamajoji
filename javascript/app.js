@@ -1859,11 +1859,15 @@ function simulation_clock_tick(){
 }
 
 function smart_pause_tick(){
-    if(is_sleeptime){
-        is_simulating = false;
-        is_simulate_time_away_mode = false;
-    }else{
-        is_simulate_time_away_mode = true;
+    if(is_sleeptime)is_smart_pause_slept = true;
+
+    if(!is_sleeptime){
+        if(is_smart_pause_slept){
+            is_simulating = false;
+            is_simulate_time_away_mode = false;
+        }else{
+            is_simulate_time_away_mode = true;
+        }
     }
 }
 
