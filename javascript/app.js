@@ -1,9 +1,14 @@
 const DAY_SECONDS = 86400;
 
-
+//amount of mistakes commited in this stage
+//stage mistakes are counted for evolution purposes
+//the death score is decrased gradually over time, but if it goes above a certain limit, the vpet dies
 let stage_care_miss_count = 0;
 let care_miss_death_score = 0;
 
+
+//timers for care mistakes, when set  to true countdown for that specific mistake begins
+//if the timer hits zero, one mistake is added
 let is_critical = Array();
 
 is_critical["food"]  = false;
@@ -24,26 +29,36 @@ critical_timer["faking"]  = 900;
 
 let faking_critical_timer = 7200;
 
+//used to display age
 let age_in_seconds = 0;
 
+//movement variables for walking
 let is_going_at_left = true;
 let limit_left = 0;
 let limit_right = 520;
 
+//icon in the game menu currently selected, goes from 0 to 6, representing each option available
+//(7 is an alert icon, it's not selectable)
 let current_selected_icon = 0;
 
+//which window of the stats mernu are you in right now
 let selected_stats_menu = 0;
 
+//pet need meter, food and fun goes from 0 to 4, discipline from 0 to 1
 let food_stat = 1;
 let fun_stat = 1;
 let discipline_stat = 0;
 let satiety = 0;
 
+//used for clearing the game animations
 let clear_animation_counter = 0;
 
+//inside menu option contollers, meal/snack off/on
 let selected_food = 0;
 let selected_sleep_menu = 0;
 
+//random number (0-1) determines whether the pet will obey when you tell it to eat meals or play games
+//when timer hits zero the number is re-rolled
 let obedience_roll = 0.5;
 let obedience_reroll_timer = 60;
 
@@ -52,12 +67,19 @@ let obedience_reroll_timer = 60;
 let base_weight  = 30; 
 let extra_weight = 0;
 
+//poops when time hits zero, timer is then set to a random number
+//poop count and uncleaned time are accounted for sickness calculations
 //5400 base value
 //randomize between 0 and 3600 to add to base
 let poop_timer = 3600;
 let poop_count = 0;
 let poop_uncleaned_time = 0;
 
+//From time to time, check for sickness, poop count and diet may cause sickness, but it also might be random
+//random_sickness_limit is the limit for a 0-1 random number, going below it will make the pet sick
+//different species have different values for this limit.
+//if death_timer hits zero it means the pet got untreated for too long, it will cause death.
+//missed sick call assures the player will only get 1 care mistake for not medicating the pet imediatelly
 let is_sick = false;
 let sickness_death_timer = 18000;
 //random sickness limit may be changed for diferent evolutions
@@ -65,16 +87,21 @@ let random_sickness_limit = 0.15;
 let sick_check_timer = 3600;
 let is_missed_sick_call = false;
 
+//eating too much candy will make the pet sick
 let candy_sick_counter = 0;
 
+//amount of games won without lost rounds
 let perfect_minigame_count = 0;
+//accounts if the player ever played a game with the pet
 let is_ever_played_minigame = false;
 
+//assures the player will only get 1 care mistake for mising bed time per night.
 let is_missed_bedtime = false;
 let is_already_slept = false;
 let sleep_time = new Date(0,0,0,20,0,0);
 let wake_up_time = new Date(0,0,0,8,0,0);
 
+//used to assure only one toolbar item is open at a time
 let is_toolbar_menu_open = false;
 
 let menu = Array();
@@ -114,34 +141,50 @@ audio_array[12] = new Audio("./audio/vaccine.wav");
 //animation - 9
 let current_action = 8;
 
+//note that light on and sleeping have different meanings
 let is_light_on = true;
 let is_sleeping = false;
 let is_dead = false;
 let is_egg = true;
 
+//evolution points accounting for going to the next stage
 let evolution_count = 0;
 let next_evolution_limit = 300;
 
+//stores the evolution stage your pet is at
 let current_pet_stage = 0;
 let current_pet_version = "a";
 
+//if true, starts calculationg time for death by aging
 let is_evolution_final = false;
 
+//how much each meter is depleted each second
 let food_need_per_second = 0.0011;
 let fun_need_per_second  = 0.0011;
 
+//controls to block saving if game is shut down during simulation time
+//also needed to control the simulation loop
 let is_simulating = false;
+//manipulated to get the sleep time during simulation
+//also necessary to control smart pause
 let simulation_date;
 
+//controls game mode
 let is_simulate_time_away_mode = false;
 let is_smart_pause_mode = false;
 let is_smart_pause_slept = false;
 
+//mute options
 let is_automute_enabled = true;
 let is_muted = false;
 
+//only the first open window gets to save
+//the others are prompted to be closed by the user (who might ignore the warning and overlap saves)
+//(which is not ok.)
 let is_this_window_first_open = true;
 
+
+//array containing information about each evolution
 let evolution_array = Array();
 
 evolution_array["0-a"] = {
@@ -288,27 +331,33 @@ evolution_array["4-c"] = {
     next_evolution_limit: 5 * DAY_SECONDS
 };
 
-
+//plays the audio labeled by the index number
 function play_audio(index){
     audio_array[index].play();
 }
 
+//tells if the pet should be moving from right to left in the screen
+//eggs, dead and sleeping pets shouldn't be walking!
 function is_moving(){
     return (!is_sleeping&&!is_dead&&!is_egg);
 }
 
+//starts the movement function
 function wander(){
     setInterval(() => {
         movePet();
     }, 1000);
 }
 
+//puts the pet in the initial position
 function initPosition(){
     let pet = document.querySelector(".pet_frame")
     pet.style.left = "260px"
     is_going_at_left = true;
 }
 
+//moves the pet frame a bit for each side or turns it around
+//also makes the egg flip from side to side continuously
 function movePet(){
     let pet_frame = document.querySelector(".pet_frame");
     let pet_sprite = document.querySelector(".pet_sprite");
@@ -361,6 +410,8 @@ function movePet(){
 
 }
 
+//Gets time each second, calling all of the "tick" functions
+//which are also called each second
 function currentTime() {
     let date = new Date(); /* creating object of Date class */
     let hour = date.getHours();
@@ -376,6 +427,8 @@ function currentTime() {
     let t = setTimeout(function(){ currentTime() }, 1000); /* setting timer */
 }
 
+//every action that repeats every second is stored here
+//some are disabled when the pet is asleep
 function game_clock_tick(){ 
     
     if(!is_dead){
@@ -400,6 +453,7 @@ function game_clock_tick(){
                 sick_tick();
                 poop_tick();
                 fake_tick();
+                weight_tick();
             }
 
             sleep_tick();
@@ -408,6 +462,7 @@ function game_clock_tick(){
     }
 }
 
+//checks if is there a menu animation going on and removes it from screen automatically after a while
 function clear_animation_tick(){
     if (current_action == 9){
         if(clear_animation_counter <= 0){
@@ -418,6 +473,7 @@ function clear_animation_tick(){
     }
 }
 
+//calculates extra weight and deducts it from total lifespam
 function natural_death_tick(){
     if(is_evolution_final){
         let lifespan_reduction = ( (extra_weight-5) /10) * DAY_SECONDS;
@@ -431,10 +487,12 @@ function natural_death_tick(){
     }
 }
 
+//records the pet is getting one second older
 function aging_tick(){
     age_in_seconds++;
 }
 
+//loads species characteristic from species array during evolution
 //full version of loading characteristics from species array
 //only apply once, during evolution
 function import_species_stats(stage,version){
@@ -449,16 +507,24 @@ function import_species_stats(stage,version){
     next_evolution_limit = evolve_to.next_evolution_limit;
 }
 
+//changes the pet sprite to their current species' sprite
 function update_pet_sprite(){
     let pet_sprite = document.querySelector(".pet_sprite");
     pet_sprite.src = "./images/pet_stages/"+ current_pet_stage +"-" + current_pet_version +".png";
 }
 
+//loses a fixed amout of discipline keeping the value above zero
+//used during evolution
 function lose_discipline(discipline_loss){
     discipline_stat -= discipline_loss;
     if(discipline_stat < 0 ) discipline_stat = 0;
 }
 
+
+//check for prerequisites for evolution
+//updates if the lifestage is final
+//checks if the quest requisites were fulfilled on time
+//pets with unfulfilled requisites get a bit more of lifespam and are set to final.
 function evolve(){
 
     //final evolutions don't evolve
@@ -560,16 +626,19 @@ function evolve(){
     if(!is_silent)play_audio(6)
 }
 
+//adds to evolution count and then check if it's time to evolve
 function evolution_tick(){
     evolution_count++;
     if(evolution_count >= next_evolution_limit)evolve();
 }
 
-
+//satiety will set a limit to how much food the pet will want to eat at a time
 function satiety_tick(){
     if(satiety > 0) satiety -= 0.0016;
 }
 
+//reset timer for care mistakes, lights up the warning icon and starts the timer for the care mistake
+//after 15 minutes, if nothing is done the mistake will be added to the count
 function declare_critical(key){
 
     is_critical[key] = true;
@@ -587,7 +656,9 @@ function remove_critical(key){
     update_critical_icon();
 }
 
-//current base rate: depletes 4 hearts after 1h
+//deduces a bit of the food meter based on the food need variable
+//keeps the food meter abobe zero if it hits zero
+//call for care mistake when it hits zero.
 function food_tick(){
     if(food_stat > 0){
         food_stat -= food_need_per_second;
@@ -599,10 +670,11 @@ function food_tick(){
     }
 }
 
+//loses a bit of weight if pet is not sleeping
 function weight_tick(){
     //doesn't loses weight while sleeping
     //trend is to lose 0.32 gram each hour after meal
-    if(extra_weight > 0 && !is_sleeping){
+    if(extra_weight > 0){
         extra_weight -= 0.00135;
     }
 }
