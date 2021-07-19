@@ -1751,6 +1751,7 @@ function click_savestate_apply_button(){
 
     localStorage.setItem("config_gamemode" , gamemode);
     update_gamemode();
+    play_audio(8);
 }
 
 function load_local_customization(){
