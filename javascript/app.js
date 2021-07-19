@@ -135,6 +135,7 @@ let simulation_date;
 
 let is_simulate_time_away_mode = false;
 let is_smart_pause_mode = false;
+let is_smart_pause_slept = false;
 
 let is_automute_enabled = true;
 let is_muted = false;
