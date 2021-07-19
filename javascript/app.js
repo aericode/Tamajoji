@@ -861,7 +861,8 @@ function clean_poop(){
     play_audio(2);
 }
 
-//confirms the scold action and giv
+//confirms the scold action and gives extra discipline if applied correctly
+//will give negative fun stat if applied at the wrong time
 function confirmScoldMenu(){
     if(is_critical["faking"]){
         remove_critical("faking");
@@ -876,6 +877,9 @@ function confirmScoldMenu(){
     play_audio(11);
 }
 
+//ticks the sickness check timer
+//checks if the pet will die for being sick for too long
+//counts for care mistake in case of sickness
 function sick_tick(){
     //doesn't make rolls if sick
 
@@ -894,6 +898,8 @@ function sick_tick(){
     }
 }
 
+
+//resets timer for sickness check
 function reset_sick_timer(){
     let base_time = 7200;
     let variable_time_max = 1800;
@@ -901,6 +907,7 @@ function reset_sick_timer(){
     sick_check_timer = base_time + Math.floor(Math.random()*variable_time_max);
 }
 
+//Makes random checkings for 
 function sick_chance_roll(){
     //POOP RELATED
     if(poop_count > 0){
@@ -920,6 +927,7 @@ function sick_chance_roll(){
     //TOO MUCH CANDY
 
     if(candy_sick_counter > 5){
+        candy_sick_counter = 0;
         critical_miss(null);
         get_sick();
         return;
