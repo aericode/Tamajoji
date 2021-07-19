@@ -2219,8 +2219,10 @@ function click_reset_lock(){
 }
 
 function click_reset_button(){
-    reborn();
-    close_toolbar("savestate");
+    if(reset_lock_break_count > 10){
+        reborn();
+        close_toolbar("savestate");
+    }
 }
 
 function first_load(){
