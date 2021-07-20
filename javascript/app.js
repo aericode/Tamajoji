@@ -1008,6 +1008,7 @@ function update_death_display(){
 //closes all menus, turns on llght
 //brings you back to main menu
 function die(){
+    is_simulating = false;
     is_light_on = true;
     updateLightDisplay();
 
