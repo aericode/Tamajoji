@@ -695,7 +695,7 @@ function fun_tick(){
 
 //loses a bit of discipline each second
 function discipline_tick(){
-    if(discipline_stat > 0)discipline_stat -= 0.000005;
+    if(discipline_stat > 0)discipline_stat -= 0.000006;
 }
 
 //roll new value for obedience
