@@ -407,7 +407,8 @@ body{
 
 .toolbar{
     position: absolute;
-    left: 1300px;
+    left: 10px;
+    top: 10px;
 
 }
 
