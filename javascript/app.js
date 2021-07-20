@@ -429,8 +429,7 @@ function currentTime() {
 
 //every action that repeats every second is stored here
 //some are disabled when the pet is asleep
-function game_clock_tick(){ 
-    debug();
+function game_clock_tick(){
 
     if(!is_dead){
         if(is_smart_pause_mode)smart_pause_tick();
@@ -2028,7 +2027,7 @@ function simulate_time_away(time_away){
 
 
     if(time_away < 0 ) time_away = 0;
-    if(time_away > 3 * DAY_SECONDS  ) time_away = 3 * DAY_SECONDS;
+    if(time_away > 2 * DAY_SECONDS  ) time_away = 2 * DAY_SECONDS;
 
     is_simulating = true;
     let simulated_seconds = 0;
@@ -2430,10 +2429,6 @@ function unregisterOpenTab(){
 function set_window_singleton(){
     window.addEventListener('load', registerOpenTab);
     window.addEventListener('beforeunload', unregisterOpenTab);
-}
-
-function debug(){
-    console.log(evolution_count);
 }
 
 function start(){
