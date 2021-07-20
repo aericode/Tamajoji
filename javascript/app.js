@@ -1799,7 +1799,7 @@ function update_volume(action_volume,alert_volume,button_volume){
         if( i == 0 ){
             audio_array[i].volume = alert_volume*0.2;
         }else if( i == 1){
-            audio_array[i].volume = button_volume*0.25;
+            audio_array[i].volume = button_volume*0.2;
         }else{
             audio_array[i].volume = action_volume*0.2;
         }
@@ -2316,7 +2316,7 @@ function toggle_is_muted(){
 function set_default_audio(){
     let default_action_volume  = 1;
     let default_alert_volume   = 1;
-    let default_button_volume  = 2;
+    let default_button_volume  = 1;
 
     localStorage.setItem("config_action_volume" , default_action_volume);
     localStorage.setItem("config_alert_volume"  , default_alert_volume);
