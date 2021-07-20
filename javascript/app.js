@@ -912,7 +912,7 @@ function reset_stats(){
     critical_timer["sick"]  = 900;
     critical_timer["faking"]  = 900;
 
-    faking_critical_timer = reset_fake_critical_timer();
+    reset_fake_critical_timer();
 
     age_in_seconds = 0;
 
@@ -940,7 +940,7 @@ function reset_stats(){
 
     //5400 base value
     //randomize between 0 and 3600 to add to base
-    poop_timer = reset_poop_timer();
+    reset_poop_timer();
     poop_count = 0;
     poop_uncleaned_time = 0;
 
@@ -977,6 +977,8 @@ function reset_stats(){
 
 function reborn(){
     reset_stats();
+    initPosition();
+
     updateLightDisplay();
     update_death_display();
     update_poop_display();
