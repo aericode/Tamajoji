@@ -1504,7 +1504,8 @@ function is_sleeptime(current_time){
     const day_begin = 0;
     const day_end   = 86400;
 
-    return ((day_begin < current_time_seconds && current_time_seconds<wake_up_time_seconds) || (sleep_time_seconds<current_time_seconds&&current_time_seconds<=day_end))
+   
+    return ((day_begin <= current_time_seconds && current_time_seconds<wake_up_time_seconds) || (sleep_time_seconds<current_time_seconds&&current_time_seconds<=day_end))
 }
 
 function update_sleepy_icon(){
@@ -1564,7 +1565,7 @@ function sleep_tick(){
         if(is_already_slept)wake_up();
     }
 }
-//options: customize volume savestate
+//options: customize sound savestate
 function open_toolbar(menu_option){
     let menu_class_name = "." + menu_option + "_menu";
 
@@ -1574,7 +1575,7 @@ function open_toolbar(menu_option){
             update_reset_lock_icon();
         }
 
-        if(menu_option == "volume"){
+        if(menu_option == "sound"){
             load_audio_config();
         }
 
@@ -1646,6 +1647,7 @@ function load_audio_config(){
     document.querySelector(".action_volume_slider").value = action_volume;
     document.querySelector(".alert_volume_slider").value  = alert_volume;
     document.querySelector(".button_volume_slider").value = button_volume;
+
 }
 
 function click_volume_apply_button(){
