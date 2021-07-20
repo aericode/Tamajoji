@@ -2194,7 +2194,18 @@ function registerOpenTab () {
     localStorage.setItem('openTab' + tabsOpen, 'open');
     if (localStorage.getItem('openTab2') !== null) {
         is_this_window_first_open = false;
-        window.alert("Tamajoji is already open in another tab progress on this tab won't be saved");
+        let retVal = confirm("It seems like there are multiple tabs running Tamajoji.\nPress OK to close this tab or cancel to ignore this message");
+        if( retVal == true ) {
+            close();
+        } else {
+            //ignores error message and reactivates the save function
+           let close_count = tabsOpen;
+           while(close_count > 1){
+            localStorage.removeItem('openTab' + (close_count));
+            close_count--;
+           }
+           is_this_window_first_open = true;
+        }
         
     }
 }
