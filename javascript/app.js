@@ -430,7 +430,8 @@ function currentTime() {
 //every action that repeats every second is stored here
 //some are disabled when the pet is asleep
 function game_clock_tick(){ 
-    
+    debug();
+
     if(!is_dead){
         if(is_smart_pause_mode)smart_pause_tick();
 
@@ -1999,7 +2000,7 @@ function save_logout_date(){
 
 function get_time_elapsed_since_logout(){
     let current_date = Date.parse( new Date() );
-    let logout_date  =  Number.parseInt(localStorage.getItem("logout_date"));
+    let logout_date  =  Number.parseInt(localStorage.getItem("logout_parsed_date"));
 
     let elapsed_seconds = Math.round((current_date - logout_date)/1000);
 
@@ -2025,6 +2026,7 @@ function smart_pause_tick(){
 
 function simulate_time_away(time_away){
 
+
     if(time_away < 0 ) time_away = 0;
     if(time_away > 3 * DAY_SECONDS  ) time_away = 3 * DAY_SECONDS;
 
@@ -2034,6 +2036,7 @@ function simulate_time_away(time_away){
     simulation_date = new Date(localStorage.getItem("logout_date"));
 
     while( simulated_seconds <= time_away){
+
         simulation_clock_tick();
         game_clock_tick();
         simulated_seconds++;
@@ -2429,6 +2432,10 @@ function set_window_singleton(){
     window.addEventListener('beforeunload', unregisterOpenTab);
 }
 
+function debug(){
+    console.log(evolution_count);
+}
+
 function start(){
     set_window_singleton();
     
@@ -2448,7 +2455,9 @@ function start(){
         first_load();
     }else{
         load_session();
-        if(is_simulate_time_away_mode)simulate_time_away();
+        if(is_simulate_time_away_mode){
+            simulate_time_away( get_time_elapsed_since_logout() );
+        }
     }
     load_local_customization();
     load_audio_config();

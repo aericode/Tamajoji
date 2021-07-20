@@ -1,0 +1,75 @@
+body{
+    background-color: #B6D0E2;
+}
+
+img{
+    width: 300px;
+    border: 3px solid black;
+}
+
+
+h1{
+    text-align: center;
+}
+
+h2{
+    text-align: center;
+}
+
+.illustration{
+    border: none;
+    width: 128px;
+    padding:0px 60px;
+}
+
+.index_frame{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.logo{
+    width: 400px;
+    margin-bottom: 10px;
+    border-radius: 10px;    
+    border: 5px solid black;
+}
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.category_divider{
+    border-style: dashed;
+}
+
+.section_divider{
+    height:2px;
+    border-width:0;
+    color:gray;
+    background-color:gray;
+}
+
+.all_menu_image{
+    width: 720px;
+}
+
+.tutorial_container{
+    width: 900px;
+    margin: auto;
+    background-color: #A2C5AC;
+    padding: 5px 50px;
+    border-radius: 10px;
+    border: 3px solid black;
+    margin-bottom: 40px;
+}
+
+.index-box{
+    background-color: darkgray;
+    width: 260px;
+    padding: 2px 20px;
+    border: 3px solid black;
+}
