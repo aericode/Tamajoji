@@ -429,7 +429,7 @@ function currentTime() {
 
 //every action that repeats every second is stored here
 //some are disabled when the pet is asleep
-function game_clock_tick(){
+function game_clock_tick(){    
 
     if(!is_dead){
         if(is_smart_pause_mode)smart_pause_tick();
@@ -460,6 +460,8 @@ function game_clock_tick(){
             natural_death_tick();
         }
     }
+
+    debug();
 }
 
 //checks if is there a menu animation going on and removes it from screen automatically after a while
@@ -695,7 +697,7 @@ function fun_tick(){
 
 //loses a bit of discipline each second
 function discipline_tick(){
-    if(discipline_stat > 0)discipline_stat -= 0.000006;
+    if(discipline_stat > 0)discipline_stat -= 0.000008;
 }
 
 //roll new value for obedience
@@ -2430,6 +2432,11 @@ function unregisterOpenTab(){
 function set_window_singleton(){
     window.addEventListener('load', registerOpenTab);
     window.addEventListener('beforeunload', unregisterOpenTab);
+}
+
+function debug(){
+    console.log("simulated " + is_simulating);
+    console.log("discipline" + discipline_stat);
 }
 
 function start(){
