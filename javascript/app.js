@@ -462,7 +462,6 @@ function game_clock_tick(){
         }
     }
 
-    debug();
 }
 
 //checks if is there a menu animation going on and removes it from screen automatically after a while
@@ -940,7 +939,6 @@ function sick_chance_roll(){
 
     //RANDOM CHANCE;
     const random_sickness_rng   = Math.random();
-    console.log(random_sickness_rng);
     if(random_sickness_limit > random_sickness_rng){
 
         get_sick();
@@ -2453,16 +2451,6 @@ function set_window_singleton(){
     window.addEventListener('beforeunload', unregisterOpenTab);
 }
 
-function debug(){
-    
-    console.log("sick_timer" + sick_check_timer);
-    console.log("random sick lim." + random_sickness_limit);
-}
-
-function debug2(){
-    sick_check_timer = 5;
-}
-
 function start(){
     set_window_singleton();
     
@@ -2492,7 +2480,6 @@ function start(){
     update_pet_sprite();
     update_sleepy_icon();
     update_sick_icon();
-    debug2();
     
  
 }
