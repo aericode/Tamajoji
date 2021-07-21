@@ -1033,6 +1033,7 @@ function die(){
     remove_critical("sleep");
     remove_critical("sick");
     remove_critical("faking");
+    update_critical_icon();
 
     is_dead = true;
     current_action = 8;
