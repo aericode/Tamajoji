@@ -938,8 +938,9 @@ function sick_chance_roll(){
 
     //RANDOM CHANCE;
     const random_sickness_rng   = Math.random();
-
+    console.log(random_sickness_rng);
     if(random_sickness_limit > random_sickness_rng){
+
         get_sick();
         return;
     }
@@ -951,25 +952,33 @@ function sick_chance_roll(){
 
 //updates logical and visual factors for your pet getting sick.
 function get_sick() {
+    /*
     let sick_icon = document.querySelector(".sick_icon");
     sick_icon.classList.remove("hidden_display");
+    */
+    
     is_sick = true;
     sickness_death_timer = 18000;
     is_missed_sick_call = false;
 
     declare_critical("sick");
+    update_sick_icon();
 }
 
 
 //updates logical and visual factors for your pet getting healed.
 function get_healed(){
+    /*
     let sick_icon = document.querySelector(".sick_icon");
     sick_icon.classList.add("hidden_display");
+    */
+    
     is_sick = false;
     sickness_death_timer = 18000;
 
     is_missed_sick_call = false;
     remove_critical("sick");
+    update_sick_icon();
 
     displayAnimation(7);
     play_audio(12);
@@ -1689,6 +1698,15 @@ function update_sleepy_icon(){
     }
 }
 
+function update_sick_icon(){
+    let icon = document.querySelector(".sick_icon");
+    if(is_sick){
+        icon.classList.remove("hidden_display");
+    }else{
+        icon.classList.add("hidden_display");
+    }
+}
+
 function sleep(){
     let icon = document.querySelector(".sleepy_icon");
     icon.classList.remove("hidden_display");
@@ -2206,7 +2224,7 @@ function pressB(){
             openStatsMenu();
         }
         if(current_selected_icon == 2 && is_action_menu_available()){
-            if(obedience_check("fun")){
+            if(obedience_check("fun") && !is_sick){
                 current_action = 2;
                 openMinigameMenu();
             }else{
@@ -2435,8 +2453,12 @@ function set_window_singleton(){
 }
 
 function debug(){
-    console.log("simulated " + is_simulating);
-    console.log("discipline" + discipline_stat);
+    
+    console.log("sick_timer" + sick_check_timer);
+}
+
+function debug2(){
+    sick_check_timer = 5;
 }
 
 function start(){
@@ -2467,6 +2489,8 @@ function start(){
     preselect_current_skins();
     update_pet_sprite();
     update_sleepy_icon();
+    update_sick_icon();
+    debug2();
     
  
 }
