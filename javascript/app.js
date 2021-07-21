@@ -1933,7 +1933,7 @@ function load_local_customization(){
 
 function save_local_gameState(){
     localStorage.setItem("localsave_stage_care_miss_count" , stage_care_miss_count );
-    localStorage.setItem("localsave_stage_care_miss_count" , care_miss_death_score );
+    localStorage.setItem("localsave_stage_care_miss_death_score" , care_miss_death_score );
 
     localStorage.setItem("localsave_is_critical_food", is_critical["food"]);
     localStorage.setItem("localsave_is_critical_fun", is_critical["fun"]);
@@ -2082,7 +2082,7 @@ function set_unload_autosave(){
 function load_local_savestate(){
 
     stage_care_miss_count = localStorage.getItem("localsave_stage_care_miss_count")
-    care_miss_death_score = localStorage.getItem("localsave_stage_care_miss_count")
+    care_miss_death_score = localStorage.getItem("localsave_care_miss_death_score")
 
     is_critical["food"] = localStorage.getItem("localsave_is_critical_food") === "true";
     is_critical["fun"] = localStorage.getItem("localsave_is_critical_fun") === "true";
