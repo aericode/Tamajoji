@@ -81,9 +81,10 @@ let poop_uncleaned_time = 0;
 //if death_timer hits zero it means the pet got untreated for too long, it will cause death.
 //missed sick call assures the player will only get 1 care mistake for not medicating the pet imediatelly
 let is_sick = false;
-let sickness_death_timer = 18000;
+//current time to respond: 1h45min after sick
+let sickness_death_timer = 6300;
 //random sickness limit may be changed for diferent evolutions
-let random_sickness_limit = 0.15;
+let random_sickness_limit = 0.25;
 let sick_check_timer = 3600;
 let is_missed_sick_call = false;
 
@@ -205,7 +206,7 @@ evolution_array["1-a"] = {
     food_need_per_second: 0.0011,
     fun_need_per_second: 0.0011,
     is_evolution_final: false,
-    random_sickness_limit: 0.15,
+    random_sickness_limit: 0.40,
     base_weight:30,
     sleep_time:  new Date(0,0,0,20,30,0),
     wake_up_time:  new Date(0,0,0,8,0,0),
@@ -217,7 +218,7 @@ evolution_array["2-a"] = {
     food_need_per_second: 0.0011,
     fun_need_per_second: 0.0009,
     is_evolution_final: false,
-    random_sickness_limit: 0.15,
+    random_sickness_limit: 0.20,
     base_weight: 40,
     sleep_time:  new Date(0,0,0,21,30,0),
     wake_up_time:  new Date(0,0,0,8,0,0),
@@ -227,7 +228,7 @@ evolution_array["2-b"] = {
     food_need_per_second: 0.0013,
     fun_need_per_second: 0.0011,
     is_evolution_final: false,
-    random_sickness_limit: 0.20,
+    random_sickness_limit: 0.25,
     base_weight: 50,
     sleep_time:  new Date(0,0,0,21,0,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
@@ -240,7 +241,7 @@ evolution_array["3-a"] = {
     food_need_per_second: 0.0009,
     fun_need_per_second: 0.0009,
     is_evolution_final: true,
-    random_sickness_limit: 0.1,
+    random_sickness_limit: 0.15,
     base_weight: 55,
     sleep_time:  new Date(0,0,0,22,0,0),
     wake_up_time:  new Date(0,0,0,8,30,0),
@@ -250,7 +251,7 @@ evolution_array["3-b"] = {
     food_need_per_second: 0.0011,
     fun_need_per_second: 0.0009,
     is_evolution_final: false,
-    random_sickness_limit: 0.15,
+    random_sickness_limit: 0.20,
     base_weight: 50,
     sleep_time:  new Date(0,0,0,22,30,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
@@ -262,7 +263,7 @@ evolution_array["3-c"] = {
     fun_need_per_second: 0.0013,
     is_evolution_final: false,
     base_weight: 50,
-    random_sickness_limit: 0.20,
+    random_sickness_limit: 0.25,
     sleep_time:  new Date(0,0,0,23,0,0),
     wake_up_time:  new Date(0,0,0,8,30,0),
     next_evolution_limit: 7 * DAY_SECONDS
@@ -271,7 +272,7 @@ evolution_array["3-d"] = {
     food_need_per_second: 0.0013,
     fun_need_per_second: 0.0011,
     is_evolution_final: false,
-    random_sickness_limit: 0.25,
+    random_sickness_limit: 0.30,
     base_weight: 55,
     sleep_time:  new Date(0,0,0,22,0,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
@@ -281,7 +282,7 @@ evolution_array["3-e"] = {
     food_need_per_second: 0.0013,
     fun_need_per_second: 0.0013,
     is_evolution_final: true,
-    random_sickness_limit: 0.35,
+    random_sickness_limit: 0.40,
     base_weight: 65,
     sleep_time:  new Date(0,0,0,21,0,0),
     wake_up_time:  new Date(0,0,0,8,30,0),
@@ -291,7 +292,7 @@ evolution_array["3-f"] = {
     food_need_per_second: 0.0015,
     fun_need_per_second: 0.0014,
     is_evolution_final: true,
-    random_sickness_limit: 0.20,
+    random_sickness_limit: 0.25,
     base_weight: 75,
     sleep_time:  new Date(0,0,0,21,0,0),
     wake_up_time:  new Date(0,0,0,9,30,0),
@@ -303,7 +304,7 @@ evolution_array["4-a"] = {
     food_need_per_second: 0.0009,
     fun_need_per_second:  0.0008,
     is_evolution_final: true,
-    random_sickness_limit: 0.1,
+    random_sickness_limit: 0.15,
     base_weight: 70,
     sleep_time:  new Date(0,0,0,20,30,0),
     wake_up_time:  new Date(0,0,0,9,30,0),
@@ -313,7 +314,7 @@ evolution_array["4-b"] = {
     food_need_per_second: 0.0012,
     fun_need_per_second:  0.0013,
     is_evolution_final: true,
-    random_sickness_limit: 0.15,
+    random_sickness_limit: 0.20,
     base_weight: 70,
     sleep_time:  new Date(0,0,0,23,30,0),
     wake_up_time:  new Date(0,0,0,10,0,0),
@@ -324,7 +325,7 @@ evolution_array["4-c"] = {
     food_need_per_second: 0.0014,
     fun_need_per_second:  0.0007,
     is_evolution_final: true,
-    random_sickness_limit: 0.25,
+    random_sickness_limit: 0.30,
     base_weight: 55,
     sleep_time:  new Date(0,0,0,20,0,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
@@ -902,9 +903,10 @@ function sick_tick(){
 
 
 //resets timer for sickness check
+//random sickness limit now also influences the variable time limit
 function reset_sick_timer(){
-    let base_time = 7200;
-    let variable_time_max = 1800;
+    let base_time = 3600;
+    let variable_time_max = ( 1 - random_sickness_limit) * 3600 ;
 
     sick_check_timer = base_time + Math.floor(Math.random()*variable_time_max);
 }
@@ -929,7 +931,7 @@ function sick_chance_roll(){
     }
     //TOO MUCH CANDY
 
-    if(candy_sick_counter > 5){
+    if(candy_sick_counter >= 5){
         candy_sick_counter = 0;
         critical_miss(null);
         get_sick();
@@ -958,7 +960,7 @@ function get_sick() {
     */
     
     is_sick = true;
-    sickness_death_timer = 18000;
+    sickness_death_timer = 6300;
     is_missed_sick_call = false;
 
     declare_critical("sick");
@@ -974,7 +976,7 @@ function get_healed(){
     */
     
     is_sick = false;
-    sickness_death_timer = 18000;
+    sickness_death_timer = 6300;
 
     is_missed_sick_call = false;
     remove_critical("sick");
@@ -1094,9 +1096,9 @@ function reset_stats(){
     poop_uncleaned_time = 0;
 
     is_sick = false;
-    sickness_death_timer = 18000;
+    sickness_death_timer = 6300;
     //random sickness limit may be changed for diferent evolutions
-    random_sickness_limit = 0.15;
+    random_sickness_limit = 0.25;
     sick_check_timer = 3600;
     is_missed_sick_call = false;
 
@@ -1966,7 +1968,6 @@ function save_local_gameState(){
 
     localStorage.setItem("localsave_is_sick", is_sick)
     localStorage.setItem("localsave_sickness_death_timer", sickness_death_timer);
-    localStorage.setItem("localsave_random_sickness_limit", random_sickness_limit);
     localStorage.setItem("localsave_sick_check_timer", sick_check_timer);
 
     localStorage.setItem("localsave_is_missed_bedtime", is_missed_bedtime);
@@ -1997,6 +1998,7 @@ function reload_species_characteristics(current_pet_stage,current_pet_version){
 
     food_need_per_second = evolve_to.food_need_per_second;
     fun_need_per_second = evolve_to.fun_need_per_second;
+    random_sickness_limit = evolve_to.random_sickness_limit;
     base_weight = evolve_to.base_weight;
     sleep_time = evolve_to.sleep_time;
     wake_up_time = evolve_to.wake_up_time;
@@ -2115,7 +2117,6 @@ function load_local_savestate(){
 
     is_sick = localStorage.getItem("localsave_is_sick") === "true";
     sickness_death_timer = Number.parseInt(localStorage.getItem("localsave_sickness_death_timer"), 10);
-    random_sickness_limit = Number.parseFloat(localStorage.getItem("localsave_random_sickness_limit"), 10);
     sick_check_timer = Number.parseInt(localStorage.getItem("localsave_sick_check_timer"), 10);
 
     is_missed_bedtime = localStorage.getItem("localsave_is_missed_bedtime") === "true";
@@ -2455,6 +2456,7 @@ function set_window_singleton(){
 function debug(){
     
     console.log("sick_timer" + sick_check_timer);
+    console.log("random sick lim." + random_sickness_limit);
 }
 
 function debug2(){
