@@ -292,7 +292,7 @@ evolution_array["3-f"] = {
     fun_need_per_second: 0.0014,
     is_evolution_final: true,
     random_sickness_limit: 0.20,
-    base_weight: 70,
+    base_weight: 75,
     sleep_time:  new Date(0,0,0,21,0,0),
     wake_up_time:  new Date(0,0,0,9,30,0),
     next_evolution_limit: 5 * DAY_SECONDS
