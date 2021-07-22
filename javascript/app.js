@@ -792,7 +792,7 @@ function critical_miss(key){
 
 //light up or turn off the attention icon, depending on wheter there is an attention call going
 function update_critical_icon(){
-    let is_icon_active = (is_critical["food"]||is_critical["fun"]||is_critical["sleep"]||is_critical["sick"]||is_critical["faking"]);
+    let is_icon_active = !is_dead && (is_critical["food"]||is_critical["fun"]||is_critical["sleep"]||is_critical["sick"]||is_critical["faking"]);
     let critical_icon = document.querySelector(".menu_attention");
 
     if(is_icon_active){
@@ -1002,7 +1002,7 @@ function forgive_miss_tick(){
 //dies after 8 mistakes in a row
 //9 mistakes = both bars empty for 1 hour + any extra mistake.
 function check_death_by_miss(){
-    if(care_miss_death_score >= 8)die();
+    if(care_miss_death_score >= 15)die();
 }
 
 //if pet is dead, show the death screen
