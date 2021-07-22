@@ -1134,6 +1134,7 @@ function reborn(){
     update_death_display();
     update_poop_display();
     update_sleepy_icon();
+    update_sick_icon();
     update_pet_sprite();
 
 
