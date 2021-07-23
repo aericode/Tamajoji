@@ -273,7 +273,7 @@ evolution_array["3-d"] = {
     fun_need_per_second: 0.0011,
     is_evolution_final: false,
     random_sickness_limit: 0.30,
-    base_weight: 55,
+    base_weight: 40,
     sleep_time:  new Date(0,0,0,22,0,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
     next_evolution_limit: 7 * DAY_SECONDS
@@ -305,7 +305,7 @@ evolution_array["4-a"] = {
     fun_need_per_second:  0.0008,
     is_evolution_final: true,
     random_sickness_limit: 0.15,
-    base_weight: 70,
+    base_weight: 55,
     sleep_time:  new Date(0,0,0,20,30,0),
     wake_up_time:  new Date(0,0,0,9,30,0),
     next_evolution_limit: 5 * DAY_SECONDS
