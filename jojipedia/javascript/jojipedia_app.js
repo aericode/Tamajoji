@@ -67,10 +67,9 @@ pet_stat_array["2-a"] = {
 
 pet_stat_array["2-b"] = {
     name:"Jomomo",
-    text:`Kid Tamajojis that are are not that well cared will evolve into Jomomo.
-    They're even more dependent than before, but still won't give you a lot of work. However, it 
-    has a restricted evolution pool, and needs good care, since evolutions of an uncared Jomomo might give
-    you a LOT of work.`,
+    text:`When not that well cared, kid Tamajojis will evolve into Jomomo. They're even more dependent
+    than before, but still won't give you a lot of work. However, their restricted evolution pool mean
+    that they really need good care, since evolutions of an uncared Jomomo might give you a LOT of work.`,
     time_info:"<b>Stage duration</b>: 2 years",
 
     food: 7,
@@ -115,7 +114,7 @@ pet_stat_array["3-c"] = {
     name:"Jobulin",
     text:`Very active, Jobulins' energy never seems to run out, usually making them to stay up to late.
     They need lots of play, and lots of discipline. To train their body and mind, they're always praticing
-    sports (their cloth is a Jojitsu uniform)`,
+    phisical activities (their cloth is a Jojitsu uniform)`,
     time_info:"<b>Average lifespam</b>: 12 years",
 
     food: 5,
@@ -127,7 +126,7 @@ pet_stat_array["3-c"] = {
 }
 
 pet_stat_array["3-d"] = {
-    name:"Ajichi",
+    name:"Achiji",
     text:`Six legs and one horn of pure love and affection. They're healthy, strong and have a considerable
     lifespam, only being a bit needy when it comes to feeding, they really love snacks.`,
     time_info:"<b>Average lifespam</b>: 12 years",
@@ -158,7 +157,7 @@ pet_stat_array["3-e"] = {
 pet_stat_array["3-f"] = {
     name:"Plantoji",
     text:`They spend a lot of time in the sun and draining energy from the soil, but that simply ain't enough.
-    Who would guess that a plant Joji could be so hard to take care of? They sleep a lot, need a lot
+    Who would guess that a plant Tamajoji could be so hard to take care of? They sleep a lot, need a lot
     of food, and a lot of play, aside from having a relatively short lifespam. `,
     time_info:"<b>Average lifespam</b>: 7 years",
 
@@ -174,7 +173,7 @@ pet_stat_array["3-f"] = {
 
 pet_stat_array["4-a"] = {
     name:"Joneji",
-    text:`Legends say it can see the future. I say it's just a lot of lucky guesses.`,
+    text:`Legends say they can predict the future. I say it's just a lot of lucky guesses.`,
     time_info:"<b>Average lifespam</b>: 20 years",
 
     food: 3,
@@ -187,7 +186,12 @@ pet_stat_array["4-a"] = {
 
 pet_stat_array["4-b"] = {
     name:"Guga",
-    text:`A free spirit, a rebel of heart and soul.`,
+    text:`"Roses are red <br>
+           I don't need a master <br>
+           Rhyming is lame <br>
+           Omega Blaster! <br>
+           <br>           
+        -The Guga Song`,
     time_info:"<b>Average lifespam</b>: 15 years",
 
     food: 6,
@@ -200,7 +204,7 @@ pet_stat_array["4-b"] = {
 
 pet_stat_array["4-c"] = {
     name:"Doji",
-    text:`Doesn't enjoys playing around, but it's still the sweetest thing.`,
+    text:`Doesn't enjoy playing around, but it's still the sweetest thing.`,
     time_info:"<b>Average lifespam</b>: 15 years",
 
     food: 8,
