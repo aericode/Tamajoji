@@ -534,6 +534,7 @@ function evolve(){
     //prevents from reseting the evolution counter
     if(is_evolution_final)return;
 
+    //failing secret evolutions makes no sound
     let is_silent = false;
 
     if(current_pet_stage == 0){
@@ -544,7 +545,7 @@ function evolve(){
     }else if(current_pet_stage == 1){
         current_pet_stage = 2;
 
-        if(stage_care_miss_count < 4){
+        if(stage_care_miss_count < 5){
             lose_discipline(0.5);
             current_pet_version = "a";
         }else{
@@ -555,24 +556,24 @@ function evolve(){
         current_pet_stage = 3;
 
         if(current_pet_version == "a"){
-            if(stage_care_miss_count < 2){
+            if(stage_care_miss_count < 3){
                 current_pet_version = "a";                
-            }else if(stage_care_miss_count < 4){
+            }else if(stage_care_miss_count < 6){
                 lose_discipline(0.3);
                 current_pet_version = "b";  
-            }else if(stage_care_miss_count < 6){
+            }else if(stage_care_miss_count < 9){
                 //buff to simplify secret evolution
                 is_ever_been_disciplined = false;
 
                 lose_discipline(0.75);
                 current_pet_version = "c";  
-            }else if(stage_care_miss_count < 8){
+            }else if(stage_care_miss_count < 12){
                 //buff to simplify secret evolution
                 is_ever_played_minigame = false;
 
                 lose_discipline(0.25);
                 current_pet_version = "d";
-            }else if(stage_care_miss_count < 10){
+            }else if(stage_care_miss_count < 15){
                 lose_discipline(0.1);
                 current_pet_version = "e";  
             }else{
@@ -580,13 +581,13 @@ function evolve(){
                 current_pet_version = "f";
             }
         }else if(urrent_pet_version == "b"){
-            if(stage_care_miss_count < 3){
+            if(stage_care_miss_count < 4){
                 //buff to simplify secret evolution
                 is_ever_played_minigame = false;
-                
+
                 lose_discipline(0.25);
                 current_pet_version = "d";                
-            }else if(stage_care_miss_count < 6){
+            }else if(stage_care_miss_count < 8){
                 lose_discipline(0.1);
                 current_pet_version = "e";  
             }else{
@@ -605,7 +606,7 @@ function evolve(){
         }else{
             is_silent = true;
             is_evolution_final = true;
-            evolution_count += 2 * DAY_SECONDS;
+            next_evolution_limit += 2 * DAY_SECONDS;
         }
 
         if(current_pet_version == "c" && !is_ever_been_disciplined && current_pet_stage != 4){
@@ -615,7 +616,7 @@ function evolve(){
         }else{
             is_silent = true;
             is_evolution_final = true;
-            evolution_count += 2 * DAY_SECONDS;
+            next_evolution_limit += 2 * DAY_SECONDS;
         }
 
         if(current_pet_version == "d" && !is_ever_played_minigame && current_pet_stage != 4){
@@ -624,7 +625,7 @@ function evolve(){
         }else{
             is_silent = true;
             is_evolution_final = true;
-            evolution_count += 2 * DAY_SECONDS;
+            next_evolution_limit += 2 * DAY_SECONDS;
         }       
 
     }
@@ -776,8 +777,16 @@ function critical_tick(key){
 //food and fun timers reset and keep going
 //sleep and sick are only registered once, they aren't recurrent
 function critical_miss(key){
-    stage_care_miss_count++;
-    care_miss_death_score++;
+
+    //repeated ticks gives 1 point of penality
+    //nonrepeating ticks give 2 points of penality
+    if(key=="food" || key=="fun"){
+        stage_care_miss_count +=1;
+        care_miss_death_score +=1;
+    }else{
+        stage_care_miss_count +=2;
+        care_miss_death_score +=2;
+    }
 
 
     //food and fun just keep going for criticals after first critical
