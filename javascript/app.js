@@ -2142,7 +2142,7 @@ function load_local_savestate(){
 
 function is_first_time_loading(){
     let is_first = localStorage.getItem("localsave_is_savestate_empty") === null;
-    localStorage.setItem("localsave_is_savestate_empty", true );
+    localStorage.setItem("localsave_is_savestate_empty", false );
     return is_first;
 }
 
