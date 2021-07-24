@@ -2053,8 +2053,9 @@ function smart_pause_tick(){
 function simulate_time_away(time_away){
 
 
+
     if(time_away < 0 ) time_away = 0;
-    if(time_away > 2 * DAY_SECONDS  ) time_away = 2 * DAY_SECONDS;
+    if(time_away > 1 * DAY_SECONDS  ) time_away = 1 * DAY_SECONDS;
 
     is_simulating = true;
     let simulated_seconds = 0;
