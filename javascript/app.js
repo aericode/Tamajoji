@@ -2105,8 +2105,8 @@ function set_unload_autosave(){
 
 function load_local_savestate(){
 
-    stage_care_miss_count = localStorage.getItem("localsave_stage_care_miss_count")
-    care_miss_death_score = localStorage.getItem("localsave_care_miss_death_score")
+    stage_care_miss_count = Number.parseInt(localStorage.getItem("localsave_stage_care_miss_count"))
+    care_miss_death_score = Number.parseInt(localStorage.getItem("localsave_care_miss_death_score"))
 
     is_critical["food"] = localStorage.getItem("localsave_is_critical_food") === "true";
     is_critical["fun"] = localStorage.getItem("localsave_is_critical_fun") === "true";
