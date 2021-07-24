@@ -1901,8 +1901,9 @@ function update_gamemode(){
         is_simulate_time_away_mode = false;
         is_smart_pause_mode = false;
     }else if(gamemode==1){//smart-pause
-        is_simulate_time_away_mode = false;
+        is_simulate_time_away_mode = true;
         is_smart_pause_mode = true;
+        smart_pause_tick();//Imediatelly verifies status
     }else if(gamemode==2){//continuous
         is_simulate_time_away_mode = true;
         is_smart_pause_mode = false;
@@ -2051,8 +2052,6 @@ function smart_pause_tick(){
 }
 
 function simulate_time_away(time_away){
-
-
 
     if(time_away < 0 ) time_away = 0;
     if(time_away > 1 * DAY_SECONDS  ) time_away = 1 * DAY_SECONDS;
