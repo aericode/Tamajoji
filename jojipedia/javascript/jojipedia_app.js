@@ -219,27 +219,53 @@ function get_RGB_array(rgb){
     return rgb_array;
 }
 
-function resize_bar(bar_name, new_value, min_color,max_color){
+function resize_bar(bar_name, new_value, min_color,mid_color,max_color){
     let bar = document.querySelector("."+bar_name + "_stat_bar");
     const full_size = 132;
-    let current_size = bar.clientWidth;
     let target_size = (full_size/max_stat_limit[bar_name])*new_value;
 
     bar.style.width = target_size + "px";
 
     //color control
     let bar_percentage = target_size/full_size;
-    let min_color_dominance = (1 - bar_percentage);
-    let max_color_dominance = bar_percentage;
+    let is_past_half = (bar_percentage > 0.5)
 
-    let color_array_min = get_RGB_array(min_color);
-    let color_array_max = get_RGB_array(max_color);
+
+    let recalculated_percentage;
+
+    let low_color;
+    let high_color;
+
+
+
+    if(is_past_half){
+        low_color = mid_color;
+        high_color = max_color;
+        recalculated_percentage = 2*(bar_percentage - 0.5)
+    }else{
+        low_color = min_color;
+        high_color = mid_color;
+        recalculated_percentage = 2*(bar_percentage)
+    }
+
+    let low_color_dominance  = 1 - recalculated_percentage;
+    let high_color_dominance = recalculated_percentage;
+    //let min_color_dominance = (1 - bar_percentage);
+    //let max_color_dominance = bar_percentage;
+
+    let color_array_low  = get_RGB_array(low_color);
+    let color_array_high = get_RGB_array(high_color);
+
     let result_rgb = Array();
-    result_rgb[0] = min_color_dominance* color_array_min[0] + max_color_dominance* color_array_max[0];
-    result_rgb[1] = min_color_dominance* color_array_min[1] + max_color_dominance* color_array_max[1];
-    result_rgb[2] = min_color_dominance* color_array_min[2] + max_color_dominance* color_array_max[2];
+
+    
+    result_rgb[0] = low_color_dominance* color_array_low[0] + high_color_dominance* color_array_high[0];
+    result_rgb[1] = low_color_dominance* color_array_low[1] + high_color_dominance* color_array_high[1];
+    result_rgb[2] = low_color_dominance* color_array_low[2] + high_color_dominance* color_array_high[2];
 
     bar.style.backgroundColor = "rgb("+result_rgb[0]+","+result_rgb[1]+","+result_rgb[2]+")";
+
+    console.log(bar_name+":" +recalculated_percentage);
     
 }
 
@@ -259,15 +285,16 @@ function change_current_values(pet_code){
 
 function update_bars(){
     let good_color    = "rgb(0,255,0)";
-    let bad_color     = "rgb(255,100,0)";
+    let mid_color     = "rgb(255,255,0)";
+    let bad_color     = "rgb(255,0,0)";
     let neutral_color = "rgb(114, 137, 218)";
 
-    resize_bar("food"  , current_selected_values.food  , good_color, bad_color);
-    resize_bar("fun"   , current_selected_values.fun   , good_color, bad_color);
-    resize_bar("sick"  , current_selected_values.sick  , bad_color , good_color);
-    resize_bar("weight", current_selected_values.weight, neutral_color, neutral_color);
-    resize_bar("sleep" , current_selected_values.sleep , good_color, bad_color);
-    resize_bar("wake"  , current_selected_values.wake  , good_color, bad_color);
+    resize_bar("food"  , current_selected_values.food  , good_color, mid_color, bad_color);
+    resize_bar("fun"   , current_selected_values.fun   , good_color, mid_color , bad_color);
+    resize_bar("sick"  , current_selected_values.sick  , bad_color , mid_color , good_color);
+    resize_bar("weight", current_selected_values.weight, neutral_color, neutral_color, neutral_color);
+    resize_bar("sleep" , current_selected_values.sleep , good_color, mid_color , bad_color);
+    resize_bar("wake"  , current_selected_values.wake  , good_color, mid_color , bad_color);
 }
  
 function update_name(){
