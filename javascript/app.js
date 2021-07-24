@@ -1,4 +1,5 @@
 const DAY_SECONDS = 86400;
+const INGAME_YEAR_SECONDS = 20 * (3600)
 
 //amount of mistakes commited in this stage
 //stage mistakes are counted for evolution purposes
@@ -210,7 +211,7 @@ evolution_array["1-a"] = {
     base_weight:30,
     sleep_time:  new Date(0,0,0,20,30,0),
     wake_up_time:  new Date(0,0,0,8,0,0),
-    next_evolution_limit: 1 * DAY_SECONDS
+    next_evolution_limit: 1 * INGAME_YEAR_SECONDS
 };
 
 //TEENS
@@ -222,7 +223,7 @@ evolution_array["2-a"] = {
     base_weight: 40,
     sleep_time:  new Date(0,0,0,21,30,0),
     wake_up_time:  new Date(0,0,0,8,0,0),
-    next_evolution_limit: 2 * DAY_SECONDS
+    next_evolution_limit: 2 * INGAME_YEAR_SECONDS
 };
 evolution_array["2-b"] = {
     food_need_per_second: 0.0013,
@@ -232,7 +233,7 @@ evolution_array["2-b"] = {
     base_weight: 50,
     sleep_time:  new Date(0,0,0,21,0,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
-    next_evolution_limit: 2 * DAY_SECONDS
+    next_evolution_limit: 2 * INGAME_YEAR_SECONDS
 };
 
 
@@ -245,7 +246,7 @@ evolution_array["3-a"] = {
     base_weight: 55,
     sleep_time:  new Date(0,0,0,22,0,0),
     wake_up_time:  new Date(0,0,0,8,30,0),
-    next_evolution_limit: 19 * DAY_SECONDS
+    next_evolution_limit: 19 * INGAME_YEAR_SECONDS
 };
 evolution_array["3-b"] = {
     food_need_per_second: 0.0011,
@@ -255,7 +256,7 @@ evolution_array["3-b"] = {
     base_weight: 50,
     sleep_time:  new Date(0,0,0,22,30,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
-    next_evolution_limit: 9 * DAY_SECONDS
+    next_evolution_limit: 9 * INGAME_YEAR_SECONDS
     
 };
 evolution_array["3-c"] = {
@@ -266,7 +267,7 @@ evolution_array["3-c"] = {
     random_sickness_limit: 0.25,
     sleep_time:  new Date(0,0,0,23,0,0),
     wake_up_time:  new Date(0,0,0,8,30,0),
-    next_evolution_limit: 7 * DAY_SECONDS
+    next_evolution_limit: 7 * INGAME_YEAR_SECONDS
 };
 evolution_array["3-d"] = {
     food_need_per_second: 0.0013,
@@ -276,7 +277,7 @@ evolution_array["3-d"] = {
     base_weight: 40,
     sleep_time:  new Date(0,0,0,22,0,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
-    next_evolution_limit: 7 * DAY_SECONDS
+    next_evolution_limit: 7 * INGAME_YEAR_SECONDS
 };
 evolution_array["3-e"] = {
     food_need_per_second: 0.0013,
@@ -286,7 +287,7 @@ evolution_array["3-e"] = {
     base_weight: 65,
     sleep_time:  new Date(0,0,0,21,0,0),
     wake_up_time:  new Date(0,0,0,8,30,0),
-    next_evolution_limit: 7 * DAY_SECONDS
+    next_evolution_limit: 7 * INGAME_YEAR_SECONDS
 };
 evolution_array["3-f"] = {
     food_need_per_second: 0.0015,
@@ -296,7 +297,7 @@ evolution_array["3-f"] = {
     base_weight: 75,
     sleep_time:  new Date(0,0,0,21,0,0),
     wake_up_time:  new Date(0,0,0,9,30,0),
-    next_evolution_limit: 5 * DAY_SECONDS
+    next_evolution_limit: 5 * INGAME_YEAR_SECONDS
 };
 
 //SENIOR
@@ -308,7 +309,7 @@ evolution_array["4-a"] = {
     base_weight: 55,
     sleep_time:  new Date(0,0,0,20,30,0),
     wake_up_time:  new Date(0,0,0,9,30,0),
-    next_evolution_limit: 8 * DAY_SECONDS
+    next_evolution_limit: 8 * INGAME_YEAR_SECONDS
 };
 evolution_array["4-b"] = {
     food_need_per_second: 0.0012,
@@ -318,7 +319,7 @@ evolution_array["4-b"] = {
     base_weight: 70,
     sleep_time:  new Date(0,0,0,23,30,0),
     wake_up_time:  new Date(0,0,0,10,0,0),
-    next_evolution_limit: 5 * DAY_SECONDS
+    next_evolution_limit: 5 * INGAME_YEAR_SECONDS
     
 };
 evolution_array["4-c"] = {
@@ -329,7 +330,7 @@ evolution_array["4-c"] = {
     base_weight: 55,
     sleep_time:  new Date(0,0,0,20,0,0),
     wake_up_time:  new Date(0,0,0,9,0,0),
-    next_evolution_limit: 5 * DAY_SECONDS
+    next_evolution_limit: 5 * INGAME_YEAR_SECONDS
 };
 
 //plays the audio labeled by the index number
@@ -479,7 +480,7 @@ function clear_animation_tick(){
 //calculates extra weight and deducts it from total lifespam
 function natural_death_tick(){
     if(is_evolution_final){
-        let lifespan_reduction = ( (extra_weight-5) /10) * DAY_SECONDS;
+        let lifespan_reduction = ( (extra_weight-5) /10) * INGAME_YEAR_SECONDS;
         if(lifespan_reduction < 0)lifespan_reduction = 0;
 
         let life_line = next_evolution_limit - lifespan_reduction;
@@ -606,7 +607,7 @@ function evolve(){
         }else{
             is_silent = true;
             is_evolution_final = true;
-            next_evolution_limit += 2 * DAY_SECONDS;
+            next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
         }
 
         if(current_pet_version == "c" && !is_ever_been_disciplined && current_pet_stage != 4){
@@ -616,7 +617,7 @@ function evolve(){
         }else{
             is_silent = true;
             is_evolution_final = true;
-            next_evolution_limit += 2 * DAY_SECONDS;
+            next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
         }
 
         if(current_pet_version == "d" && !is_ever_played_minigame && current_pet_stage != 4){
@@ -625,7 +626,7 @@ function evolve(){
         }else{
             is_silent = true;
             is_evolution_final = true;
-            next_evolution_limit += 2 * DAY_SECONDS;
+            next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
         }       
 
     }
@@ -1012,14 +1013,14 @@ function sick_trigger(){
     reset_sick_timer();
 }
 
-//16h forgive 4 misses
+//every hour forgives aprox. 0.75 miss
+//4 hours forgive 3 misses
 //(doesn't ticks when sleeping)
 function forgive_miss_tick(){
-    if(care_miss_death_score>0)care_miss_death_score -= 0.00007;
+    if(care_miss_death_score>0)care_miss_death_score -= 0.00021;
 }
 
-//dies after 8 mistakes in a row
-//9 mistakes = both bars empty for 1 hour + any extra mistake.
+//approx +2 hours of both empty bar
 function check_death_by_miss(){
     if(care_miss_death_score >= 15)die();
 }
@@ -1304,7 +1305,7 @@ function update_stats_display(){
     let age_display = document.querySelector(".stats_age_display");
     let weight_display = document.querySelector(".stats_weight_display");
 
-    let ingame_years_age = Math.floor(age_in_seconds/86400);
+    let ingame_years_age = Math.floor(age_in_seconds/INGAME_YEAR_SECONDS);
 
     let total_weight_display = Math.round(base_weight+extra_weight);
 
