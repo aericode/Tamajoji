@@ -308,7 +308,7 @@ evolution_array["4-a"] = {
     base_weight: 55,
     sleep_time:  new Date(0,0,0,20,30,0),
     wake_up_time:  new Date(0,0,0,9,30,0),
-    next_evolution_limit: 5 * DAY_SECONDS
+    next_evolution_limit: 8 * DAY_SECONDS
 };
 evolution_array["4-b"] = {
     food_need_per_second: 0.0012,

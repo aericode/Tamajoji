@@ -127,7 +127,7 @@ pet_stat_array["3-c"] = {
 }
 
 pet_stat_array["3-d"] = {
-    name:"Wajichi",
+    name:"Ajichi",
     text:`Six legs and one horn of pure love and affection. They're healthy, strong and have a considerable
     lifespam, only being a bit needy when it comes to feeding, they really love snacks.`,
     time_info:"<b>Average lifespam</b>: 12 years",
@@ -173,9 +173,9 @@ pet_stat_array["3-f"] = {
 
 
 pet_stat_array["4-a"] = {
-    name:"Ajor",
+    name:"Joneji",
     text:`Legends say it can see the future. I say it's just a lot of lucky guesses.`,
-    time_info:"<b>Average lifespam</b>: 17 years",
+    time_info:"<b>Average lifespam</b>: 20 years",
 
     food: 3,
     fun: 2,
