@@ -1,0 +1,250 @@
+body{
+    background-color: #B6D0E2;
+}
+
+h2{
+    display: block;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.tree{
+    position: absolute;
+    width: 500px;
+    left: 80px;
+    top: 50px;
+    border: 3px solid gray;
+    border-radius: 10px;
+}
+
+.selection_container{
+    position: absolute;
+    width: 500px;
+    left: 80px;
+    top: 50px;
+    background-color: red;
+}
+
+.jojipedia_screen_decoration{
+    position: absolute;
+    margin: auto;
+    margin-top: 30px;
+    left: 50px;
+    width: 900px;
+    height: 480px;
+    background-color: black;
+}
+
+.jojipedia_container{
+    position:relative;
+    width: 1000px;
+    height: 550px;
+    background-color: rebeccapurple;
+    margin: auto;
+    margin-top: 50px;
+    border: 5px solid black;
+    border-radius: 30px;
+}
+
+.card_box{
+    position: absolute;
+    left: 600px;
+    top: 50px;
+    width: 300px;
+    height: 430px;
+    background-color: lightgrey;
+
+    border: 3px solid gray;
+    border-radius: 10px;
+}
+
+.stat_bar_container{
+    position: absolute;
+    top: 380px;
+    left: 80px;
+    width: 500px;
+    height: 100px;
+    background-color: darkgrey;
+    border: 3px solid gray;
+    border-radius: 10px;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-around;
+}
+
+.stat_bar_container hr{
+    opacity: 0;
+}
+
+.selected_pet_image{
+    position: absolute;
+    width: 128px;
+    left:80px;
+    top:10px;
+    border-radius: 10px;
+    border: 3px solid black;
+}
+
+.text_box{
+    position: absolute;
+    width: 240px;
+    height: 160px;
+    left:20px;
+    border-radius: 10px;
+    border: 3px solid black;
+    background-color: lightgrey;
+    padding:0px 10px 10px 10px;
+    text-align: center;
+}
+
+.time_info_box{
+    position: absolute;
+    border-radius: 10px;
+    border: 3px solid black;
+    background-color: lightgrey;
+    left: 20px;
+    top: 370px;
+    width: 250px;
+    height: 35px;
+    vertical-align: middle;
+    padding-top: 15px;
+    padding-left: 10px;
+
+}
+
+.stat_bar_frame{
+    width: 140px;
+    height: 20px;
+}
+
+.stat_bar_container p{
+    margin: 3px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.stat_bar{
+    position: absolute;
+    background-color: black;
+    height: 17px;
+    width: 0px;
+}
+
+.food_stat_bar{
+    top: 24px;
+    left: 17px;
+}
+
+.fun_stat_bar{
+    top: 24px;
+    left: 184px;
+}
+
+
+.sick_stat_bar{
+    top: 24px;
+    left: 351px;
+}
+
+.weight_stat_bar{
+    top: 75px;
+    left: 17px;
+}
+
+.sleep_stat_bar{
+    top: 75px;
+    left: 184px;
+}
+
+.wake_stat_bar{
+    top: 75px;
+    left: 351px;
+}
+
+.selection_box{
+    position: absolute;
+    width:  25px;
+    height: 25px;
+
+
+    border-radius: 8px;
+    border: 4px solid black;
+}
+
+.selection_box:hover{
+
+    border: 3px dashed black;
+}
+
+.selection_box_selected{
+    border: 5px solid red;
+}
+
+.selection_box_selected:hover{
+    border: 5px solid red;
+}
+
+.box_0a{
+    left: 237px;
+    top: 12px;
+}
+
+.box_1a{
+    left: 236px;
+    top: 65px;
+}
+
+.box_2a{
+    left: 109px;
+    top: 117px;
+}
+
+.box_2b{
+    left: 361px;
+    top: 118px;
+}
+
+.box_3a{
+    left: 11px;
+    top: 191px;
+}
+
+.box_3b{
+    left: 108px;
+    top: 191px;
+}
+
+.box_3c{
+    left: 195px;
+    top: 191px;
+}
+
+.box_3d{
+    left: 276px;
+    top: 191px;
+}
+
+.box_3e{
+    left: 361px;
+    top: 191px;
+}
+
+.box_3f{
+    left: 452px;
+    top: 191px;
+}
+
+.box_4a{
+    left: 108px;
+    top: 265px;
+}
+
+.box_4b{
+    left: 195px;
+    top: 265px;
+}
+
+.box_4c{
+    left: 276px;
+    top: 265px;
+}
