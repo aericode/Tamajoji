@@ -561,9 +561,15 @@ function evolve(){
                 lose_discipline(0.3);
                 current_pet_version = "b";  
             }else if(stage_care_miss_count < 6){
-                
+                //buff to simplify secret evolution
+                is_ever_been_disciplined = false;
+
+                lose_discipline(0.75);
                 current_pet_version = "c";  
             }else if(stage_care_miss_count < 8){
+                //buff to simplify secret evolution
+                is_ever_played_minigame = false;
+
                 lose_discipline(0.25);
                 current_pet_version = "d";
             }else if(stage_care_miss_count < 10){
