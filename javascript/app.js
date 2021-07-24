@@ -1124,6 +1124,9 @@ function reset_stats(){
     next_evolution_limit = 300;
     current_pet_stage = 0;
     current_pet_version = "a";
+
+    //smart pause added later sets to default
+    is_smart_pause_slept = false;
 }
 
 //return pet stats and game state to zero
