@@ -113,8 +113,8 @@ pet_stat_array["3-b"] = {
 
 pet_stat_array["3-c"] = {
     name:"Jobulin",
-    text:`Very active, Jobulins' energy never seems to run out, usually making them to stay up to late,
-    they need lots of play, and lots of discipline. To train their body and mind, they're always praticing
+    text:`Very active, Jobulins' energy never seems to run out, usually making them to stay up to late.
+    They need lots of play, and lots of discipline. To train their body and mind, they're always praticing
     sports (their cloth is a Jojitsu uniform)`,
     time_info:"<b>Average lifespam</b>: 12 years",
 

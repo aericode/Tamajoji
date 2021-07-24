@@ -428,9 +428,10 @@ function currentTime() {
     let t = setTimeout(function(){ currentTime() }, 1000); /* setting timer */
 }
 
+
 //every action that repeats every second is stored here
 //some are disabled when the pet is asleep
-function game_clock_tick(){    
+function game_clock_tick(){
 
     if(!is_dead){
         if(is_smart_pause_mode)smart_pause_tick();
@@ -1934,7 +1935,7 @@ function load_local_customization(){
 
 function save_local_gameState(){
     localStorage.setItem("localsave_stage_care_miss_count" , stage_care_miss_count );
-    localStorage.setItem("localsave_stage_care_miss_death_score" , care_miss_death_score );
+    localStorage.setItem("localsave_care_miss_death_score" , care_miss_death_score );
 
     localStorage.setItem("localsave_is_critical_food", is_critical["food"]);
     localStorage.setItem("localsave_is_critical_fun", is_critical["fun"]);
