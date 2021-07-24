@@ -751,7 +751,7 @@ function reset_fake_critical_timer(){
 
 //Don't ticks or calls during real calls
 function fake_tick(){
-    if(!is_critical["food"] || !is_critical["fun"] || !is_critical["sick"] || !is_critical["sleep"] ){
+    if(!is_critical["food"] && !is_critical["fun"] && !is_critical["sick"] && !is_critical["sleep"] ){
         if(is_critical["faking"]){
             faking_critical_timer--;
             if(faking_critical_timer <= 0)remove_critical("faking");
