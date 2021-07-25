@@ -1975,7 +1975,7 @@ function update_gamemode(){
 }
 
 //chooses GAMEMODE option in the GAMEMODE menu
-//TODO: check if it's possible to rename function savestate is better as gamemode
+//a better name would be click_gamemode_apply_button()
 function click_savestate_apply_button(){
     let radio_array = document.querySelectorAll(".gamemode_radio");
     let gamemode;
@@ -2001,7 +2001,7 @@ function load_local_customization(){
 
 //savel game files - skipping some species specifics which can be loaded separately
 //TODO: fix random camelcase
-function save_local_gameState(){
+function save_local_gamestate(){
     localStorage.setItem("localsave_stage_care_miss_count" , stage_care_miss_count );
     localStorage.setItem("localsave_care_miss_death_score" , care_miss_death_score );
 
@@ -2151,7 +2151,7 @@ function set_unload_autosave(){
     window.addEventListener("beforeunload", function () {
         //check if is simulating before saving ()
         if(!is_simulating && is_this_window_first_open){
-            save_local_gameState();
+            save_local_gamestate();
             save_logout_date();
         }
     });
