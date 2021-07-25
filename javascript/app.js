@@ -2402,8 +2402,8 @@ function pressC(){
 function load_auto_mute_config(){
     let loaded_value = localStorage.getItem("config_is_automute_enabled");
     if( loaded_value === null){
-        //sets true by default
-        localStorage.setItem("config_is_automute_enabled", true);
+        //sets false by default
+        localStorage.setItem("config_is_automute_enabled", false);
     }
 
     is_automute_enabled = localStorage.getItem("config_is_automute_enabled") === "true";
