@@ -186,11 +186,11 @@ pet_stat_array["4-a"] = {
 
 pet_stat_array["4-b"] = {
     name:"Guga",
-    text:`"Roses are red <br>
-           I don't need a master <br>
-           Rhyming is lame <br>
-           Omega Blaster! <br>
-           <br>           
+    text:`Roses are red <br>
+          I don't need a master <br>
+          Rhyming is lame <br>
+          Omega Blaster! <br>
+          <br>           
         -The Guga Song`,
     time_info:"<b>Average lifespam</b>: 15 years",
 
