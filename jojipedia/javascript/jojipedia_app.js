@@ -254,8 +254,6 @@ function resize_bar(bar_name, new_value, min_color,mid_color,max_color){
 
     let low_color_dominance  = 1 - recalculated_percentage;
     let high_color_dominance = recalculated_percentage;
-    //let min_color_dominance = (1 - bar_percentage);
-    //let max_color_dominance = bar_percentage;
 
     let color_array_low  = get_RGB_array(low_color);
     let color_array_high = get_RGB_array(high_color);
@@ -268,8 +266,6 @@ function resize_bar(bar_name, new_value, min_color,mid_color,max_color){
     result_rgb[2] = low_color_dominance* color_array_low[2] + high_color_dominance* color_array_high[2];
 
     bar.style.backgroundColor = "rgb("+result_rgb[0]+","+result_rgb[1]+","+result_rgb[2]+")";
-
-    console.log(bar_name+":" +recalculated_percentage);
     
 }
 
