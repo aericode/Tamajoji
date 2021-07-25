@@ -1564,6 +1564,7 @@ function confirm_round_game(){
 
 }
 
+//updates lower score and win/lose round symbol
 function update_minigame_display(is_round_won){
 
     let target_icon = document.querySelector(".minigame_score_icon_" + minigame_try);
@@ -1578,8 +1579,10 @@ function update_minigame_display(is_round_won){
     }
 }
 
+//returns to minigame initial state
 function prepare_minigame_round(){
 
+    //finishes minigame if this is 5th round
     if(minigame_try == 5){
         complete_minigame();
         is_ever_played_minigame = true;
@@ -1597,6 +1600,8 @@ function prepare_minigame_round(){
     minigame_stage = 0;
 }
 
+//ends mini-game, plays animations audio, closes minigame and screens
+//accounts for perfect games, which count for secret evolution and give 2 happines points
 function complete_minigame(){
     
     if(minigame_score == 5){
@@ -1621,7 +1626,7 @@ function complete_minigame(){
     
 }
 
-
+//moves arrow in sleep mmenu
 function updateSleepArrow(){
     let arrow = document.querySelector(".sleep_menu_arrow");
 
@@ -1635,11 +1640,13 @@ function updateSleepArrow(){
 
 }
 
+//changes light option in sleep menu
 function changeSelectedSleep(){
     selected_sleep_menu++;
     if(selected_sleep_menu ==2) selected_sleep_menu=0;
 }
 
+//opens the sleep menu and sets arrow to default position
 function openSleepMenu(){
     let menu = document.querySelector(".sleep_menu_display");
     selected_sleep_menu = 1;
@@ -1648,12 +1655,14 @@ function openSleepMenu(){
     menu.style.display = "block";
 }
 
+//closes sleep menu
 function closeSleepMenu(){
     let menu = document.querySelector(".sleep_menu_display");
 
     menu.style.display = "none";  
 }
 
+//applies sleep menu option and deals with sleep criticals
 function confirmSleepMenu(){
     if(selected_sleep_menu==1){
         if(is_sleeping && !is_light_on)declare_critical("sleep");
@@ -1671,6 +1680,9 @@ function confirmSleepMenu(){
 
 }
 
+//updates the sleep screen according to the light x sleep configurations
+//light on  = no display
+//light off = display shows if pet is sleeping or not under the display 
 function updateLightDisplay(){
 
     let menu  = document.querySelector(".sleep_display");
@@ -1703,6 +1715,7 @@ function date_to_seconds_elapsed(date){
     return seconds_val;
 }
 
+//calculates if pet is at sleep time with date object for sleep/wake and current time
 function is_sleeptime(current_time){
     const current_time_seconds = date_to_seconds_elapsed(current_time);
     const sleep_time_seconds   = date_to_seconds_elapsed(sleep_time);
@@ -1714,6 +1727,7 @@ function is_sleeptime(current_time){
     return ((day_begin <= current_time_seconds && current_time_seconds<wake_up_time_seconds) || (sleep_time_seconds<current_time_seconds&&current_time_seconds<=day_end))
 }
 
+//shows/hide "zzz" at pet's head
 function update_sleepy_icon(){
     let icon = document.querySelector(".sleepy_icon");
     if(is_sleeping){
@@ -1723,6 +1737,7 @@ function update_sleepy_icon(){
     }
 }
 
+//shows/hide sick "skull" icon beside pet's head
 function update_sick_icon(){
     let icon = document.querySelector(".sick_icon");
     if(is_sick){
@@ -1732,6 +1747,9 @@ function update_sick_icon(){
     }
 }
 
+//stop pet's movement, adds sleep icon
+//change is_sleeping, which will trigger a critical
+//is_already_slept is used to turn on the lights the next morning, if they're on
 function sleep(){
     let icon = document.querySelector(".sleepy_icon");
     icon.classList.remove("hidden_display");
@@ -1743,6 +1761,8 @@ function sleep(){
     updateLightDisplay();
 }
 
+//turns on light and sets variables to wake up state
+//removes critical by precaution
 function wake_up(){
     let icon = document.querySelector(".sleepy_icon");
     icon.classList.add("hidden_display");
@@ -1760,6 +1780,8 @@ function wake_up(){
     remove_critical("sleep");
 }
 
+//deals with sleeping, waking up and sleep-related criticals
+//also takes the simulation time when required (sleeping in simulate mode)
 function sleep_tick(){
     let date_to_check;
     if(!is_simulating){
@@ -1780,6 +1802,10 @@ function sleep_tick(){
         if(is_already_slept)wake_up();
     }
 }
+
+//opens the 3 openable menus in the toolbar
+//preloads info when oppening, assuring it's up to date
+//signals menu is ope, so no other menu will open at the same time
 //options: customize sound savestate
 function open_toolbar(menu_option){
     let menu_class_name = "." + menu_option + "_menu";
@@ -1805,6 +1831,8 @@ function open_toolbar(menu_option){
     }
 }
 
+//closes the menu
+//signals the menu is closed, so that others can be open now
 function close_toolbar(menu_option){
     let menu_class_name = "." + menu_option + "_menu";
 
@@ -1813,6 +1841,10 @@ function close_toolbar(menu_option){
     menu.style.display = "none";
 }
 
+//changes the game frame customizations with the 3 arguments
+//screen and buttons are simple HEX colors
+//the frame can be a "color.HEX" or "skin.FILE.png"
+//theis action is usually called extracted from HTML values of selects in the menu
 function update_customization(screen_color,frame_color,button_color){
 
     //DEFAULT SETTINGS
@@ -1840,6 +1872,7 @@ function update_customization(screen_color,frame_color,button_color){
     }
 }
 
+//updates the game volume
 function update_volume(action_volume,alert_volume,button_volume){
     for(let i = 0;i < audio_array.length; i++){
         if( i == 0 ){
@@ -1852,6 +1885,7 @@ function update_volume(action_volume,alert_volume,button_volume){
     }
 }
 
+//loads audio configurations
 function load_audio_config(){
     let action_volume = Number.parseInt(localStorage.getItem("config_action_volume"));
     let alert_volume  = Number.parseInt(localStorage.getItem("config_alert_volume"));
@@ -1869,6 +1903,7 @@ function load_audio_config(){
     document.querySelector(".automute_volume_checkbox").checked = is_automute_enabled;
 }
 
+//called when pressing the apply button in the volume menu
 function click_volume_apply_button(){
     let action_volume = document.querySelector(".action_volume_slider").value;
     let alert_volume  = document.querySelector(".alert_volume_slider").value;
@@ -1886,6 +1921,8 @@ function click_volume_apply_button(){
     play_audio(8);
 }
 
+//called when pressing the apply button in the custommize menu
+//extracts value from the HTML select
 function click_customize_apply_button(){
     let screen_color = document.querySelector(".select_screen_color").value;
     let frame_color  = document.querySelector(".select_shell_color").value;
@@ -1900,6 +1937,7 @@ function click_customize_apply_button(){
     update_customization(screen_color,frame_color,button_color);
 }
 
+//puts the radio select in the radio correspondent to current options
 function update_gamemode_radio_button(){
     let radio_array = document.querySelectorAll(".gamemode_radio");
     let gamemode = Number.parseInt(localStorage.getItem("config_gamemode"));
@@ -1912,6 +1950,8 @@ function select_gamemode_radio(index){
     if(index >=0 && index <=2) radio_array[index].checked =  true;
 }
 
+//convers the number corresponding to the gamemode to the variables they represent
+//0 is pause / 1 is smart-pause / 2 is continuous
 function update_gamemode(){
     let gamemode = Number.parseInt(localStorage.getItem("config_gamemode"));
     
@@ -1934,6 +1974,8 @@ function update_gamemode(){
 
 }
 
+//chooses GAMEMODE option in the GAMEMODE menu
+//TODO: check if it's possible to rename function savestate is better as gamemode
 function click_savestate_apply_button(){
     let radio_array = document.querySelectorAll(".gamemode_radio");
     let gamemode;
@@ -1947,6 +1989,7 @@ function click_savestate_apply_button(){
     play_audio(8);
 }
 
+//loads preselected skin for game
 function load_local_customization(){
     let screen_color = localStorage.getItem("localsave_screen_color")
     let frame_color  = localStorage.getItem("localsave_frame_color")
@@ -1956,6 +1999,8 @@ function load_local_customization(){
     update_customization(screen_color,frame_color,button_color);
 }
 
+//savel game files - skipping some species specifics which can be loaded separately
+//TODO: fix random camelcase
 function save_local_gameState(){
     localStorage.setItem("localsave_stage_care_miss_count" , stage_care_miss_count );
     localStorage.setItem("localsave_care_miss_death_score" , care_miss_death_score );
@@ -2015,7 +2060,8 @@ function save_local_gameState(){
 }
 
 
-//Light load species for game load
+//Reduced "load species" function for game load
+//Full load only applied during evolution
 function reload_species_characteristics(current_pet_stage,current_pet_version){
     let species = current_pet_stage + "-" + current_pet_version;
     evolve_to = evolution_array[species];
@@ -2031,11 +2077,12 @@ function reload_species_characteristics(current_pet_stage,current_pet_version){
     //is_evolution_final is also dynamic, can't be loaded from here
 }
 
-
+//most menus are disabled when sleeping or egg or dead
 function is_action_menu_available(){
     return (is_light_on && !is_dead && !is_egg)
 }
 
+//saves time player left
 function save_logout_date(){
     let logout_date = new Date();
     let logout_parsed_date = Date.parse(logout_date);
@@ -2044,6 +2091,7 @@ function save_logout_date(){
     localStorage.setItem("logout_parsed_date", logout_parsed_date);
 }
 
+//when opening the game gets for how many seconds they were away
 function get_time_elapsed_since_logout(){
     let current_date = Date.parse( new Date() );
     let logout_date  =  Number.parseInt(localStorage.getItem("logout_parsed_date"));
@@ -2053,10 +2101,13 @@ function get_time_elapsed_since_logout(){
     return elapsed_seconds;
 }
 
+//skips one second in the simulated clock (used only during simulations)
 function simulation_clock_tick(){
     simulation_date.setSeconds( simulation_date.getSeconds() + 1);
 }
 
+//checks if it's time to pause simulation when opening game in smart pause mode
+//also runs when not simulating, but has no effect at this time
 function smart_pause_tick(){
     if(is_sleeptime)is_smart_pause_slept = true;
 
@@ -2070,6 +2121,8 @@ function smart_pause_tick(){
     }
 }
 
+//Tick a simulated clock X times where X is the number of seconds the player was away
+// Limited to 24h tick, since pet won't stay a live for more than 24h away for the current build
 function simulate_time_away(time_away){
 
     if(time_away < 0 ) time_away = 0;
@@ -2093,6 +2146,7 @@ function simulate_time_away(time_away){
     is_simulating = false;
 }
 
+//prepares the game to call auto-save function in the moment when player closes window
 function set_unload_autosave(){
     window.addEventListener("beforeunload", function () {
         //check if is simulating before saving ()
@@ -2103,10 +2157,11 @@ function set_unload_autosave(){
     });
 }
 
+//loads variables
 function load_local_savestate(){
 
-    stage_care_miss_count = Number.parseInt(localStorage.getItem("localsave_stage_care_miss_count"))
-    care_miss_death_score = Number.parseInt(localStorage.getItem("localsave_care_miss_death_score"))
+    stage_care_miss_count = Number.parseInt(localStorage.getItem("localsave_stage_care_miss_count"));
+    care_miss_death_score = Number.parseInt(localStorage.getItem("localsave_care_miss_death_score"));
 
     is_critical["food"] = localStorage.getItem("localsave_is_critical_food") === "true";
     is_critical["fun"] = localStorage.getItem("localsave_is_critical_fun") === "true";
@@ -2162,11 +2217,18 @@ function load_local_savestate(){
 
 }
 
+//checks if this is the fist time the player is opening the game
+//opens defaults etc
 function is_first_time_loading(){
     let is_first = localStorage.getItem("localsave_is_savestate_empty") === null;
     localStorage.setItem("localsave_is_savestate_empty", false );
     return is_first;
 }
+
+
+//loads information
+//updates display
+//updates gamemode
 
 function load_session(){
     
@@ -2179,12 +2241,14 @@ function load_session(){
 }
 
 
+//used for making HTML select show the current selected skins
 function select_by_value(array, searched_value) {
     for(let i = 0; i < array.length; i++){
         if(array[i].value == searched_value)array[i].selected = 'selected';
     }
 }
 
+//loads info about the selected skins and puts them on the HTML selects
 function preselect_current_skins(){
     let screen_color = localStorage.getItem("localsave_screen_color")
     let frame_color  = localStorage.getItem("localsave_frame_color")
@@ -2199,6 +2263,7 @@ function preselect_current_skins(){
     select_by_value(buttonOptionArray, button_color);
 }
 
+//press the A game button (switch)
 function pressA(){
     play_audio(1);
 
@@ -2234,6 +2299,7 @@ function pressA(){
 
 }
 
+//press the B game button (confirm)
 function pressB(){
     play_audio(1);
     let just_selected;
@@ -2294,7 +2360,7 @@ function pressB(){
 
 }
 
-
+//press the C game button (cancel)
 function pressC(){
     play_audio(1);
 
@@ -2332,6 +2398,7 @@ function pressC(){
 
 }
 
+//loads the automute option (if player wants the game to start muted)
 function load_auto_mute_config(){
     let loaded_value = localStorage.getItem("config_is_automute_enabled");
     if( loaded_value === null){
@@ -2344,6 +2411,8 @@ function load_auto_mute_config(){
 
 }
 
+//enables disables mute
+//uptades the "muted" display
 function toggle_is_muted(){
     //changes is_muted to opposite value
     is_muted = !is_muted;
@@ -2360,6 +2429,7 @@ function toggle_is_muted(){
 
 }
 
+//sets default volume for audio
 function set_default_audio(){
     let default_action_volume  = 1;
     let default_alert_volume   = 1;
@@ -2380,6 +2450,7 @@ function set_default_audio(){
     
 }
 
+//saves  default skins local file
 function set_default_skins(){
     screen_color="#d3f6dB";
     frame_color="color.#708090";
@@ -2393,12 +2464,16 @@ function set_default_skins(){
     update_customization(screen_color,frame_color,button_color);
 }
 
+//sets default gamemode, applies and saves them on local file
 function set_default_gamemode(){
     localStorage.setItem("config_gamemode" , 0);
     update_gamemode();
 }
 
 
+//the reset button is covered by a "breakable" button in the save menu
+//this function controls visual the breaking 
+//also control display:block when not broken
 let reset_lock_break_count = 0;
 function update_reset_lock_icon(){
     let lock_icon = document.querySelector(".reset_lock_icon");
@@ -2408,7 +2483,7 @@ function update_reset_lock_icon(){
     }
 }
 
-
+//calls for visual breaking or removes display when broken
 function click_reset_lock(){
 
     let lock_icon = document.querySelector(".reset_lock_icon");
@@ -2422,6 +2497,8 @@ function click_reset_lock(){
     
 }
 
+//checks if lock is broken (avoids misclicks or random resets)
+//if it is, reset
 function click_reset_button(){
     if(reset_lock_break_count > 10){
         reborn();
@@ -2429,6 +2506,7 @@ function click_reset_button(){
     }
 }
 
+//loads default configs at the first time the game is open
 function first_load(){
     set_default_skins();
     set_default_audio();
@@ -2436,7 +2514,9 @@ function first_load(){
     reborn();
 }
 
-
+//Controls to check if number of tabs open is greater than one
+//prompts to close the tab without saving (avoiding bugs)
+//also allows to ignore this. (maybe the tab counter made a mistake)
 // registerOpenTab FUNCTION
 function registerOpenTab () {
     let tabsOpen = 1;
@@ -2470,12 +2550,14 @@ function unregisterOpenTab(){
     }
     localStorage.removeItem('openTab' + (tabsOpen - 1));
 }
-  
+
+//upticks and downticks the number of opened windows
 function set_window_singleton(){
     window.addEventListener('load', registerOpenTab);
     window.addEventListener('beforeunload', unregisterOpenTab);
 }
 
+//runs at the begining of the game
 function start(){
     set_window_singleton();
     
