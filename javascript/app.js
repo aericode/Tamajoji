@@ -82,7 +82,7 @@ let poop_uncleaned_time = 0;
 //if death_timer hits zero it means the pet got untreated for too long, it will cause death.
 //missed sick call assures the player will only get 1 care mistake for not medicating the pet imediatelly
 let is_sick = false;
-//current time to respond: 1h45min after sick
+//current time to respond: 1h45hmin after sick
 let sickness_death_timer = 6300;
 //random sickness limit may be changed for diferent evolutions
 let random_sickness_limit = 0.25;
@@ -429,10 +429,16 @@ function currentTime() {
     let t = setTimeout(function(){ currentTime() }, 1000); /* setting timer */
 }
 
+function debug(){
+    console.log("is this smart pause?: "+ is_smart_pause_mode);
+    console.log("is this sleeptime?"+ is_sleeptime);
+}
+
 
 //every action that repeats every second is stored here
 //some are disabled when the pet is asleep
 function game_clock_tick(){
+    //debug();
 
     if(!is_dead){
         if(is_smart_pause_mode)smart_pause_tick();
@@ -2109,12 +2115,24 @@ function simulation_clock_tick(){
 //checks if it's time to pause simulation when opening game in smart pause mode
 //also runs when not simulating, but has no effect at this time
 function smart_pause_tick(){
-    if(is_sleeptime)is_smart_pause_slept = true;
+    let date_to_check;
+    if(!is_simulating){
+        date_to_check = new Date();
+    }else{
+        date_to_check = simulation_date;
+    }
 
-    if(!is_sleeptime){
+    let is_sleeptime_return = is_sleeptime(date_to_check);
+
+
+    if(is_sleeptime_return)is_smart_pause_slept = true;
+
+    if(!is_sleeptime_return){
+        console.log("we're not in sleeptime");
         if(is_smart_pause_slept){
             is_simulating = false;
             is_simulate_time_away_mode = false;
+            console.log("sleep finished quitting simulation");
         }else{
             is_simulate_time_away_mode = true;
         }
