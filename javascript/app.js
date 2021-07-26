@@ -2373,7 +2373,6 @@ function pressB(){
 
 //press the C game button (cancel)
 function pressC(){
-    debug2();
     play_audio(1);
 
     let just_selected;
