@@ -695,7 +695,7 @@ function weight_tick(){
     //doesn't loses weight while sleeping
     //trend is to lose 0.32 gram each hour after meal
     if(extra_weight > 0){
-        extra_weight -= 0.00135;
+        extra_weight -= 0.0012;
     }
 }
 
@@ -745,7 +745,7 @@ function obedience_check(stat_to_check){
 
 //digests 1 candy per hour, accumulating undigested candy will get your pet sick
 function candy_digestion_tick(){
-    if(candy_sick_counter > 0) candy_sick_counter -= 0.0003;
+    if(candy_sick_counter > 0) candy_sick_counter -= 0.00014;
 }
 
 //Timer for the fake discipline calls
@@ -956,7 +956,7 @@ function sick_chance_roll(){
     }
     //TOO MUCH CANDY
 
-    if(candy_sick_counter >= 5){
+    if(candy_sick_counter >= 4){
         candy_sick_counter = 0;
         critical_miss(null);
         get_sick();
@@ -2292,8 +2292,12 @@ function preselect_current_skins(){
     select_by_value(buttonOptionArray, button_color);
 }
 
+function debug(){
+    evolution_count +=20000;
+}
 //press the A game button (switch)
 function pressA(){
+    debug();
     play_audio(1);
 
     if(current_action == 8){
