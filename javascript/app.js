@@ -96,6 +96,7 @@ let candy_sick_counter = 0;
 let perfect_minigame_count = 0;
 //accounts if the player ever played a game with the pet
 let is_ever_played_minigame = false;
+let is_ever_been_disciplined = false;
 
 //assures the player will only get 1 care mistake for mising bed time per night.
 let is_missed_bedtime = false;
@@ -429,16 +430,10 @@ function currentTime() {
     let t = setTimeout(function(){ currentTime() }, 1000); /* setting timer */
 }
 
-function debug(){
-    console.log("is this smart pause?: "+ is_smart_pause_mode);
-    console.log("is this sleeptime?"+ is_sleeptime);
-}
-
 
 //every action that repeats every second is stored here
 //some are disabled when the pet is asleep
 function game_clock_tick(){
-    //debug();
 
     if(!is_dead){
         if(is_smart_pause_mode)smart_pause_tick();
@@ -542,7 +537,7 @@ function evolve(){
     if(is_evolution_final)return;
 
     //failing secret evolutions makes no sound
-    let is_silent = false;
+    let is_evolution_failed = false;
 
     if(current_pet_stage == 0){
         current_pet_stage = 1;
@@ -611,7 +606,7 @@ function evolve(){
             current_pet_version = "a";
             return; 
         }else{
-            is_silent = true;
+            is_evolution_failed = true;
             is_evolution_final = true;
             next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
         }
@@ -621,7 +616,7 @@ function evolve(){
             current_pet_version = "b";
             return; 
         }else{
-            is_silent = true;
+            is_evolution_failed = true;
             is_evolution_final = true;
             next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
         }
@@ -630,7 +625,7 @@ function evolve(){
             current_pet_stage = 4;
             current_pet_version = "c";
         }else{
-            is_silent = true;
+            is_evolution_failed = true;
             is_evolution_final = true;
             next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
         }       
@@ -638,12 +633,19 @@ function evolve(){
     }
 
     
-    import_species_stats(current_pet_stage,current_pet_version);
+    
 
-    stage_care_miss_count = 0;
-    evolution_count = 0;
-    update_pet_sprite();
-    if(!is_silent)play_audio(6)
+    //some adults check for secret evolutions
+    //failing makes their stage final and also
+    //cancels any further transitions
+    //prevents from going back to evolution count zero infinitely
+    if(!is_evolution_failed){
+        import_species_stats(current_pet_stage,current_pet_version);
+        stage_care_miss_count = 0;
+        update_pet_sprite();
+        evolution_count = 0;
+        play_audio(6);
+    }
 }
 
 //adds to evolution count and then check if it's time to evolve
@@ -2139,11 +2141,9 @@ function smart_pause_tick(){
     if(is_sleeptime_return)is_smart_pause_slept = true;
 
     if(!is_sleeptime_return){
-        console.log("we're not in sleeptime");
         if(is_smart_pause_slept){
             is_simulating = false;
             is_simulate_time_away_mode = false;
-            console.log("sleep finished quitting simulation");
         }else{
             is_simulate_time_away_mode = true;
         }
@@ -2231,7 +2231,7 @@ function load_local_savestate(){
 
     candy_sick_counter = Number.parseFloat(localStorage.getItem("localsave_candy_sick_counter"), 10);
     perfect_minigame_count = Number.parseInt(localStorage.getItem("localsave_perfect_minigame_count"), 10); 
-    is_ever_played_minigame = localStorage.getItem("localsave_is_ever_played_game") === "true";
+    is_ever_played_minigame = localStorage.getItem("localsave_is_ever_played_minigame") === "true";
     is_ever_been_disciplined = localStorage.getItem("localsave_is_ever_been_disciplined") === "true";
 
     is_light_on = localStorage.getItem("localsave_is_light_on") === "true";
@@ -2294,6 +2294,13 @@ function preselect_current_skins(){
 
 function debug(){
     evolution_count +=20000;
+    console.log(evolution_count);
+    console.log(is_evolution_final);
+    console.log(stage_care_miss_count);
+}
+
+function debug2(){
+    stage_care_miss_count = 7;
 }
 //press the A game button (switch)
 function pressA(){
@@ -2395,6 +2402,7 @@ function pressB(){
 
 //press the C game button (cancel)
 function pressC(){
+    debug2();
     play_audio(1);
 
     let just_selected;
