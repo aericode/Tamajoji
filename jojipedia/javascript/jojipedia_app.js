@@ -114,7 +114,7 @@ pet_stat_array["3-c"] = {
     name:"Jobulin",
     text:`Very active, Jobulins' energy never seems to run out, usually making them to stay up to late.
     They need lots of play, and lots of discipline. To train their body and mind, they're always praticing
-    phisical activities (their cloth is a Jojitsu uniform)`,
+    phisical activities (which is why they're often wearing a Jojitsu uniform)`,
     time_info:"<b>Average lifespam</b>: 12 years",
 
     food: 5,
