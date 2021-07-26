@@ -1767,6 +1767,16 @@ function sleep(){
     updateLightDisplay();
 }
 
+//more immersion for smart pause mode
+//might lose 0, 1 or 2 hearts when waking up
+//going from sleeping to woke removes some hearts from meter
+function needy_wake_up(){
+    food_stat -= Math.floor( Math.random()*3 );
+    if(food_stat<0) food_stat =0;
+    fun_stat  -= Math.floor( Math.random()*3 );
+    if(fun_stat<0) fun_stat =0;
+}
+
 //turns on light and sets variables to wake up state
 //removes critical by precaution
 function wake_up(){
@@ -1783,6 +1793,7 @@ function wake_up(){
     is_sleeping = false;
     is_already_slept = false;
 
+    needy_wake_up();
     remove_critical("sleep");
 }
 
