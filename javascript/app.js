@@ -582,7 +582,7 @@ function evolve(){
                 lose_discipline(0.5);
                 current_pet_version = "f";
             }
-        }else if(urrent_pet_version == "b"){
+        }else if(current_pet_version == "b"){
             if(stage_care_miss_count < 4){
                 //buff to simplify secret evolution
                 is_ever_played_minigame = false;
@@ -601,39 +601,21 @@ function evolve(){
 
     }else if(current_pet_stage == 3 && !is_evolution_final){
 
-        if(current_pet_version == "b" && perfect_minigame_count >= 20 && current_pet_stage != 4){
+        if(current_pet_version == "b" && perfect_minigame_count >= 20){
             current_pet_stage = 4;
             current_pet_version = "a";
-            return; 
-        }else{
-            is_evolution_failed = true;
-            is_evolution_final = true;
-            next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
-        }
-
-        if(current_pet_version == "c" && !is_ever_been_disciplined && current_pet_stage != 4){
+        }else if(current_pet_version == "c" && !is_ever_been_disciplined){
             current_pet_stage = 4;
             current_pet_version = "b";
-            return; 
-        }else{
-            is_evolution_failed = true;
-            is_evolution_final = true;
-            next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
-        }
-
-        if(current_pet_version == "d" && !is_ever_played_minigame && current_pet_stage != 4){
+        }else if(current_pet_version == "d" && !is_ever_played_minigame){
             current_pet_stage = 4;
             current_pet_version = "c";
         }else{
             is_evolution_failed = true;
             is_evolution_final = true;
             next_evolution_limit += 2 * INGAME_YEAR_SECONDS;
-        }       
-
+        }
     }
-
-    
-    
 
     //some adults check for secret evolutions
     //failing makes their stage final and also
@@ -2292,19 +2274,8 @@ function preselect_current_skins(){
     select_by_value(buttonOptionArray, button_color);
 }
 
-function debug(){
-    evolution_count +=20000;
-    console.log(evolution_count);
-    console.log(is_evolution_final);
-    console.log(stage_care_miss_count);
-}
-
-function debug2(){
-    stage_care_miss_count = 7;
-}
 //press the A game button (switch)
 function pressA(){
-    debug();
     play_audio(1);
 
     if(current_action == 8){
@@ -2480,7 +2451,7 @@ function set_default_audio(){
     localStorage.setItem("config_alert_volume"  , default_alert_volume);
     localStorage.setItem("config_button_volume" , default_button_volume);
 
-    localStorage.setItem("config_is_automute_enabled" , true);
+    localStorage.setItem("config_is_automute_enabled" , false);
 
     update_volume(default_action_volume,default_alert_volume,default_button_volume);
 
