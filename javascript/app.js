@@ -608,6 +608,7 @@ function evolve(){
             current_pet_stage = 4;
             current_pet_version = "b";
         }else if(current_pet_version == "d" && !is_ever_played_minigame){
+            extra_weight = 0;
             current_pet_stage = 4;
             current_pet_version = "c";
         }else{
@@ -939,8 +940,10 @@ function sick_chance_roll(){
         }
     }
     //TOO MUCH CANDY
-
-    if(candy_sick_counter >= 4){
+    let candy_sick_limit = 4;
+    //possibilitate 3d's secret evolution
+    if(current_pet_stage==3 && current_pet_version =='d')candy_sick_limit=8;
+    if(candy_sick_counter >= candy_sick_limit){
         candy_sick_counter = 0;
         critical_miss(null);
         get_sick();
