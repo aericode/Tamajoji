@@ -725,3 +725,44 @@ body{
     left: 285px;
 }
 
+.multi_tab_screenblock{
+    position: absolute;
+    left: 0px;
+    top:  0px;
+    width: 100%;
+    height: 100%;
+    z-index: 14;
+    background-color:gray;
+    opacity: 0.7;
+    overflow: hidden;
+}
+
+.multi_tab_warning{
+    text-align: center;
+    position: absolute;
+
+    border: 3px solid black;
+    top: 160px;
+    left: 425px;
+    width: 450px;
+    height: 220px;
+    background-color: lightblue;
+    z-index: 15;
+    padding: 10px;
+    opacity: 2;
+    border-radius: 10px;
+}
+
+.multi_tab_warning p{
+    font-size: 18px;;
+}
+
+.multi_tab_warning h2{
+    padding: 0px;
+    margin: 1px;
+}
+
+.multi_tab_warning button{
+    width: 200px;
+    height: 50px;
+}

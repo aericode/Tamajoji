@@ -2525,6 +2525,31 @@ function first_load(){
     reborn();
 }
 
+//ingame alert for multi-tab
+function open_multitab_warning(){
+    let warning_screen = document.querySelector(".multi_tab_section");
+    warning_screen.classList.remove("hidden_display");
+}
+
+//ingame dismiss for multi-tab
+function dismiss_multitab_warning(){
+    let tabsOpen = 1;
+    while (localStorage.getItem('openTab' + tabsOpen) !== null) {
+        tabsOpen++;
+    }
+    let close_count = tabsOpen;
+    while(close_count > 1){
+    localStorage.removeItem('openTab' + (close_count));
+    close_count--;
+    }
+    is_this_window_first_open = true;
+
+    let warning_screen = document.querySelector(".multi_tab_section");
+    warning_screen.classList.add("hidden_display");
+}
+
+
+
 //Controls to check if number of tabs open is greater than one
 //prompts to close the tab without saving (avoiding bugs)
 //also allows to ignore this. (maybe the tab counter made a mistake)
@@ -2537,19 +2562,7 @@ function registerOpenTab () {
     localStorage.setItem('openTab' + tabsOpen, 'open');
     if (localStorage.getItem('openTab2') !== null) {
         is_this_window_first_open = false;
-        let retVal = confirm("It seems like there are multiple tabs running Tamajoji.\nPress OK to close this tab or cancel to ignore this message");
-        if( retVal == true ) {
-            close();
-        } else {
-            //ignores error message and reactivates the save function
-           let close_count = tabsOpen;
-           while(close_count > 1){
-            localStorage.removeItem('openTab' + (close_count));
-            close_count--;
-           }
-           is_this_window_first_open = true;
-        }
-        
+        open_multitab_warning();
     }
 }
   
