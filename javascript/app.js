@@ -2584,6 +2584,7 @@ function set_window_singleton(){
     window.addEventListener('beforeunload', unregisterOpenTab);
 }
 
+
 //runs at the begining of the game
 function start(){
     set_window_singleton();

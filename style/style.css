@@ -392,14 +392,14 @@ body{
     position: absolute;
     z-index: -1;
     left: 160px;
-    top: -10px;
+    top: 0px;
     width: 990px;
     height: 610px;
     margin-top: 0;
     background-image: "none";
 
     border: 5px solid black;
-    border-radius: 0px 0px 15px 15px;
+    border-radius: 7px 10px 15px 15px;
 
     background-color: #1b5583;
 }
@@ -408,7 +408,7 @@ body{
 .toolbar{
     position: absolute;
     left: 10px;
-    top: 10px;
+    top: 130px;
 
 }
 
