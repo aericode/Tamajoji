@@ -308,10 +308,8 @@ function update_text(){
 }
 
 function update_time_info_box(){
-    console.log("passou");
     let time_info_box = document.querySelector(".time_info_box");
     time_info_box.innerHTML = current_selected_values.time_info;
-    console.log(time_info_box);
 }
 
 function change_selected_box_frame(index){
@@ -322,7 +320,6 @@ function change_selected_box_frame(index){
 
     select_box.forEach(function(box){
         if(box.getAttribute("value") == index){
-            console.log(box);
             box.classList.add("selection_box_selected");
         } 
     })
@@ -352,7 +349,6 @@ function click_info_box(index){
 function init_box_onclick(){
     let select_box = document.querySelectorAll(".selection_box");
     select_box.forEach(function(box){
-        console.log();
         box.onclick = () => {
             click_info_box(box.getAttribute("value"));
         }
