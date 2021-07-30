@@ -725,6 +725,94 @@ body{
     left: 285px;
 }
 
+.difficulty_menu{
+    position: absolute;
+    z-index: 9;
+    border: 3px solid black;
+    top: 80px;
+    left: 425px;
+    width: 450px;
+    height: 380px;
+    background-color: rgb(145, 0, 0);
+    display: none;
+}
+
+.difficulty_apply_button{
+    position: absolute;
+
+    left: 180px;
+    top: 275px;
+    cursor: pointer;
+}
+
+.difficulty_apply_button:hover{
+    position: absolute;
+
+    left: 180px;
+    top: 275px;
+
+    content:url("../images/icons/apply_button_difficulty_hover.png")
+}
+
+.difficulty_menu_decoration{
+    position: absolute;
+    width: 410px;
+    height: 210px;
+    left: 20px;
+    top: 40px;
+    border-radius: 30px;
+    background-color: rgb(255, 181, 181);
+}
+
+.difficulty_card{
+    position: absolute;
+    background-color: white;
+    width: 170px;
+    height: 180px;
+    border-radius: 10px;
+    border: 2px solid black;
+    cursor: pointer;
+
+}
+
+.difficulty_card img{
+    position: absolute;
+    top: 10px;
+    left: 55px;
+    width: 64px;
+}
+
+.difficulty_card h4{
+    width: 100%;
+    position: absolute;
+    top:45px;
+    text-align: center;
+}
+
+.difficulty_card p{
+    width: 100%;
+    position: absolute;
+    top: 73px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.difficulty_card input{
+    position: absolute;
+    top: 145px;
+    left: 75px;
+}
+
+.chill_difficulty_mode{
+    top: 10px;
+    left: 20px
+}
+
+.challenge_difficulty_mode{
+    top: 10px;
+    left: 220px
+}
+
 .multi_tab_screenblock{
     position: absolute;
     left: 0px;

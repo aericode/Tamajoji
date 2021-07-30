@@ -31,6 +31,7 @@
         <img src="./images/icons/sound_icon.png" class="toolbar_icon" onclick="open_toolbar('sound')"> <br>
         <img src="./images/icons/unmuted_icon.png" class="toolbar_icon toggle_mute_icon" onclick="toggle_is_muted()"> <br>
         <img src="./images/icons/time_settings_icon.png" class="toolbar_icon" onclick="open_toolbar('savestate')"> <br>
+        <img src="./images/icons/difficulty_icon.png" class="toolbar_icon" onclick="open_toolbar('difficulty')"><br>
         <a href="./vpet_tutorial_page/tutorial.html" target="_blank" rel="noopener noreferrer"> <img src="./images/icons/help_icon.png" class="toolbar_icon"> </a> <br>
         <a href="./jojipedia/jojipedia.html" target="_blank" rel="noopener noreferrer"> <img src="./images/icons/jojilogy_icon.png" class="toolbar_icon"> </a>
         
@@ -157,6 +158,28 @@
 
         <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button" onclick="close_toolbar('savestate')">
         <img src="./images/icons/apply_button_savestate.png" class="savestate_apply_button" onclick="click_savestate_apply_button()" >
+    </div>
+
+    <div class="difficulty_menu">
+        <div class="difficulty_menu_decoration">
+            <div class="chill_difficulty_mode difficulty_card" onclick="select_difficulty_radio(0)">
+                <img src=" ./images/icons/difficulty_icons/chill_icon.png">
+                <h4>Chill</h4>
+                <p>Sicknesses are less harsh, <br> pets are less needy and more resistent to care mistakes</p>
+                <input name="difficulty" class="difficulty_radio" type="radio" value='0'>
+            </div>
+
+            <div class="challenge_difficulty_mode difficulty_card" onclick="select_difficulty_radio(1)">
+                <img src=" ./images/icons/difficulty_icons/challenge_icon.png" >
+                <h4>Challenge</h4>
+                <p>Hardcore Tamajoji taming</p>
+                <input name="difficulty" class="difficulty_radio" type="radio" value='1'>
+            </div>
+
+        </div>
+        <img src="./images/icons/close_icon.png" class="close_toolbar_menu_button" onclick="close_toolbar('difficulty')">
+        <img src="./images/icons/apply_button_difficulty.png" class="difficulty_apply_button" onclick="click_difficulty_apply_button()">
+
     </div>
 
     <div class="shell_skin"></div>

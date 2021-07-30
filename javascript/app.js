@@ -186,6 +186,10 @@ let is_muted = false;
 //(which is not ok.)
 let is_this_window_first_open = true;
 
+//current game difficulty
+let difficulty = 0;
+
+
 
 //array containing information about each evolution
 let evolution_array = Array();
@@ -2522,7 +2526,7 @@ function click_reset_button(){
 
 //loads default configs at the first time the game is open
 function first_load(){
-    preload_images();
+    //preload_images();
     set_default_skins();
     set_default_audio();
     set_default_gamemode();
@@ -2609,7 +2613,30 @@ image_path_array = [
     "./images/shell_skins/green_triangles.jpg",
     "./images/shell_skins/purple_dash.jpg",
     "./images/shell_skins/swish.jpg",
-    "./images/shell_skins/waves.jpg"
+    "./images/shell_skins/waves.jpg",
+
+    "./images/menus/bar_status.png",
+    "./images/menus/blank_screen.png",
+    "./images/menus/dark.png",
+    "./images/menus/food_menu.png",
+    "./images/menus/minigame_screen.png",
+    "./images/menus/right_arrow.png",
+    "./images/menus/sleeping.png",
+    "./images/menus/up_arrow.png",
+
+    "./images/objects/empty_heart.png",
+    "./images/objects/full_heart.png",
+    "./images/objects/greater_equal.png",
+    "./images/objects/lesser_equal.png",
+    "./images/objects/mini_game_correct.png",
+    "./images/objects/mini_game_score_blank.png",
+    "./images/objects/mini_game_score_correct.png",
+    "./images/objects/mini_game_score_wrong.png",
+    "./images/objects/mini_game_wrong.png",
+    "./images/objects/poop.png",
+    "./images/objects/sick_icon.png",
+    "./images/objects/sleepy_icon.png"
+
 ]
 function preload_images(){
     let images = Array();
@@ -2619,12 +2646,51 @@ function preload_images(){
     }
 }
 
+function click_difficulty_apply_button(){
+    let radio_array = document.querySelectorAll(".difficulty_radio");
+    let old_difficulty = difficulty;
+
+    for(let i = 0; i< 2; i++){
+        if(radio_array[i].checked)difficulty = radio_array[i].value;
+    }
+
+    localStorage.setItem("config_difficulty" , difficulty);
+    
+    if(old_difficulty == 0 && difficulty == 1){
+        if(sickness_death_timer > 6300) sickness_death_timer = 6300;
+        if(care_miss_death_score > 11) care_miss_death_score = 11;
+    }
+    
+
+    play_audio(8);
+}
+
+function select_difficulty_radio(index){
+    let radio_array = document.querySelectorAll(".difficulty_radio");
+    if(index >=0 && index <=2) radio_array[index].checked =  true;
+}
+
+function update_difficulty(){
+    difficulty = Number.parseInt(localStorage.getItem("config_difficulty"));
+    if( Number.isNaN(difficulty) ) difficulty = 0;
+}
+
+function update_difficulty_radio_button(){
+    let radio_array = document.querySelectorAll(".difficulty_radio");
+    console.log(difficulty);
+
+    radio_array[difficulty].checked =  true;
+}
+
 //runs at the begining of the game
 function start(){
     set_window_singleton();
     
     load_auto_mute_config();
     if(is_automute_enabled)toggle_is_muted();
+
+    update_difficulty();
+    update_difficulty_radio_button();
 
     update_gamemode();//loads gamemode from localstate and applies to local variables
     update_gamemode_radio_button();    
