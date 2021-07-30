@@ -2627,12 +2627,7 @@ function start(){
     if(is_automute_enabled)toggle_is_muted();
 
     update_gamemode();//loads gamemode from localstate and applies to local variables
-    update_gamemode_radio_button();
-
-    currentTime();
-    initPosition();
-    wander();
-      
+    update_gamemode_radio_button();    
 
     set_unload_autosave();
     if(is_first_time_loading()){
@@ -2643,6 +2638,11 @@ function start(){
             simulate_time_away( get_time_elapsed_since_logout() );
         }
     }
+
+    currentTime();
+    initPosition();
+    wander();
+
     load_local_customization();
     load_audio_config();
     preselect_current_skins();
