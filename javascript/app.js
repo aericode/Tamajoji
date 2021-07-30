@@ -2590,26 +2590,26 @@ function set_window_singleton(){
 let image_path_array = Array();
 image_path_array = [
     
-    "images\animations\blank_screen.png",
-    "images\animations\death.png",
-    "images\animations\eat_meal.png",
-    "images\animations\eat_snack.png",
-    "images\animations\fail.png",
-    "images\animations\refuse.png",
-    "images\animations\scold.png",
-    "images\animations\success.png",
-    "images\animations\thrash.png",
-    "images\animations\vaccine.png",
+    "./images/animations/blank_screen.png",
+    "./images/animations/death.png",
+    "./images/animations/eat_meal.png",
+    "./images/animations/eat_snack.png",
+    "./images/animations/fail.png",
+    "./images/animations/refuse.png",
+    "./images/animations/scold.png",
+    "./images/animations/success.png",
+    "./images/animations/thrash.png",
+    "./images/animations/vaccine.png",
 
-    "images\shell_skins\blue_squares.jpg",
-    "images\shell_skins\blurred.jpg",
-    "images\shell_skins\chroma.jpg",
-    "images\shell_skins\cosmic_human.jpg",
-    "images\shell_skins\desert.jpg",
-    "images\shell_skins\green_triangles.jpg",
-    "images\shell_skins\purple_dash.jpg",
-    "images\shell_skins\swish.jpg",
-    "images\shell_skins\waves.jpg"
+    "./images/shell_skins/blue_squares.jpg",
+    "./images/shell_skins/blurred.jpg",
+    "./images/shell_skins/chroma.jpg",
+    "./images/shell_skins/cosmic_human.jpg",
+    "./images/shell_skins/desert.jpg",
+    "./images/shell_skins/green_triangles.jpg",
+    "./images/shell_skins/purple_dash.jpg",
+    "./images/shell_skins/swish.jpg",
+    "./images/shell_skins/waves.jpg"
 ]
 function preload_images(){
     let images = Array();
