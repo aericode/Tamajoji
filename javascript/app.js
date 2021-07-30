@@ -858,9 +858,9 @@ function update_poop_display(){
     }
 }
 
-//resets the counter for the next time the pet will need to poop (1:30h~2:30h)
+//resets the counter for the next time the pet will need to poop (1h~2h)
 function reset_poop_timer(){
-    let base_time = 5400;
+    let base_time = 3600;
     let variable_time_max = 3600;
 
     poop_timer = base_time + Math.floor(Math.random()*variable_time_max);
@@ -2522,6 +2522,7 @@ function click_reset_button(){
 
 //loads default configs at the first time the game is open
 function first_load(){
+    preload_images();
     set_default_skins();
     set_default_audio();
     set_default_gamemode();
@@ -2585,6 +2586,39 @@ function set_window_singleton(){
 }
 
 
+//preloading images 
+let image_path_array = Array();
+image_path_array = [
+    
+    "images\animations\blank_screen.png",
+    "images\animations\death.png",
+    "images\animations\eat_meal.png",
+    "images\animations\eat_snack.png",
+    "images\animations\fail.png",
+    "images\animations\refuse.png",
+    "images\animations\scold.png",
+    "images\animations\success.png",
+    "images\animations\thrash.png",
+    "images\animations\vaccine.png",
+
+    "images\shell_skins\blue_squares.jpg",
+    "images\shell_skins\blurred.jpg",
+    "images\shell_skins\chroma.jpg",
+    "images\shell_skins\cosmic_human.jpg",
+    "images\shell_skins\desert.jpg",
+    "images\shell_skins\green_triangles.jpg",
+    "images\shell_skins\purple_dash.jpg",
+    "images\shell_skins\swish.jpg",
+    "images\shell_skins\waves.jpg"
+]
+function preload_images(){
+    let images = Array();
+    for (var i = 0; i < image_path_array.length; i++) {
+        images[i] = new Image();
+        images[i].src = image_path_array[i];
+    }
+}
+
 //runs at the begining of the game
 function start(){
     set_window_singleton();
@@ -2598,7 +2632,7 @@ function start(){
     currentTime();
     initPosition();
     wander();
-    
+      
 
     set_unload_autosave();
     if(is_first_time_loading()){
