@@ -2574,7 +2574,7 @@ function click_reset_button(){
 
 //loads default configs at the first time the game is open
 function first_load(){
-    //preload_images();
+    preload_images();
     set_default_skins();
     set_default_audio();
     set_default_gamemode();
