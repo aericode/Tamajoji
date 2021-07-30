@@ -72,7 +72,7 @@ let extra_weight = 0;
 //poop count and uncleaned time are accounted for sickness calculations
 //5400 base value
 //randomize between 0 and 3600 to add to base
-let poop_timer = 3600;
+let poop_timer = 3000;
 let poop_count = 0;
 let poop_uncleaned_time = 0;
 
@@ -83,7 +83,7 @@ let poop_uncleaned_time = 0;
 //missed sick call assures the player will only get 1 care mistake for not medicating the pet imediatelly
 let is_sick = false;
 //current time to respond: 1h45hmin after sick
-let sickness_death_timer = 6300;
+let sickness_death_timer = 7200;
 //random sickness limit may be changed for diferent evolutions
 let random_sickness_limit = 0.25;
 let sick_check_timer = 3600;
@@ -860,7 +860,7 @@ function update_poop_display(){
 
 //resets the counter for the next time the pet will need to poop (1h~2h)
 function reset_poop_timer(){
-    let base_time = 3600;
+    let base_time = 3000;
     let variable_time_max = 3600;
 
     poop_timer = base_time + Math.floor(Math.random()*variable_time_max);
@@ -971,7 +971,7 @@ function get_sick() {
     */
     
     is_sick = true;
-    sickness_death_timer = 6300;
+    sickness_death_timer = 7200;
     is_missed_sick_call = false;
 
     declare_critical("sick");
@@ -987,7 +987,7 @@ function get_healed(){
     */
     
     is_sick = false;
-    sickness_death_timer = 6300;
+    sickness_death_timer = 7200;
 
     is_missed_sick_call = false;
     remove_critical("sick");
@@ -1108,7 +1108,7 @@ function reset_stats(){
     poop_uncleaned_time = 0;
 
     is_sick = false;
-    sickness_death_timer = 6300;
+    sickness_death_timer = 7200;
     //random sickness limit may be changed for diferent evolutions
     random_sickness_limit = 0.25;
     sick_check_timer = 3600;
