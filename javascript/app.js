@@ -669,8 +669,16 @@ function remove_critical(key){
 //keeps the food meter abobe zero if it hits zero
 //call for care mistake when it hits zero.
 function food_tick(){
+    let need_rate;
+    const easy_rate = 0.75;
+    const hard_rate =  1;
+
+    if(difficulty == 0) need_rate = easy_rate;
+    if(difficulty == 1) need_rate = hard_rate;
+
+
     if(food_stat > 0){
-        food_stat -= food_need_per_second;
+        food_stat -= food_need_per_second * need_rate;
         if(food_stat < 0)food_stat=0;
     }else if(!is_critical["food"]){
         declare_critical("food");
@@ -692,8 +700,15 @@ function weight_tick(){
 //keeps the food meter abobe zero if it hits zero
 //call for care mistake when it hits zero.
 function fun_tick(){
+    let need_rate;
+    const easy_rate = 0.75;
+    const hard_rate =  1;
+
+    if(difficulty == 0) need_rate = easy_rate;
+    if(difficulty == 1) need_rate = hard_rate;
+
     if(fun_stat > 0){
-        fun_stat -= fun_need_per_second;
+        fun_stat -= fun_need_per_second*need_rate;
         if(fun_stat < 0)fun_stat=0;
     }else if(!is_critical["fun"]){
         declare_critical("fun");
@@ -967,6 +982,16 @@ function sick_chance_roll(){
 
 }
 
+function get_difficulty_sickness_death_timer(){
+    if(difficulty == 0){
+        return 14400;
+    }
+
+    if(difficulty == 1){
+        return 7200;
+    }
+}
+
 //updates logical and visual factors for your pet getting sick.
 function get_sick() {
     /*
@@ -975,7 +1000,7 @@ function get_sick() {
     */
     
     is_sick = true;
-    sickness_death_timer = 7200;
+    sickness_death_timer = get_difficulty_sickness_death_timer();
     is_missed_sick_call = false;
 
     declare_critical("sick");
@@ -991,7 +1016,7 @@ function get_healed(){
     */
     
     is_sick = false;
-    sickness_death_timer = 7200;
+    sickness_death_timer = get_difficulty_sickness_death_timer();
 
     is_missed_sick_call = false;
     remove_critical("sick");
@@ -1010,16 +1035,39 @@ function sick_trigger(){
     reset_sick_timer();
 }
 
-//every hour forgives aprox. 0.75 miss
-//4 hours forgive 3 misses
-//(doesn't ticks when sleeping)
+//rate at which mistakes are removed from death_score
 function forgive_miss_tick(){
-    if(care_miss_death_score>0)care_miss_death_score -= 0.00021;
+    let forgive_rate;
+    const easy_rate = 0.0008;
+    const hard_rate = 0.00045;
+
+    if(difficulty == 0){
+        forgive_rate = easy_rate;
+    }
+
+    if(difficulty == 1){
+        forgive_rate = hard_rate;
+    }
+
+
+    if(care_miss_death_score>0)care_miss_death_score -= forgive_rate;
 }
 
-//approx +2 hours of both empty bar
+//check if misses are beyond limit
 function check_death_by_miss(){
-    if(care_miss_death_score >= 15)die();
+    let death_limit;
+    const easy_limit = 30;
+    const hard_limit = 18;
+
+    if(difficulty == 0){
+        death_limit = easy_limit;
+    }
+
+    if(difficulty == 1){
+        death_limit = hard_limit;
+    }
+
+    if(care_miss_death_score >= death_limit)die();
 }
 
 //if pet is dead, show the death screen
@@ -1112,7 +1160,7 @@ function reset_stats(){
     poop_uncleaned_time = 0;
 
     is_sick = false;
-    sickness_death_timer = 7200;
+    sickness_death_timer = get_difficulty_sickness_death_timer();
     //random sickness limit may be changed for diferent evolutions
     random_sickness_limit = 0.25;
     sick_check_timer = 3600;
@@ -2656,11 +2704,15 @@ function click_difficulty_apply_button(){
 
     localStorage.setItem("config_difficulty" , difficulty);
     
-    if(old_difficulty == 0 && difficulty == 1){
-        if(sickness_death_timer > 6300) sickness_death_timer = 6300;
+    //preventing insta-death by changing difficulty
+    if(old_difficulty == 1 && difficulty == 0){
         if(care_miss_death_score > 11) care_miss_death_score = 11;
     }
     
+    //prevents extra resistance from passing from one mode to another
+    if(old_difficulty == 0 && difficulty == 1){
+        if(sickness_death_timer > 7200) sickness_death_timer = 7200;
+    }
 
     play_audio(8);
 }
