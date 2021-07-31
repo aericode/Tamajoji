@@ -382,7 +382,7 @@ function preload_images(){
 }
 
 function start(){
-    //resize_bar("food", 10, "rgb(255,128, 0)", "rgb(128, 255, 0)");
+    
     init_box_onclick();
     preload_images();
 }
