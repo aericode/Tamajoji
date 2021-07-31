@@ -689,10 +689,16 @@ function food_tick(){
 
 //loses a bit of extra weight if pet is not sleeping
 function weight_tick(){
-    //doesn't loses weight while sleeping
-    //trend is to lose 0.32 gram each hour after meal
+    let difficulty_rate;
+    const easy_rate = 0.75;
+    const hard_rate =  1;
+
+    if(difficulty == 0) difficulty_rate = easy_rate;
+    if(difficulty == 1) difficulty_rate = hard_rate;
+
+
     if(extra_weight > 0){
-        extra_weight -= 0.0012;
+        extra_weight -= 0.0012*difficulty_rate;
     }
 }
 
@@ -2683,8 +2689,16 @@ image_path_array = [
     "./images/objects/mini_game_wrong.png",
     "./images/objects/poop.png",
     "./images/objects/sick_icon.png",
-    "./images/objects/sleepy_icon.png"
+    "./images/objects/sleepy_icon.png",
 
+    "./images/icons/apply_button_cosmetics_hover.png",
+    "./images/icons/apply_button_cosmetics.png",
+    "./images/icons/apply_button_difficulty_hover.png",
+    "./images/icons/apply_button_difficulty.png",
+    "./images/icons/apply_button_savestate_hover.png",
+    "./images/icons/apply_button_savestate.png",
+    "./images/icons/apply_button_sound_hover.png",
+    "./images/icons/apply_button_sound.png"
 ]
 function preload_images(){
     let images = Array();
