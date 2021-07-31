@@ -551,7 +551,7 @@ function evolve(){
     }else if(current_pet_stage == 1){
         current_pet_stage = 2;
 
-        if(stage_care_miss_count < 5){
+        if(stage_care_miss_count < 6){
             lose_discipline(0.5);
             current_pet_version = "a";
         }else{
@@ -2720,7 +2720,7 @@ function click_difficulty_apply_button(){
     
     //preventing insta-death by changing difficulty
     if(old_difficulty == 1 && difficulty == 0){
-        if(care_miss_death_score > 11) care_miss_death_score = 11;
+        if(care_miss_death_score > 15) care_miss_death_score = 15;
     }
     
     //prevents extra resistance from passing from one mode to another
