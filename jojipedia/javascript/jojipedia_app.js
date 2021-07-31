@@ -355,9 +355,36 @@ function init_box_onclick(){
     })
 }
 
+let image_path_array = Array();
+image_path_array = [
+    
+    "./images/pet_stages/0-a.png",
+    "./images/pet_stages/1-a.png",
+    "./images/pet_stages/2-a.png",
+    "./images/pet_stages/2-b.png",
+    "./images/pet_stages/3-a.png",
+    "./images/pet_stages/3-b.png",
+    "./images/pet_stages/3-c.png",
+    "./images/pet_stages/3-d.png",
+    "./images/pet_stages/3-e.png",
+    "./images/pet_stages/3-f.png",
+    "./images/pet_stages/4-a.png",
+    "./images/pet_stages/4-b.png",
+    "./images/pet_stages/4-c.png"
+
+]
+function preload_images(){
+    let images = Array();
+    for (var i = 0; i < image_path_array.length; i++) {
+        images[i] = new Image();
+        images[i].src = image_path_array[i];
+    }
+}
+
 function start(){
     //resize_bar("food", 10, "rgb(255,128, 0)", "rgb(128, 255, 0)");
     init_box_onclick();
+    preload_images();
 }
 
 start();
