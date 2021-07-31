@@ -2734,8 +2734,20 @@ function update_difficulty_radio_button(){
     radio_array[difficulty].checked =  true;
 }
 
+function firefox_detector(){
+    let w3UserAgent = navigator.userAgent;
+
+    if (w3UserAgent.indexOf("Firefox") > -1) {
+        console.log("is firefox");
+    }else{
+        console.log("is not firefox");
+    }
+
+}
+
 //runs at the begining of the game
 function start(){
+    firefox_detector();
     set_window_singleton();
     
     load_auto_mute_config();
