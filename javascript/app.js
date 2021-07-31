@@ -485,7 +485,7 @@ function clear_animation_tick(){
 //calculates extra weight and deducts it from total lifespam
 function natural_death_tick(){
     if(is_evolution_final){
-        let lifespan_reduction = ( (extra_weight-5) /10) * INGAME_YEAR_SECONDS;
+        let lifespan_reduction = ( (extra_weight-5) /8) * INGAME_YEAR_SECONDS;
         if(lifespan_reduction < 0)lifespan_reduction = 0;
 
         let life_line = next_evolution_limit - lifespan_reduction;
