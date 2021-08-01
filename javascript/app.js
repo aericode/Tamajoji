@@ -1716,7 +1716,7 @@ function closeSleepMenu(){
 //applies sleep menu option and deals with sleep criticals
 function confirmSleepMenu(){
     if(selected_sleep_menu==1){
-        if(is_sleeping && !is_light_on)declare_critical("sleep");
+        if(is_sleeping && !is_light_on && !is_missed_bedtime)declare_critical("sleep");
         is_light_on = true;        
     }
 
