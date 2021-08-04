@@ -2531,9 +2531,9 @@ function set_default_audio(){
 
 //saves  default skins local file
 function set_default_skins(){
-    screen_color="#d3f6dB";
-    frame_color="color.#708090";
-    button_color="#d0ff14";
+    screen_color="#d3f6db";
+    frame_color="color.#1b5583";
+    button_color="#ffd800";
 
     localStorage.setItem("localsave_screen_color" , screen_color );
     localStorage.setItem("localsave_frame_color"  , frame_color);
