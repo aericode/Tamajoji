@@ -755,7 +755,14 @@ function obedience_check(stat_to_check){
 
 //digests 1 candy per hour, accumulating undigested candy will get your pet sick
 function candy_digestion_tick(){
-    if(candy_sick_counter > 0) candy_sick_counter -= 0.00014;
+    let difficulty_rate;
+    const easy_rate = 0.75;
+    const hard_rate =  1;
+
+    if(difficulty == 0) difficulty_rate = easy_rate;
+    if(difficulty == 1) difficulty_rate = hard_rate;
+
+    if(candy_sick_counter > 0) candy_sick_counter -= 0.00014*difficulty_rate;
 }
 
 //Timer for the fake discipline calls
@@ -2743,25 +2750,12 @@ function update_difficulty(){
 
 function update_difficulty_radio_button(){
     let radio_array = document.querySelectorAll(".difficulty_radio");
-    console.log(difficulty);
 
     radio_array[difficulty].checked =  true;
 }
 
-function firefox_detector(){
-    let w3UserAgent = navigator.userAgent;
-
-    if (w3UserAgent.indexOf("Firefox") > -1) {
-        console.log("is firefox");
-    }else{
-        console.log("is not firefox");
-    }
-
-}
-
 //runs at the begining of the game
 function start(){
-    firefox_detector();
     set_window_singleton();
     
     load_auto_mute_config();
